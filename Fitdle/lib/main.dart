@@ -1,5 +1,7 @@
 import 'package:fitdle/scene/login/login_screen.dart';
+import 'package:fitdle/scene/signup/birthday_screen.dart';
 import 'package:fitdle/scene/signup/create_account_screen.dart';
+import 'package:fitdle/scene/signup/personal_info_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,7 +18,9 @@ class Fitdle extends StatelessWidget {
       initialRoute: 'login',
       routes: {
         'login': (context) => const LoginScreen(),
-        'create_account': (context) => const CreateAccountScreen()
+        'create_account': (context) => const CreateAccountScreen(),
+        'personal_info': (context) => const PersonalInfoScreen(),
+        'birthday': (context) => const BirthdayScreen()
       },
     );
   }

@@ -9,6 +9,38 @@ class CreateAccountScreen extends StatefulWidget {
 }
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
+  Widget loginButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+            alreadyHaveAccount
+        ),
+        TextButton(
+            style: ButtonStyle(
+                overlayColor: MaterialStateProperty.all<Color>(
+                    Colors.black12)
+            ),
+            onPressed: loginButtonPressed,
+            child: const Text(
+              login,
+              style: const TextStyle(fontFamily: 'Roboto',
+                  fontSize: hint,
+                  color: Colors.purple),
+            )
+        )
+      ],
+    );
+  }
+
+  loginButtonPressed() {
+    Navigator.pop(context);
+  }
+
+  signupButtonPressed() {
+    Navigator.popAndPushNamed(context, "personal_info");
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -23,65 +55,18 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           children: [
             fitdleText(createAccount, h1),
             const SizedBox(height: large),
-            const TextField(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: email
-              ),
-            ),
+            fitdleTextField(email),
             const SizedBox(height: regular),
-            const TextField(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: password
-              ),
-            ),
+            fitdleTextField(password),
             const SizedBox(height: regular),
-            const TextField(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: confirmPassword
-              ),
-            ),
+            fitdleTextField(confirmPassword),
             const SizedBox(height: regular),
-            CupertinoButton(
-                color: Colors.purple,
-                onPressed: () {},   // TODO: Add button function
-                child: fitdleText(signup, button)
-            ),
+            primaryButton(signup, signupButtonPressed),
             SizedBox(height: size.height / 6),
             loginButton()
           ],
         ),
       ),
     );
-  }
-
-  Widget loginButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-            "Already have an account?"
-        ),
-        TextButton(
-            style: ButtonStyle(
-                overlayColor: MaterialStateProperty.all<Color>(
-                    Colors.black12)
-            ),
-            onPressed: loginButtonPressed,
-            child: const Text(
-              "Sign in",
-              style: const TextStyle(fontFamily: 'Roboto',
-                  fontSize: hint,
-                  color: Colors.purple),
-            )
-        )
-      ],
-    );
-  }
-
-  loginButtonPressed() {
-    Navigator.pop(context);
   }
 }

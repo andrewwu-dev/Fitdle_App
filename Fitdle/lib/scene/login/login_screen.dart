@@ -10,7 +10,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   signupButtonPressed() {
-    Navigator.pushNamed(context, 'create_account');
+    Navigator.pushNamed(context, "create_account");
   }
 
   @override
