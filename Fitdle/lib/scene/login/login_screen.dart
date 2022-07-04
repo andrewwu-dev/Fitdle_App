@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:fitdle/constants/constants.dart';
+import 'package:fitdle/constants+utility.dart';
 import 'package:flutter/cupertino.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,17 +15,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
         alignment: Alignment.topLeft,
-        padding: const EdgeInsets.only(
-            top: topPadding, left: regular, right: regular),
+        padding: const EdgeInsets.only(top: topPadding, left: regular, right: regular),
         child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Text(
                   appName,
@@ -36,14 +32,14 @@ class _LoginScreenState extends State<LoginScreen> {
               const TextField(
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: "Username"
+                    labelText: email
                 ),
               ),
               const SizedBox(height: regular),
               const TextField(
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: "Password"
+                    labelText: password
                 ),
               ),
               const SizedBox(height: 14),
@@ -55,16 +51,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(height: regular),
-              Align(
-                  alignment: Alignment.center,
-                  child: CupertinoButton(
-                      color: Colors.purple,
-                      onPressed: () {},   // TODO: Add button function
-                      child: const Text(
-                        login,
-                        style: TextStyle(
-                            fontFamily: 'Roboto', fontSize: button),
-                      )
+              CupertinoButton(
+                  color: Colors.purple,
+                  onPressed: () {},   // TODO: Add button function
+                  child: const Text(
+                    login,
+                    style: TextStyle(
+                        fontFamily: 'Roboto', fontSize: button),
                   )
               ),
               // Push create account button to bottom of screen
