@@ -19,8 +19,6 @@ Widget fitdleTextField(placeholder) {
   );
 }
 
-
-
 Widget primaryButton(label, action) {
   return CupertinoButton(
       color: Colors.purple,
