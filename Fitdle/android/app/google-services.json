@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "168797822573",
+    "project_id": "fitdle",
+    "storage_bucket": "fitdle.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:168797822573:android:caa47c866e9f3ba7086964",
+        "android_client_info": {
+          "package_name": "com.example.fitdle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "168797822573-m75r8l0s4gt3rnbqkba5ie5j6d6496kv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWAmsIPDi6DPX0IbqwI52iFNwCtn1XWb0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "168797822573-m75r8l0s4gt3rnbqkba5ie5j6d6496kv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "168797822573-v5nvrvef1dgf6sfu4cf6pvokl8sdfms3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fitdle"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
