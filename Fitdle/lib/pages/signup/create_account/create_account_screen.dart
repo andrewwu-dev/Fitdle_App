@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:fitdle/constants/all_constants.dart';
 import 'package:fitdle/pages/signup/create_account/create_account_vm.dart';
 import 'package:flutter/cupertino.dart';
@@ -47,7 +46,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         stream: _createAccountVM.subject.stream,
         builder: (context, snapshot) {
           if(snapshot.hasError) {
-            Fluttertoast.showToast(msg: snapshot.error.toString());
+            Fluttertoast.showToast(
+              msg: snapshot.error.toString(),
+              toastLength: Toast.LENGTH_SHORT
+            );
           }
 
           return Scaffold(
