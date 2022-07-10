@@ -1,5 +1,6 @@
-import 'package:fitdle/constants+utility.dart';
+import 'package:fitdle/constants/all_constants.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -76,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: signupButtonPressed,
                       child: const Text(
                         signup,
-                        style: const TextStyle(fontFamily: 'Roboto',
+                        style: TextStyle(fontFamily: 'Roboto',
                             fontSize: hint,
                             color: Colors.purple),
                       )

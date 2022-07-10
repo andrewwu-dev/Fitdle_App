@@ -1,5 +1,7 @@
-import 'package:fitdle/constants+utility.dart';
+import 'package:fitdle/constants/all_constants.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import '../../components/common.dart';
 
 class PersonalInfoScreen extends StatefulWidget {
   const PersonalInfoScreen({Key? key}) : super(key: key);
@@ -9,6 +11,9 @@ class PersonalInfoScreen extends StatefulWidget {
 }
 
 class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
+  var firstNameController = TextEditingController();
+  var lastNameController = TextEditingController();
+
   continueButtonTapped() {
     Navigator.pushNamed(context, "birthday");
   }
@@ -27,9 +32,9 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               fitdleText(hiThere, h1),
               fitdleText(namePrompt, h2),
               SizedBox(height: large),
-              fitdleTextField(firstName),
+              fitdleTextField(firstNameController, firstName),
               SizedBox(height: regular),
-              fitdleTextField(lastName),
+              fitdleTextField(lastNameController, lastName),
               SizedBox(height: large),
               primaryButton(ctn, continueButtonTapped)
             ]

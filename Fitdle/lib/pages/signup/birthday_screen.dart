@@ -1,5 +1,7 @@
-import 'package:fitdle/constants+utility.dart';
+import 'package:fitdle/constants/all_constants.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import '../../components/common.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
