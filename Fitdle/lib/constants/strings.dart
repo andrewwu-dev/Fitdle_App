@@ -24,3 +24,18 @@ const lastName = "Last name";
 
 // Birthday
 const birthdayPrompt = "What is your birthday?";
+
+// Home
+const hi = "Hi";
+const dailyTasks = "Daily Tasks:";
+const weeklyTasks = "Weekly Tasks:";
+const points = "Points:";
+
+// Analytics
+const analytics = "Analytics";
+
+// Redeem
+const redeem = "Redeem";
+
+// Settings
+const settings = "Settings";

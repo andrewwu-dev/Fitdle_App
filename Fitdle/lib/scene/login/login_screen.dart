@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(fontFamily: 'Roboto', fontSize: hint)
                 ),
               ),
-              SizedBox(height: regular),
+              const SizedBox(height: regular),
               CupertinoButton(
                   color: Colors.purple,
                   onPressed: () {},   // TODO: Add button function
@@ -65,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                       noAccount
                   ),
                   TextButton(
@@ -76,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: signupButtonPressed,
                       child: const Text(
                         signup,
-                        style: const TextStyle(fontFamily: 'Roboto',
+                        style: TextStyle(fontFamily: 'Roboto',
                             fontSize: hint,
                             color: Colors.purple),
                       )
