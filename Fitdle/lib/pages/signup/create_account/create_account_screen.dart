@@ -54,30 +54,36 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
           return Scaffold(
             resizeToAvoidBottomInset: false,
-            body: Container(
-              alignment: Alignment.topLeft,
-              padding: const EdgeInsets.fromLTRB (regular, topPadding, regular, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  fitdleText(createAccount, h1),
-                  const SizedBox(height: large),
-                  fitdleTextField(emailController, email),
-                  const SizedBox(height: regular),
-                  fitdlePasswordField(passwordController, password),
-                  const SizedBox(height: regular),
-                  fitdlePasswordField(confirmPasswordController, confirmPassword),
-                  const SizedBox(height: regular),
-                  primaryButton(signup, signupButtonPressed, isEnabled: !_isLoading),
-                  SizedBox(height: size.height / 6),
-                  loginButton(),
-                  Visibility(
-                      visible: _isLoading,
-                      child: const CircularProgressIndicator()
+            // TODO: Wrap in SingleChildScrollView so keyboard doesn't cause overflow
+            // TODO: Figure out why CircularProgressIndicator is not appearing
+            body: Stack (
+              children: [
+                Container(
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.fromLTRB (regular, topPadding, regular, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      fitdleText(createAccount, h1),
+                      const SizedBox(height: large),
+                      fitdleTextField(emailController, email),
+                      const SizedBox(height: regular),
+                      fitdlePasswordField(passwordController, password),
+                      const SizedBox(height: regular),
+                      fitdlePasswordField(confirmPasswordController, confirmPassword),
+                      const SizedBox(height: regular),
+                      primaryButton(signup, signupButtonPressed, isEnabled: !_isLoading),
+                      SizedBox(height: size.height / 6),
+                      loginButton()
+                    ],
                   ),
-                ],
-              ),
-            ),
+                ),
+                Visibility(
+                    visible: _isLoading,
+                    child: const CircularProgressIndicator()
+                )
+              ],
+            )
           );
         }
     );
@@ -117,7 +123,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   signupButtonPressed() async {
     _isLoading = true;
-    _createAccountVM.createAccount(emailController.text, passwordController.text);
+    _createAccountVM.firebaseSignup(emailController.text, passwordController.text);
     _isLoading = false;
   }
 }
