@@ -27,7 +27,13 @@ const lastName = "Last name";
 // Birthday
 const birthdayPrompt = "What is your birthday?";
 
+// Dashboard
+const run = "Run";
+const pushups = "Pushups";
+const squats = "Squats";
+
 // Home
+const home = "Home";
 const hi = "Hi";
 const dailyTasks = "Daily Tasks:";
 const weeklyTasks = "Weekly Tasks:";

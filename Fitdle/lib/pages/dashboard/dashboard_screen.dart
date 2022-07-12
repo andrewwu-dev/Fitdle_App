@@ -1,8 +1,10 @@
+import 'package:fitdle/constants/all_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:fitdle/pages/dashboard/home_screen.dart';
-import 'package:fitdle/pages/dashboard/redeem_screen.dart';
-import 'package:fitdle/pages/dashboard/settings_screen.dart';
+import 'home_screen.dart';
+import 'redeem_screen.dart';
+import 'settings_screen.dart';
 import 'analytics_screen.dart';
+import 'expandable_fab.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -39,19 +41,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: home,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.analytics),
-            label: 'Analytics',
+            label: analytics,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.redeem),
-            label: 'Redeem',
+            label: redeem,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            label: 'Settings',
+            label: settings,
           )
         ],
         currentIndex: selectedIndex,
@@ -60,10 +62,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
         unselectedItemColor: Colors.grey,
         onTap: navItemPressed,
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.purple,
-        onPressed: () {},
-        child: const Icon(Icons.add),
+      floatingActionButton: ExpandableFab(
+        distance: 112.0,
+        children: [
+          ActionButton(
+              onPressed: () {},
+              icon: const Icon(Icons.directions_run),
+              label: run),
+          ActionButton(
+              onPressed: () {},
+              icon: const Icon(Icons.fitness_center),
+              label: pushups),
+          ActionButton(
+              onPressed: () {},
+              icon: const Icon(Icons.videocam),
+              label: squats),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
