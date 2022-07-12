@@ -34,9 +34,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _listen() {
     // navigate
-    // _navigationSubscription = _createAccountVM.done.listen((value) {
-    //     //   Navigator.pushNamed(context, "personal_info");
-    //     // });
+    _navigationSubscription = _loginVM.done.listen((value) {
+          Navigator.pushNamed(context, "dashboard");
+    });
   }
 
   @override

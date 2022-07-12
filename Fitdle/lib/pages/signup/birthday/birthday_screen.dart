@@ -32,7 +32,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
 
   _listen() {
     _navigationSubscription = _birthdayVM.done.listen((value) {
-      //Navigator.pushNamed(context, "dashboard");
+      Navigator.pushNamed(context, "dashboard");
     });
   }
 

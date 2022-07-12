@@ -1,4 +1,5 @@
 import 'package:fitdle/locator.dart';
+import 'package:fitdle/repository/auth_repository.dart';
 import 'package:fitdle/repository/user_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
@@ -21,6 +22,7 @@ class BirthdayVM extends ChangeNotifier {
   void dispose() {
     super.dispose();
     _subject.close();
+    _done.close();
   }
 
   saveUser(birthday) {

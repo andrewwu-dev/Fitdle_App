@@ -27,6 +27,7 @@ class CreateAccountVM extends ChangeNotifier {
   void dispose() {
     super.dispose();
     _subject.close();
+    _done.close();
   }
 
   firebaseSignup(email, password) async {

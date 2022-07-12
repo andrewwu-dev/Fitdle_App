@@ -31,8 +31,9 @@ class AuthRepository implements AuthRepositoryProtocol {
       );
     } on FirebaseAuthException catch (e) {
       return Failure(e.toString());
+    } catch (e) {
+      return Failure(e.toString());
     }
-    print("LOGINED ");
     return Success();
   }
 

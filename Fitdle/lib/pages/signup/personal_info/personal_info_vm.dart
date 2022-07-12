@@ -21,6 +21,7 @@ class PersonalInfoVM extends ChangeNotifier {
   void dispose() {
     super.dispose();
     _subject.close();
+    _done.close();
   }
 
   updatePersonalInfo(firstName, lastName) {

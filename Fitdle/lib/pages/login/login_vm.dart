@@ -24,6 +24,7 @@ class LoginVM extends ChangeNotifier {
   void dispose() {
     super.dispose();
     _subject.close();
+    _done.close();
   }
 
   login(email, password) async {
