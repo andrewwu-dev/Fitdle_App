@@ -1,13 +1,14 @@
-import 'package:fitdle/constants+utility.dart';
+import 'package:fitdle/constants/all_constants.dart';
+import 'package:flutter/material.dart';
 
-class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+class RedeemScreen extends StatefulWidget {
+  const RedeemScreen({Key? key}) : super(key: key);
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  State<RedeemScreen> createState() => _RedeemScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _RedeemScreenState extends State<RedeemScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -17,7 +18,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         centerTitle: false,
         backgroundColor: const Color.fromARGB(255, 240, 240, 240),
         title: const Text(
-                settings,
+                redeem,
                 style: TextStyle(fontFamily: 'Roboto', fontSize: h2, color: Colors.black),
             ),
       ),

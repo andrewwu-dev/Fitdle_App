@@ -15,6 +15,8 @@ const password = "Password";
 const confirmPassword = "Confirm Password";
 const signup = "Sign up";
 const alreadyHaveAccount = "Already have an account?";
+const weakPassword = "The password provided is too weak.";
+const emailInUse = "The account already exists for that email.";
 
 // Personal Info
 const hiThere = "Hi there,";

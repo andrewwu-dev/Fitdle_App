@@ -1,8 +1,8 @@
-import 'package:fitdle/constants+utility.dart';
-import 'package:fitdle/scene/dashboard/home_screen.dart';
-import 'package:fitdle/scene/dashboard/analytics_screen.dart';
-import 'package:fitdle/scene/dashboard/redeem_screen.dart';
-import 'package:fitdle/scene/dashboard/settings_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:fitdle/pages/dashboard/home_screen.dart';
+import 'package:fitdle/pages/dashboard/redeem_screen.dart';
+import 'package:fitdle/pages/dashboard/settings_screen.dart';
+import 'analytics_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);

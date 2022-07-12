@@ -1,13 +1,14 @@
-import 'package:fitdle/constants+utility.dart';
+import 'package:fitdle/constants/all_constants.dart';
+import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -17,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: false,
         backgroundColor: const Color.fromARGB(255, 240, 240, 240),
         title: const Text(
-                "$hi Bill,",
+                settings,
                 style: TextStyle(fontFamily: 'Roboto', fontSize: h2, color: Colors.black),
             ),
       ),
@@ -27,15 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
             top: size.height / 12, left: regular, right: regular),
         child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: const [
-            Text(
-                dailyTasks,
-                style: TextStyle(fontFamily: 'Roboto', fontSize: h4)
-            ),
-            SizedBox(height: 20),
-            Text(
-                weeklyTasks,
-                style: TextStyle(fontFamily: 'Roboto', fontSize: h4)
-            )
+            
         ]),
       ),
     );
