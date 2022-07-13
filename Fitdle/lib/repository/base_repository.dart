@@ -5,10 +5,10 @@ class BaseRepository {
   final String _baseURL = "http://10.0.2.2:8000";
   final Dio _dio = Dio();
 
-  Future<Object> fetch(endpoint) async {
+  Future<Object> fetch(endpoint, params) async {
     try {
       String url = _baseURL + endpoint;
-      Response response = await _dio.get(url);
+      Response response = await _dio.get(url, queryParameters: params);
       return Success(response.data);
     } on DioError catch (e) {
       //TODO: add logger
