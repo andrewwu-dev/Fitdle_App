@@ -15,6 +15,8 @@ class BaseRepository {
       print(e.response?.headers);
       print(e.response?.data);
       return Failure(e.response?.data);
+    } on Exception catch(e) {
+      return Failure(e.toString());
     }
   }
 
@@ -27,6 +29,8 @@ class BaseRepository {
       print(e.response?.headers);
       print(e.response?.data);
       return Failure(e.response?.data);
+    } on Exception catch(e) {
+      return Failure(e.toString());
     }
   }
 }
