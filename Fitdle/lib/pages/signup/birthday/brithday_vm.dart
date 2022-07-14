@@ -27,6 +27,7 @@ class BirthdayVM extends ChangeNotifier {
 
   saveUser(birthday) {
     _userRepo.user.update(birthDate: birthday);
+    // TODO: Handle failure
     _userRepo.createUser();
     _done.sink.add(null);
   }

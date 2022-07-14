@@ -1,10 +1,10 @@
 // Custom response for Firebase
 class Success {
   Object? data;
-  Success([data]);
+  Success([this.data]);
 }
 
 class Failure {
   Object? data;
-  Failure(data);
+  Failure(this.data);
 }
