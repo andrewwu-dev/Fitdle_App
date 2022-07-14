@@ -15,21 +15,21 @@ class UserRepository extends BaseRepository implements UserRepositoryProtocol {
     var res = await post("/users/create", user.toJson());
     return res;
   }
-  
+
   @override
   Future<Object> fetchUser(email) async {
     var res = await fetch("/users/", email);
-    if(res is Success && res.data != null) {
+    if (res is Success && (res.data != null || res.data != "")) {
       var json = res.data as Map<String, dynamic>;
       user.update(
-        id: json["id"],
-        email: json["email"],
-        firstName: json["firstName"],
-        lastName: json["lastName"],
-        birthDate: json["birthDate"],
-        numPoints: json["numPoints"]
-      );
+          id: json["id"],
+          email: json["email"],
+          firstName: json["firstName"],
+          lastName: json["lastName"],
+          birthDate: json["birthDate"],
+          numPoints: json["numPoints"]);
+      return res;
     }
-    return res; // let VM handle what UI to show for success/fail
+    return Failure(res); // let VM handle what UI to show for success/fail
   }
 }

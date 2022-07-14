@@ -56,12 +56,12 @@ class _LoginScreenState extends State<LoginScreen> {
             resizeToAvoidBottomInset: false,
             body: Container(
               alignment: Alignment.topLeft,
-              padding: const EdgeInsets.only(top: topPadding, left: regular, right: regular),
+              padding: EdgeInsets.only(top: size.height/12, left: regular, right: regular),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     fitdleText(appName, h1),
-                    const SizedBox(height: 100),
+                    SizedBox(height: size.height / 6),
                     fitdleTextField(emailController, email),
                     const SizedBox(height: regular),
                     fitdlePasswordField(passwordController, password),
@@ -73,14 +73,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(fontFamily: 'Roboto', fontSize: hint)
                       ),
                     ),
-                    SizedBox(height: regular),
+                    const SizedBox(height: regular),
                     primaryButton(login, loginButtonPressed),
                     // Push create account button to bottom of screen
-                    SizedBox(height: size.height / 5),
+                    SizedBox(height: size.height / 6),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                             noAccount
                         ),
                         TextButton(
@@ -110,7 +110,10 @@ class _LoginScreenState extends State<LoginScreen> {
   var passwordController = TextEditingController();
 
   loginButtonPressed() {
-    _isLoading = true;
+    setState(() {
+      _isLoading = true;
+      
+    });
     _loginVM.login(emailController.text, passwordController.text);
     _isLoading = false;
   }

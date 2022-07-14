@@ -38,15 +38,17 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
         body: Container(
             alignment: Alignment.topLeft,
-            padding: const EdgeInsets.fromLTRB (regular, topPadding, regular, 0),
+            padding: EdgeInsets.fromLTRB (regular, size.height / 6, regular, 0),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   fitdleText(birthdayPrompt, h1),
-                  SizedBox(height: 110),
+                  SizedBox(height: size.height / 6),
                   TextButton(
                       onPressed: () => _selectDate(context),
                       child: fitdleText(
@@ -55,7 +57,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
                           Colors.purple
                       )
                   ),
-                  SizedBox(height: 110),
+                  SizedBox(height: size.height / 6),
                   primaryButton(done, doneButtonPressed)
                 ]
             )
@@ -69,8 +71,8 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: date,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
+        firstDate: DateTime(1930, 1),
+        lastDate: DateTime(2023));
     if (picked != null && picked != date) {
       setState(() {
         date = picked;
