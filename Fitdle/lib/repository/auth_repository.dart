@@ -15,7 +15,7 @@ class AuthRepository implements AuthRepositoryProtocol {
         password: password,
       );
     } on FirebaseAuthException catch (e) {
-      return Failure(e.toString());
+      return Failure(e.message);
     } catch (e) {
       return Failure(e.toString());
     }
@@ -30,7 +30,7 @@ class AuthRepository implements AuthRepositoryProtocol {
           password: password
       );
     } on FirebaseAuthException catch (e) {
-      return Failure(e.toString());
+       return Failure(e.message);
     } catch (e) {
       return Failure(e.toString());
     }
