@@ -60,7 +60,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               children: [
                 Container(
                   alignment: Alignment.topLeft,
-                  padding: const EdgeInsets.fromLTRB (regular, topPadding, regular, 0),
+                  padding: EdgeInsets.fromLTRB (regular, size.height / 10, regular, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -73,7 +73,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       fitdlePasswordField(confirmPasswordController, confirmPassword),
                       const SizedBox(height: regular),
                       primaryButton(signup, signupButtonPressed, isEnabled: !_isLoading),
-                      SizedBox(height: size.height / 6),
+                      SizedBox(height: size.height / 8),
                       loginButton()
                     ],
                   ),

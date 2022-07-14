@@ -44,17 +44,17 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         resizeToAvoidBottomInset: false,
         body: Container(
           alignment: Alignment.topLeft,
-          padding: const EdgeInsets.fromLTRB (regular, topPadding, regular, 0),
+          padding: EdgeInsets.fromLTRB (regular, size.height / 6, regular, 0),
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 fitdleText(hiThere, h1),
                 fitdleText(namePrompt, h2),
-                SizedBox(height: large),
+                const SizedBox(height: large),
                 fitdleTextField(firstNameController, firstName),
-                SizedBox(height: regular),
+                const SizedBox(height: regular),
                 fitdleTextField(lastNameController, lastName),
-                SizedBox(height: large),
+                const SizedBox(height: large),
                 primaryButton(ctn, continueButtonTapped)
               ]
           ),

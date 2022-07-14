@@ -15,6 +15,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: false,
         backgroundColor: const Color.fromARGB(255, 240, 240, 240),
         title: const Text(

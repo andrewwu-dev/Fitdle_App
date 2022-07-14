@@ -17,7 +17,6 @@ class LoginVM extends ChangeNotifier {
   PublishSubject<String> get subject => _subject;
   PublishSubject get done => _done;
 
-
   LoginVM([authRepo, userRepo]) {
     _authRepo = authRepo ?? locator.get<AuthRepository>();
     _userRepo = userRepo ?? locator.get<UserRepository>();
@@ -33,14 +32,14 @@ class LoginVM extends ChangeNotifier {
   login(email, password) async {
     var passwordHash = sha256.convert(utf8.encode(password)).toString();
     var res = await _authRepo.login(email, passwordHash);
-    if(res is Failure) {
+    if (res is Failure) {
       _subject.sink.addError(res.data.toString());
       return;
     }
     var queryParam = {"email": email};
-    res = _userRepo.fetchUser(queryParam);
-    if(res is Failure) {
-      _subject.sink.addError(res.data.toString());
+    res = await _userRepo.fetchUser(queryParam);
+    if (res is Failure) {
+      _subject.sink.addError("Unable to retrieve user data");
     } else {
       _done.sink.add(null);
     }

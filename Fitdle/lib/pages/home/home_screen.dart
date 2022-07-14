@@ -11,6 +11,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final HomeVM _homeVM;
+  final List<String> entries = <String>[dailyTasks, weeklyTasks];
 
   @override
   void initState() {
@@ -30,28 +31,39 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: false,
         backgroundColor: const Color.fromARGB(255, 240, 240, 240),
         title: Text(
-          "$hi ${_homeVM.getUser().firstName},",
+          "$hi${_homeVM.getUser().firstName != null ? " ${capitalize(_homeVM.getUser().firstName!)}" : ""},",
           style: const TextStyle(
               fontFamily: 'Roboto', fontSize: h2, color: Colors.black),
         ),
       ),
       body: Container(
-        alignment: Alignment.topLeft,
-        padding: EdgeInsets.only(
-            top: size.height / 12, left: regular, right: regular),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: const [
-              Text(dailyTasks,
-                  style: TextStyle(fontFamily: 'Roboto', fontSize: h4)),
-              SizedBox(height: 20),
-              Text(weeklyTasks,
-                  style: TextStyle(fontFamily: 'Roboto', fontSize: h4))
-            ]),
-      ),
+        padding: const EdgeInsets.only(left: small, top: regular, right: small),
+        child: 
+            ListView.separated(
+              padding: const EdgeInsets.all(8),
+              itemCount: entries.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      entries[index],
+                      style: const TextStyle(fontFamily: 'Roboto', fontSize: h4)
+                    ),
+                  ],
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) => const Divider(),
+            ),
+        )
     );
+  }
+
+  String capitalize(String text) {
+    return "${text[0].toUpperCase()}${text.substring(1).toLowerCase()}";
   }
 }
