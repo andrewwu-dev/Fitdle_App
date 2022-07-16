@@ -71,11 +71,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
               label: run),
           ActionButton(
               onPressed: () {},
-              icon: const Icon(Icons.fitness_center),
+              icon: const Icon(AppIcons.pushup),
               label: pushups),
           ActionButton(
               onPressed: () {},
-              icon: const Icon(Icons.videocam),
+              icon: const Icon(AppIcons.squat),
               label: squats),
         ],
       ),
