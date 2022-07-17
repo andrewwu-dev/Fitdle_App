@@ -33,9 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _listen() {
-    // navigate
     _navigationSubscription = _loginVM.done.listen((value) {
-          Navigator.pushNamed(context, "dashboard");
+          Navigator.popAndPushNamed(context, "dashboard");
     });
   }
 
