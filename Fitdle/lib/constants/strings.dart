@@ -38,6 +38,13 @@ const hi = "Hi";
 const dailyTasks = "Daily Tasks:";
 const weeklyTasks = "Weekly Tasks:";
 const points = "Points:";
+const lpa = "LPA";
+const mvpa = "MVPA";
+const strength = "Strength Exercises";
+const progress = "Progress:";
+const steps = "steps";
+const minutes = "min.";
+const times = "times";
 
 // Analytics
 const analytics = "Analytics";

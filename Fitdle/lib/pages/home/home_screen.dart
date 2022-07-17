@@ -1,6 +1,7 @@
-import 'package:fitdle/constants/all_constants.dart';
 import 'home_vm.dart';
+import 'package:fitdle/constants/all_constants.dart';
 import 'package:flutter/material.dart';
+import 'task.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,7 +12,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final HomeVM _homeVM;
-  final List<String> entries = <String>[dailyTasks, weeklyTasks];
 
   @override
   void initState() {
@@ -28,39 +28,56 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    _homeVM.getDailyProgress();
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: false,
-        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-        title: Text(
-          "$hi${_homeVM.getUser().firstName != null ? " ${capitalize(_homeVM.getUser().firstName!)}" : ""},",
-          style: const TextStyle(
-              fontFamily: 'Roboto', fontSize: h2, color: Colors.black),
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: false,
+          backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+          title: Text(
+            "$hi${_homeVM.getUser().firstName != null ? " ${capitalize(_homeVM.getUser().firstName!)}" : ""},",
+            style: const TextStyle(
+                fontFamily: 'Roboto', fontSize: h2, color: Colors.black),
+          ),
         ),
-      ),
-      body: Container(
-        padding: const EdgeInsets.only(left: small, top: regular, right: small),
-        child: 
-            ListView.separated(
-              padding: const EdgeInsets.all(8),
-              itemCount: entries.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      entries[index],
-                      style: const TextStyle(fontFamily: 'Roboto', fontSize: h4)
-                    ),
-                  ],
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) => const Divider(),
-            ),
-        )
-    );
+        body: Container(
+          padding: const EdgeInsets.only(left: small, right: small),
+          child: ListView(
+            padding: const EdgeInsets.all(8),
+            primary: false,
+            children: const [
+              SizedBox(height: regular),
+              Text(dailyTasks,
+                  style: TextStyle(fontFamily: 'Roboto', fontSize: h4)),
+              SizedBox(height: 20),
+              Task(
+                  category: lpa,
+                  icon: Icon(Icons.directions_walk, size: h3),
+                  unit: steps,
+                  taskProgress: 0,
+                  goal: 7000),
+              SizedBox(height: 20),
+              Task(
+                  category: mvpa,
+                  icon: Icon(Icons.directions_run, size: h3),
+                  unit: minutes,
+                  taskProgress: 5,
+                  goal: 20),
+              SizedBox(height: 20),
+              Text(weeklyTasks,
+                  style: TextStyle(fontFamily: 'Roboto', fontSize: h4)),
+              SizedBox(height: 20),
+              Task(
+                  category: strength,
+                  icon: Icon(Icons.fitness_center, size: h3),
+                  unit: times,
+                  taskProgress: 0,
+                  goal: 2),
+              SizedBox(height: 20),
+            ],
+          ),
+        ));
   }
 
   String capitalize(String text) {
