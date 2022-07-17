@@ -34,7 +34,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   _listen() {
     _navigationSubscription = _createAccountVM.done.listen((value) {
-      Navigator.pushNamed(context, "personal_info");
+      // empty navigation stack and push personal info page
+      // https://stackoverflow.com/questions/44978216/flutter-remove-back-button-on-appbar
+      Navigator.pushNamedAndRemoveUntil(context, "personal_info", (_) => false);
     });
   }
 

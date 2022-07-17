@@ -42,21 +42,24 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Container(
-          alignment: Alignment.topLeft,
-          padding: EdgeInsets.fromLTRB (regular, size.height / 6, regular, 0),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                fitdleText(hiThere, h1),
-                fitdleText(namePrompt, h2),
-                const SizedBox(height: large),
-                fitdleTextField(firstNameController, firstName),
-                const SizedBox(height: regular),
-                fitdleTextField(lastNameController, lastName),
-                const SizedBox(height: large),
-                primaryButton(ctn, continueButtonTapped)
-              ]
+        body: WillPopScope(
+          onWillPop: () async => false,
+          child: Container(
+            alignment: Alignment.topLeft,
+            padding: EdgeInsets.fromLTRB (regular, size.height / 6, regular, 0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  fitdleText(hiThere, h1),
+                  fitdleText(namePrompt, h2),
+                  const SizedBox(height: large),
+                  fitdleTextField(firstNameController, firstName),
+                  const SizedBox(height: regular),
+                  fitdleTextField(lastNameController, lastName),
+                  const SizedBox(height: large),
+                  primaryButton(ctn, continueButtonTapped)
+                ]
+            ),
           ),
         )
     );
