@@ -11,10 +11,10 @@ class LoginVM extends ChangeNotifier {
   late final AuthRepository _authRepo;
   late final UserRepository _userRepo;
 
-  final PublishSubject<String> _subject = PublishSubject();
+  final PublishSubject<String> _error = PublishSubject();
   final PublishSubject _done = PublishSubject();
 
-  PublishSubject<String> get subject => _subject;
+  PublishSubject<String> get error => _error;
   PublishSubject get done => _done;
 
   LoginVM([authRepo, userRepo]) {
@@ -25,7 +25,7 @@ class LoginVM extends ChangeNotifier {
   @override
   void dispose() {
     super.dispose();
-    _subject.close();
+    _error.close();
     _done.close();
   }
 
@@ -33,13 +33,13 @@ class LoginVM extends ChangeNotifier {
     var passwordHash = sha256.convert(utf8.encode(password)).toString();
     var res = await _authRepo.login(email, passwordHash);
     if (res is Failure) {
-      _subject.sink.addError(res.data.toString());
+      _error.sink.add(res.data.toString());
       return;
     }
     var queryParam = {"email": email};
     res = await _userRepo.fetchUser(queryParam);
     if (res is Failure) {
-      _subject.sink.addError("Unable to retrieve user data");
+      _error.sink.add("Unable to retrieve user data");
     } else {
       _done.sink.add(null);
     }

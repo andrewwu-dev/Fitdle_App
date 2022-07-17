@@ -4,6 +4,7 @@ import 'package:fitdle/repository/api_response.dart';
 abstract class AuthRepositoryProtocol {
   Future<Object> createAccount(email, password);
   Future<Object> login(email, password);
+  Future<void> logout();
 }
 
 class AuthRepository implements AuthRepositoryProtocol {
@@ -35,6 +36,11 @@ class AuthRepository implements AuthRepositoryProtocol {
       return Failure(e.toString());
     }
     return Success();
+  }
+
+  @override
+  Future<void> logout() async {
+    await FirebaseAuth.instance.signOut();
   }
 
 }
