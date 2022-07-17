@@ -3,8 +3,7 @@ import 'package:fitdle/repository/api_response.dart';
 
 class BaseRepository {
   // Note: for dev purposes choose a base url depending on ios or android
-  final String _baseURL = "http://10.0.2.2:8000";
-  //final String _baseURL = "http://localhost:8000";
+  final String _baseURL = "https://us-central1-fitdle.cloudfunctions.net/app";
 
   final Dio _dio = Dio();
 
