@@ -1,55 +1,63 @@
+class ExerciseHistory {
+  List<Run> runs;
+  List<Strength> strengthExercises;
+
+  ExerciseHistory(this.runs, this.strengthExercises);
+
+  Map<String, dynamic> toJson() => {
+    "runs": runs,
+    "strengthExercises": strengthExercises,
+  };
+}
+
 class Run {
   DateTime startTimestamp;
   DateTime endTimestamp;
   int exerciseType;
   int exerciseID;
   double avgPace;
-  List<String>? path;
+  String? path;
   int calories;
   int? numSteps;
   double distance;
 
   Run(
-      {required this.startTimestamp,
-      required this.endTimestamp,
-      required this.exerciseType,
-      required this.exerciseID,
-      required this.avgPace,
-      required this.calories,
-      required this.distance});
+    this.startTimestamp,
+    this.endTimestamp,
+    this.exerciseType,
+    this.exerciseID,
+    this.avgPace,
+    this.path,
+    this.calories,
+    this.numSteps,
+    this.distance
+  );
+    
+  factory Run.fromJson(Map<String, dynamic> json) {
+    return Run(
+      DateTime.parse(json['startTimestamp']),
+      DateTime.parse(json['endTimestamp']),
+      json['exerciseType'] as int,
+      json['exerciseID'] as int,
+      json['avgPace'] as double,
+      json['path'] as String?,
+      json['calories'] as int,
+      json['numSteps'] as int,
+      json['distance'] as double,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
-        "startTimestamp": startTimestamp,
-        "endTimestamp": endTimestamp,
-        "exerciseType": exerciseType,
-        "exerciseID": exerciseID,
-        "avgPace": avgPace,
-        "path": path,
-        "calories": calories,
-        "numSteps": numSteps,
-        "distance": distance
-      };
-
-  update(
-      {startTimestamp,
-      endTimestamp,
-      exerciseType,
-      exerciseID,
-      avgPace,
-      path,
-      calories,
-      numSteps,
-      distance}) {
-    this.startTimestamp = startTimestamp;
-    this.endTimestamp = endTimestamp;
-    this.exerciseType = exerciseType;
-    this.exerciseID = exerciseID;
-    this.avgPace = avgPace;
-    this.path ??= path;
-    this.calories = calories;
-    this.numSteps ??= numSteps;
-    this.distance = distance;
-  }
+    "startTimestamp": startTimestamp,
+    "endTimestamp": endTimestamp,
+    "exerciseType": exerciseType,
+    "exerciseID": exerciseID,
+    "avgPace": avgPace,
+    "path": path,
+    "calories": calories,
+    "numSteps": numSteps,
+    "distance": distance
+  };
 }
 
 class Strength {
@@ -61,37 +69,31 @@ class Strength {
   double score;
 
   Strength(
-      {
-        required this.startTimestamp,
-        required this.endTimestamp,
-        required this.exerciseType,
-        required this.exerciseID,
-        required this.repetitions,
-        required this.score
-      }
+    this.startTimestamp,
+    this.endTimestamp,
+    this.exerciseType,
+    this.exerciseID,
+    this.repetitions,
+    this.score
   );
 
-  Map<String, dynamic> toJson() => {
-        "startTimestamp": startTimestamp,
-        "endTimestamp": endTimestamp,
-        "exerciseType": exerciseType,
-        "exerciseID": exerciseID,
-        "repetitions": repetitions,
-        "score": score
-      };
-
-  update(
-      {startTimestamp,
-      endTimestamp,
-      exerciseType,
-      exerciseID,
-      repetitions,
-      score}) {
-    this.startTimestamp = startTimestamp;
-    this.endTimestamp = endTimestamp;
-    this.exerciseType = exerciseType;
-    this.exerciseID = exerciseID;
-    this.repetitions = repetitions;
-    this.score = score;
+  factory Strength.fromJson(Map<String, dynamic> json) {
+    return Strength(
+      DateTime.parse(json['startTimestamp']),
+      DateTime.parse(json['endTimestamp']),
+      json['exerciseType'] as int,
+      json['exerciseID'] as int,
+      json['repetitions'] as int,
+      json['score'] as double
+    );
   }
+
+  Map<String, dynamic> toJson() => {
+    "startTimestamp": startTimestamp,
+    "endTimestamp": endTimestamp,
+    "exerciseType": exerciseType,
+    "exerciseID": exerciseID,
+    "repetitions": repetitions,
+    "score": score
+  };
 }

@@ -5,6 +5,7 @@ class User {
   String? birthDate;
   int? id;
   int? numPoints;
+  int? age;
 
   User([this.id, this.email, this.firstName, this.lastName, this.birthDate]);
 
@@ -19,8 +20,26 @@ class User {
     this.id ??= id;
     this.email ??= email;
     this.firstName ??= firstName;
-    this.lastName ??=lastName;
+    this.lastName ??= lastName;
     this.birthDate ??= birthDate;
     this.numPoints ??= numPoints;
+    age = calculateAge(DateTime.parse(this.birthDate!));
+  }
+
+  int calculateAge(DateTime birthDate) {
+    DateTime currentDate = DateTime.now();
+    int age = currentDate.year - birthDate.year;
+    int month1 = currentDate.month;
+    int month2 = birthDate.month;
+    if (month2 > month1) {
+      age--;
+    } else if (month1 == month2) {
+      int day1 = currentDate.day;
+      int day2 = birthDate.day;
+      if (day2 > day1) {
+        age--;
+      }
+    }
+    return age;
   }
 }
