@@ -63,15 +63,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           taskProgress: progress.lpa,
                           goal: _homeVM.getTaskGoal("lpa")),
                       const SizedBox(height: 20),
+                      const Text(weeklyTasks,
+                          style: TextStyle(fontFamily: 'Roboto', fontSize: h4)),
+                      const SizedBox(height: 20),
                       Task(
                           category: mvpa,
                           icon: const Icon(Icons.directions_run, size: h3),
                           unit: minutes,
                           taskProgress: progress.mvpa,
                           goal: _homeVM.getTaskGoal("mvpa")),
-                      const SizedBox(height: 20),
-                      const Text(weeklyTasks,
-                          style: TextStyle(fontFamily: 'Roboto', fontSize: h4)),
                       const SizedBox(height: 20),
                       Task(
                           category: strength,
