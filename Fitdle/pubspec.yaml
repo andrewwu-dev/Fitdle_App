@@ -87,7 +87,7 @@ flutter:
           weight: 700
     - family: AppIcons
       fonts:
-         - asset: fonts/AppIcons.ttf
+         - asset: lib/resources/fonts/AppIcons.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

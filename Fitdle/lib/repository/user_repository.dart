@@ -5,6 +5,7 @@ import 'package:fitdle/models/user.dart';
 abstract class UserRepositoryProtocol {
   Future<Object> createUser();
   Future<Object> fetchUser(email);
+  Future<Object> fetchDailyProgress(timeRange);
 }
 
 class UserRepository extends BaseRepository implements UserRepositoryProtocol {
@@ -22,7 +23,7 @@ class UserRepository extends BaseRepository implements UserRepositoryProtocol {
     if (res is Success && (res.data != null || res.data != "")) {
       var json = res.data as Map<String, dynamic>;
       user.update(
-          id: json["id"],
+          id: json["userID"],
           email: json["email"],
           firstName: json["firstName"],
           lastName: json["lastName"],
@@ -31,5 +32,11 @@ class UserRepository extends BaseRepository implements UserRepositoryProtocol {
       return res;
     }
     return Failure(res); // let VM handle what UI to show for success/fail
+  }
+
+  @override
+  Future<Object> fetchDailyProgress(timeRange) async {
+    var res = await fetch("/users/exercises/${user.id}", timeRange);
+    return res;
   }
 }
