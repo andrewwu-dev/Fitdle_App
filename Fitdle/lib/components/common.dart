@@ -44,6 +44,8 @@ Widget primaryButton(label, action, {isEnabled=true}) {
 }
 
 Scaffold fitdleSpinner() {
+  // Need Scaffold to have white background and Center otherwise spinner takes
+  // up whole screen.
   return const Scaffold(
     body: Center(
       child: CircularProgressIndicator(color: Colors.purple),
