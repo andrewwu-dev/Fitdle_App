@@ -42,6 +42,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) return fitdleSpinner();
+
     Size size = MediaQuery.of(context).size;
 
     return StreamBuilder(
@@ -57,7 +59,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           return Scaffold(
             resizeToAvoidBottomInset: false,
             // TODO: Wrap in SingleChildScrollView so keyboard doesn't cause overflow
-            // TODO: Figure out why CircularProgressIndicator is not appearing
             body: Stack (
               children: [
                 Container(
@@ -123,9 +124,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     Navigator.pop(context);
   }
 
-  signupButtonPressed() async {
-    _isLoading = true;
-    _createAccountVM.firebaseSignup(emailController.text, passwordController.text);
-    _isLoading = false;
+  signupButtonPressed() {
+    setState(() {_isLoading = true;});
+    _createAccountVM.firebaseSignup(emailController.text, passwordController.text).then((_) {
+      _isLoading = false;
+      setState(() {});
+    });
   }
 }

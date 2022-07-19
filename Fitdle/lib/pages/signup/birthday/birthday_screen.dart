@@ -52,9 +52,9 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
                   TextButton(
                       onPressed: () => _selectDate(context),
                       child: fitdleText(
-                          "${date.month}-${date.day}-${date.year}",
-                          30.0,
-                          Colors.purple
+                        "${date.month}-${date.day}-${date.year}",
+                        30.0,
+                        color: Colors.purple
                       )
                   ),
                   SizedBox(height: size.height / 6),

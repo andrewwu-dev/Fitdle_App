@@ -85,9 +85,15 @@ flutter:
         - asset: lib/resources/fonts/Roboto-Regular.ttf
         - asset: lib/resources/fonts/Roboto-Bold.ttf
           weight: 700
+        - asset: lib/resources/fonts/Roboto-Thin.ttf
+        - asset: lib/resources/fonts/Roboto-Light.ttf
+        - asset: lib/resources/fonts/Roboto-Medium.ttf
     - family: AppIcons
       fonts:
          - asset: lib/resources/fonts/AppIcons.ttf
+
+  assets:
+    - lib/resources/images/
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -30,7 +30,7 @@ class CreateAccountVM extends ChangeNotifier {
     _done.close();
   }
 
-  firebaseSignup(email, password) async {
+  Future<void> firebaseSignup(email, password) async {
     var passwordHash = sha256.convert(utf8.encode(password)).toString();
     var res = await _authRepo.createAccount(email, passwordHash);
     _userRepo.user.update(email: email);
