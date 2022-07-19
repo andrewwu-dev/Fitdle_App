@@ -1,3 +1,4 @@
+import 'package:fitdle/components/common.dart';
 import 'package:fitdle/constants/all_constants.dart';
 import 'package:fitdle/pages/redeem/redeem_vm.dart';
 import 'package:fitdle/pages/redeem/reward_box.dart';
@@ -20,8 +21,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
     super.initState();
     _redeemVM = RedeemVM();
     _redeemVM.getRewards().then((_) {
-      _isLoading = false;
-      setState(() {});
+      setState(() {_isLoading = false;});
     });
   }
 
@@ -36,7 +36,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) return CircularProgressIndicator();
+    if (_isLoading) return fitdleSpinner();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

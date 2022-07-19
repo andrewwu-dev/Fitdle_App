@@ -51,6 +51,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) return fitdleSpinner();
+
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -111,12 +113,10 @@ class _LoginScreenState extends State<LoginScreen> {
   var passwordController = TextEditingController();
 
   loginButtonPressed() {
-    setState(() {
-      _isLoading = true;
-      
+    setState(() {_isLoading = true;});
+    _loginVM.login(emailController.text, passwordController.text).then((_) {
+      setState(() {_isLoading = false;});
     });
-    _loginVM.login(emailController.text, passwordController.text);
-    _isLoading = false;
   }
 
   signupButtonPressed() {

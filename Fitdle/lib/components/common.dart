@@ -43,3 +43,11 @@ Widget primaryButton(label, action, {isEnabled=true}) {
   );
 }
 
+Scaffold fitdleSpinner() {
+  return const Scaffold(
+    body: Center(
+      child: CircularProgressIndicator(color: Colors.purple),
+    ),
+  );
+}
+

@@ -29,7 +29,7 @@ class LoginVM extends ChangeNotifier {
     _done.close();
   }
 
-  login(email, password) async {
+  Future<void> login(email, password) async {
     var passwordHash = sha256.convert(utf8.encode(password)).toString();
     var res = await _authRepo.login(email, passwordHash);
     if (res is Failure) {
