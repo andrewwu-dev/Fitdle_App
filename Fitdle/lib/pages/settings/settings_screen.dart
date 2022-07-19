@@ -53,9 +53,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: Container(
         alignment: Alignment.topLeft,
-        padding: EdgeInsets.fromLTRB(0, regular, 0, 0),
+        color: const Color.fromARGB(255, 240, 240, 240),
         child: ListView(
+          primary: false,
           children: [
+            const SizedBox(height: regular),
             option(Icons.logout, "Log out", logoutPressed)
           ],
         )
@@ -67,12 +69,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _settingsVM.logout();
   }
 
-  ListTile option(IconData icon, String label, action) {
-    return ListTile(
-      leading: Icon(icon, color: Colors.purple),
-      title: fitdleText(label, body),
-      onTap: action,
-      contentPadding: EdgeInsets.fromLTRB(regular, 0, regular, 0)
+  Container option(IconData icon, String label, action) {
+    return Container(
+      color: Colors.white,
+      child: ListTile(
+        leading: Icon(icon, color: Colors.purple),
+        title: fitdleText(label, body),
+        onTap: action,
+        contentPadding: const EdgeInsets.fromLTRB(regular, 0, regular, 0)
+      )
     );
   }
 }

@@ -48,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 body: Container(
                   padding: const EdgeInsets.only(left: small, right: small),
+                  color: const Color.fromARGB(255, 240, 240, 240),
                   child: ListView(
                     padding: const EdgeInsets.all(8),
                     primary: false,

@@ -24,6 +24,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
             ),
       ),
       body: Container(
+        color: const Color.fromARGB(255, 240, 240, 240),
         alignment: Alignment.topLeft,
         padding: EdgeInsets.only(
             top: size.height / 12, left: regular, right: regular),

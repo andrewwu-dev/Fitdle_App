@@ -55,3 +55,5 @@ const noRewardsAvailable = "No rewards available at this time";
 
 // Settings
 const settings = "Settings";
+
+// Run
