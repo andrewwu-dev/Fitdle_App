@@ -57,7 +57,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
   body(size) {
     if(_redeemVM.rewards.isEmpty) {
       return Center(
-        child: fitdleText("No rewards available at this time", h3),
+        child: fitdleText(noRewardsAvailable, h3),
       );
     } else {
       return Container(
