@@ -63,19 +63,26 @@ class _RedeemScreenState extends State<RedeemScreen> {
       return Container(
         alignment: Alignment.topLeft,
         padding: const EdgeInsets.fromLTRB(regular, regular, regular, 0),
-        child: ListView.separated(
-            itemCount: _redeemVM.rewards.length,
-            itemBuilder: (BuildContext context, int index) {
-              final reward = _redeemVM.rewards[index];
-              return RewardBox(
-                  imgURL: reward.imgURL,
-                  title: reward.title,
-                  description: reward.description ?? "",
-                  cost: reward.cost
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 20)
-        ),
+        child: Column(
+          children: [
+            fitdleText("Your balance: ${_redeemVM.user.numPoints}", h2),
+            SizedBox(height: regular),
+            Expanded(child: ListView.separated(
+                itemCount: _redeemVM.rewards.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final reward = _redeemVM.rewards[index];
+                  return RewardBox(
+                      imgURL: reward.imgURL,
+                      title: reward.title,
+                      description: reward.description ?? "",
+                      cost: reward.cost
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 20)
+              )
+            )
+          ],
+        )
       );
     }
   }
