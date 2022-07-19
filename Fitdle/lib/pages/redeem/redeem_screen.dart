@@ -21,7 +21,8 @@ class _RedeemScreenState extends State<RedeemScreen> {
     super.initState();
     _redeemVM = RedeemVM();
     _redeemVM.getRewards().then((_) {
-      setState(() {_isLoading = false;});
+      _isLoading = false;
+      setState(() {});
     });
   }
 
@@ -37,7 +38,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return fitdleSpinner();
-
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -49,23 +50,33 @@ class _RedeemScreenState extends State<RedeemScreen> {
                 style: TextStyle(fontFamily: 'Roboto', fontSize: h2, color: Colors.black),
             ),
       ),
-      body: Container(
+      body: body(size)
+    );
+  }
+
+  body(size) {
+    if(_redeemVM.rewards.isEmpty) {
+      return Center(
+        child: fitdleText("No rewards available at this time", h3),
+      );
+    } else {
+      return Container(
         alignment: Alignment.topLeft,
         padding: const EdgeInsets.fromLTRB(regular, regular, regular, 0),
         child: ListView.separated(
-          itemCount: _redeemVM.rewards.length,
-          itemBuilder: (BuildContext context, int index) {
-            final reward = _redeemVM.rewards[index];
-            return RewardBox(
-                imgURL: reward.imgURL,
-                title: reward.title,
-                description: reward.description ?? "",
-                cost: reward.cost
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 20)
+            itemCount: _redeemVM.rewards.length,
+            itemBuilder: (BuildContext context, int index) {
+              final reward = _redeemVM.rewards[index];
+              return RewardBox(
+                  imgURL: reward.imgURL,
+                  title: reward.title,
+                  description: reward.description ?? "",
+                  cost: reward.cost
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 20)
         ),
-      ),
-    );
+      );
+    }
   }
 }

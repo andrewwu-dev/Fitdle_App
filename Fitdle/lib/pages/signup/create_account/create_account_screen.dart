@@ -127,7 +127,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   signupButtonPressed() {
     setState(() {_isLoading = true;});
     _createAccountVM.firebaseSignup(emailController.text, passwordController.text).then((_) {
-      setState(() {_isLoading = false;});
+      _isLoading = false;
+      setState(() {});
     });
   }
 }

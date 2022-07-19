@@ -14,14 +14,7 @@ class RedeemVM extends ChangeNotifier {
   PublishSubject get subject => _subject;
   PublishSubject<String> get error => _error;
 
-  List<Reward> rewards = [
-    Reward(null, "E-Book: Healthy Living", "a book about living healthy.", 1000, true),
-    Reward(null, "E-Book: Healthy Living", "a book about living healthy.", 1000, true),
-    Reward(null, "E-Book: Healthy Living", "a book about living healthy.", 1000, true),
-    Reward(null, "E-Book: Healthy Living", "a book about living healthy.", 1000, true),
-    Reward(null, "E-Book: Healthy Living", "a book about living healthy.", 1000, true),
-    Reward(null, "E-Book: Healthy Living", "a book about living healthy.", 1000, true),
-  ];
+  List<Reward> rewards = [];
 
   RedeemVM([rewardsRepo]) {
     _rewardsRepo = rewardsRepo ?? locator.get<RewardsRepository>();

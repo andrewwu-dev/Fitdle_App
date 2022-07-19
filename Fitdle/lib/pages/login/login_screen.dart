@@ -41,6 +41,8 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     _errorSubscription = _loginVM.error.listen((msg) {
+      _isLoading = false;
+      setState(() {});
       Fluttertoast.showToast(
           msg: msg.toString(),
           toastLength: Toast.LENGTH_SHORT,
@@ -115,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
   loginButtonPressed() {
     setState(() {_isLoading = true;});
     _loginVM.login(emailController.text, passwordController.text).then((_) {
-      setState(() {_isLoading = false;});
+      setState(() {});
     });
   }
 
