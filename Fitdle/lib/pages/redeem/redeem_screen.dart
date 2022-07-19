@@ -1,5 +1,5 @@
 import 'package:fitdle/constants/all_constants.dart';
-import 'package:fitdle/pages/redeem/redeem_VM.dart';
+import 'package:fitdle/pages/redeem/redeem_vm.dart';
 import 'package:fitdle/pages/redeem/reward_box.dart';
 import 'package:flutter/material.dart';
 
@@ -13,12 +13,16 @@ class RedeemScreen extends StatefulWidget {
 class _RedeemScreenState extends State<RedeemScreen> {
   late final RedeemVM _redeemVM;
   //late StreamSubscription _errorSubscription;
-  bool _isLoading = false;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _redeemVM = RedeemVM();
+    _redeemVM.getRewards().then((_) {
+      _isLoading = false;
+      setState(() {});
+    });
   }
 
   @override
@@ -32,7 +36,8 @@ class _RedeemScreenState extends State<RedeemScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    if (_isLoading) return CircularProgressIndicator();
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -52,7 +57,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
           itemBuilder: (BuildContext context, int index) {
             final reward = _redeemVM.rewards[index];
             return RewardBox(
-                imgURL: null,
+                imgURL: reward.imgURL,
                 title: reward.title,
                 description: reward.description ?? "",
                 cost: reward.cost

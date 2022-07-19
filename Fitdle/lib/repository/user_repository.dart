@@ -29,9 +29,8 @@ class UserRepository extends BaseRepository implements UserRepositoryProtocol {
           lastName: json["lastName"],
           birthDate: json["birthDate"],
           numPoints: json["numPoints"]);
-      return res;
     }
-    return Failure(res); // let VM handle what UI to show for success/fail
+    return res;
   }
 
   @override

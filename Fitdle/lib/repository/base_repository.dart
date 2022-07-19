@@ -6,7 +6,7 @@ class BaseRepository {
 
   final Dio _dio = Dio();
 
-  Future<Object> fetch(endpoint, params) async {
+  Future<Object> fetch(endpoint, [params]) async {
     try {
       String url = _baseURL + endpoint;
       Response response = await _dio.get(url, queryParameters: params);

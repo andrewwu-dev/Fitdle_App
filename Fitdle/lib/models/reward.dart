@@ -14,7 +14,7 @@ class Reward {
       json["title"],
       json["description"],
       json["cost"],
-      json["isAvailable"]
+      json["isAvailable"] == 1
     );
   }
 }

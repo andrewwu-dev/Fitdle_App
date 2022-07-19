@@ -3,10 +3,12 @@ import 'package:flutter/cupertino.dart';
 import '../constants/font_size.dart';
 
 
-Widget fitdleText(label, size, {color=Colors.black, weight=FontWeight.w400}) {
+Widget fitdleText(label, size, {color=Colors.black, weight=FontWeight.w400, align=TextAlign.center}) {
   return Text(
-      label,
-      style: TextStyle(fontFamily: "Roboto", fontSize: size, color: color, fontWeight: weight)
+    label,
+    style: TextStyle(fontFamily: "Roboto", fontSize: size, color: color, fontWeight: weight),
+    overflow: TextOverflow.clip,
+    textAlign: align
   );
 }
 
@@ -14,8 +16,8 @@ Widget fitdleTextField(controller, placeholder) {
   return TextField(
     controller: controller,
     decoration: InputDecoration(
-        border: const OutlineInputBorder(),
-        labelText: placeholder
+      border: const OutlineInputBorder(),
+      labelText: placeholder
     ),
   );
 }
@@ -27,17 +29,17 @@ Widget fitdlePasswordField(controller, placeholder) {
     enableSuggestions: false,
     autocorrect: false,
     decoration: InputDecoration(
-        border: const OutlineInputBorder(),
-        labelText: placeholder
+      border: const OutlineInputBorder(),
+      labelText: placeholder
     ),
   );
 }
 
 Widget primaryButton(label, action, {isEnabled=true}) {
   return CupertinoButton(
-      color: Colors.purple,
-      onPressed: isEnabled ? action : null,
-      child: fitdleText(label, button, color: Colors.white)
+    color: Colors.purple,
+    onPressed: isEnabled ? action : null,
+    child: fitdleText(label, button, color: Colors.white)
   );
 }
 
