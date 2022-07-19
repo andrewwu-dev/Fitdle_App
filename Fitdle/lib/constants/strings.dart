@@ -57,3 +57,9 @@ const noRewardsAvailable = "No rewards available at this time";
 const settings = "Settings";
 
 // Run
+const loading = "Loading";
+const calories = "Calories";
+const timeFormat = "Time (min:sec)";
+const distance = "Distance (km)";
+const startRun = "Start Run";
+const stopRun = "Stop Run";

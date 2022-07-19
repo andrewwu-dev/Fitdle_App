@@ -50,8 +50,8 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  fitdleText(hiThere, h1),
-                  fitdleText(namePrompt, h2),
+                  fitdleText(hiThere, h1, align: TextAlign.left),
+                  fitdleText(namePrompt, h2, align: TextAlign.left),
                   const SizedBox(height: large),
                   fitdleTextField(firstNameController, firstName),
                   const SizedBox(height: regular),

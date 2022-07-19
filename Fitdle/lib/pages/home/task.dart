@@ -1,3 +1,4 @@
+import 'package:fitdle/components/common.dart';
 import 'package:fitdle/constants/all_constants.dart';
 import 'package:flutter/material.dart';
 
@@ -37,11 +38,7 @@ class _TaskState extends State<Task> {
             const SizedBox(width: 30),
             widget.icon,
             const SizedBox(width: 10),
-            Text(widget.category,
-                style: const TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: body,
-                    fontWeight: FontWeight.bold))
+            fitdleText(widget.category, body, weight: FontWeight.bold),
           ],
         ),
         const Divider(
@@ -52,18 +49,11 @@ class _TaskState extends State<Task> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Text(progress,
-                style: TextStyle(fontFamily: 'Roboto', fontSize: body)),
+            fitdleText(progress, body),
             Row(children: [
-              Text("${widget.taskProgress} / ${widget.goal}",
-                  style: const TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: h5,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.purple)),
+              fitdleText("${widget.taskProgress} / ${widget.goal}", h5, color: Colors.purple, weight: FontWeight.bold),
               const SizedBox(width: 5),
-              Text(widget.unit,
-                  style: const TextStyle(fontFamily: 'Roboto', fontSize: body))
+              fitdleText(widget.unit, body),
             ])
           ],
         ),

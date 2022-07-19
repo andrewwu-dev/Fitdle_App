@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:fitdle/components/common.dart';
 import 'package:fitdle/constants/all_constants.dart';
 import 'package:fitdle/pages/settings/settings_vm.dart';
@@ -46,10 +45,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         automaticallyImplyLeading: false,
         centerTitle: false,
         backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-        title: const Text(
-                settings,
-                style: TextStyle(fontFamily: 'Roboto', fontSize: h2, color: Colors.black),
-            ),
+        title: fitdleText(settings, h2)
       ),
       body: Container(
         alignment: Alignment.topLeft,
@@ -74,7 +70,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       color: Colors.white,
       child: ListTile(
         leading: Icon(icon, color: Colors.purple),
-        title: fitdleText(label, body),
+        title: fitdleText(label, body, align: TextAlign.left),
         onTap: action,
         contentPadding: const EdgeInsets.fromLTRB(regular, 0, regular, 0)
       )
