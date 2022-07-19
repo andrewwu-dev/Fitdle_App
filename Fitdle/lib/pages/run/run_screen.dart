@@ -134,9 +134,6 @@ class _RunScreenState extends State<RunScreen> {
             title: fitdleText(run, h2)),
         body: currentLocation == null
             ? Center(child: fitdleText(loading, body))
-            // : WillPopScope(
-            //   onWillPop: () async => false,
-            //   child:
             : Container(
                 color: const Color.fromARGB(255, 240, 240, 240),
                 child: Column(
@@ -203,8 +200,7 @@ class _RunScreenState extends State<RunScreen> {
                       ],
                     ))
                   ],
-                )));
-    //);
+              )));
   }
 
   buttonPressed() {
