@@ -3,11 +3,10 @@ import 'package:flutter/cupertino.dart';
 import '../constants/font_size.dart';
 
 
-Widget fitdleText(label, size, [color]) {
-  color ??= Colors.black;
+Widget fitdleText(label, size, {color=Colors.black, weight=FontWeight.w400}) {
   return Text(
       label,
-      style: TextStyle(fontFamily: 'Roboto', fontSize: size, color: color)
+      style: TextStyle(fontFamily: "Roboto", fontSize: size, color: color, fontWeight: weight)
   );
 }
 
@@ -38,7 +37,7 @@ Widget primaryButton(label, action, {isEnabled=true}) {
   return CupertinoButton(
       color: Colors.purple,
       onPressed: isEnabled ? action : null,
-      child: fitdleText(label, button, Colors.white)
+      child: fitdleText(label, button, color: Colors.white)
   );
 }
 
