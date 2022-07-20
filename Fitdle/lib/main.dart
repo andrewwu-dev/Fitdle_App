@@ -1,5 +1,6 @@
 import 'package:fitdle/pages/dashboard/dashboard_screen.dart';
 import 'package:fitdle/pages/login/login_screen.dart';
+import 'package:fitdle/pages/run/run_screen.dart';
 import 'package:fitdle/pages/signup/birthday/birthday_screen.dart';
 import 'package:fitdle/pages/signup/create_account/create_account_screen.dart';
 import 'package:fitdle/pages/signup/personal_info/personal_info_screen.dart';
@@ -37,8 +38,8 @@ class Fitdle extends StatelessWidget {
           'create_account': (context) => const CreateAccountScreen(),
           'personal_info': (context) => const PersonalInfoScreen(),
           'birthday': (context) => const BirthdayScreen(),
-          'dashboard': (context) => const DashboardScreen()
-        }
-    );
+          'dashboard': (context) => const DashboardScreen(),
+          'run': (context) => const RunScreen()
+        });
   }
 }

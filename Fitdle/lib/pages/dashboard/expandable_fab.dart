@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:fitdle/components/common.dart';
 import 'package:fitdle/constants/all_constants.dart';
 import 'package:flutter/material.dart';
 
@@ -213,10 +214,7 @@ class ActionButton extends StatelessWidget {
             color: theme.colorScheme.onSecondary,
           ),
         ),
-        Text(
-          label,
-          style: const TextStyle(fontFamily: 'Roboto', fontSize: hint, color: Colors.white)
-        ),
+        fitdleText(label, hint, color: Colors.white)
       ]
     );
   }

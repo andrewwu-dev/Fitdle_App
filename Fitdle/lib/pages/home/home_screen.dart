@@ -1,4 +1,5 @@
 import 'home_vm.dart';
+import 'package:fitdle/components/common.dart';
 import 'package:fitdle/constants/all_constants.dart';
 import 'package:flutter/material.dart';
 import 'task.dart';
@@ -38,23 +39,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   automaticallyImplyLeading: false,
                   centerTitle: false,
                   backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-                  title: Text(
-                    "$hi${_homeVM.getUser().firstName != null ? " ${capitalize(_homeVM.getUser().firstName!)}" : ""},",
-                    style: const TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: h2,
-                        color: Colors.black),
-                  ),
+                  title: fitdleText("$hi${_homeVM.getUser().firstName != null ? " ${capitalize(_homeVM.getUser().firstName!)}" : ""},", h2),
                 ),
                 body: Container(
                   padding: const EdgeInsets.only(left: small, right: small),
+                  color: const Color.fromARGB(255, 240, 240, 240),
                   child: ListView(
                     padding: const EdgeInsets.all(8),
                     primary: false,
                     children: [
                       const SizedBox(height: regular),
-                      const Text(dailyTasks,
-                          style: TextStyle(fontFamily: 'Roboto', fontSize: h4)),
+                      fitdleText(dailyTasks, h4, align: TextAlign.left),
                       const SizedBox(height: 20),
                       Task(
                           category: lpa,
@@ -63,8 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           taskProgress: progress.lpa,
                           goal: _homeVM.getTaskGoal("lpa")),
                       const SizedBox(height: 20),
-                      const Text(weeklyTasks,
-                          style: TextStyle(fontFamily: 'Roboto', fontSize: h4)),
+                      fitdleText(weeklyTasks, h4, align: TextAlign.left),
                       const SizedBox(height: 20),
                       Task(
                           category: mvpa,

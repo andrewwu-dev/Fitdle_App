@@ -66,7 +66,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         distance: 112.0,
         children: [
           ActionButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.popAndPushNamed(context, "run");
+              },
               icon: const Icon(Icons.directions_run),
               label: run),
           ActionButton(

@@ -47,7 +47,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  fitdleText(birthdayPrompt, h1),
+                  fitdleText(birthdayPrompt, h1, align: TextAlign.left),
                   SizedBox(height: size.height / 6),
                   TextButton(
                       onPressed: () => _selectDate(context),

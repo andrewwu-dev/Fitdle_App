@@ -36,10 +36,8 @@ class RedeemVM extends ChangeNotifier {
     var res = await _rewardsRepo.getRewards();
     if (res is Success) {
       rewards = res.data as List<Reward>;
-      print("");
     } else {
       res = res as Failure;
-      print(res.data.toString());
       _error.add(res.data.toString());
     }
   }

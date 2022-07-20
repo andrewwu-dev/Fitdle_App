@@ -67,7 +67,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      fitdleText(createAccount, h1),
+                      fitdleText(createAccount, h1, align: TextAlign.left),
                       const SizedBox(height: large),
                       fitdleTextField(emailController, email),
                       const SizedBox(height: regular),
@@ -109,12 +109,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     Colors.black12)
             ),
             onPressed: loginButtonPressed,
-            child: const Text(
-              login,
-              style: TextStyle(fontFamily: 'Roboto',
-                  fontSize: hint,
-                  color: Colors.purple),
-            )
+            child: fitdleText(login, hint, color: Colors.purple)
         )
       ],
     );

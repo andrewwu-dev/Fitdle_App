@@ -20,7 +20,7 @@ class _RewardBoxState extends State<RewardBox> {
   Widget build(BuildContext context) {
     return Container(
       height: 100,
-      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         border: Border.all(),
@@ -36,11 +36,11 @@ class _RewardBoxState extends State<RewardBox> {
                 children: [
                   fitdleText(widget.title, h5),
                   // If null description is set to ""
-                  fitdleText(widget.description, 10.0, weight: FontWeight.w300)
+                  fitdleText(widget.description, 10.0, weight: FontWeight.w300, align: TextAlign.center)
                 ],
               )
           ),
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           Align(
             alignment: Alignment.bottomRight,
             child: fitdleText(widget.cost.toString(), hint, color: Colors.purple)

@@ -45,10 +45,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
         automaticallyImplyLeading: false,
         centerTitle: false,
         backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-        title: const Text(
-                redeem,
-                style: TextStyle(fontFamily: 'Roboto', fontSize: h2, color: Colors.black),
-            ),
+        title: fitdleText(redeem, h2)
       ),
       body: body(size)
     );
@@ -66,8 +63,9 @@ class _RedeemScreenState extends State<RedeemScreen> {
         child: Column(
           children: [
             fitdleText("Your balance: ${_redeemVM.user.numPoints}", h2),
-            SizedBox(height: regular),
+            const SizedBox(height: regular),
             Expanded(child: ListView.separated(
+                primary: false,
                 itemCount: _redeemVM.rewards.length,
                 itemBuilder: (BuildContext context, int index) {
                   final reward = _redeemVM.rewards[index];

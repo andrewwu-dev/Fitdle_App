@@ -1,3 +1,4 @@
+import 'package:fitdle/components/common.dart';
 import 'package:flutter/material.dart';
 import 'package:fitdle/constants/all_constants.dart';
 
@@ -18,12 +19,10 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         automaticallyImplyLeading: false,
         centerTitle: false,
         backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-        title: const Text(
-                analytics,
-                style: TextStyle(fontFamily: 'Roboto', fontSize: h2, color: Colors.black),
-            ),
+        title: fitdleText(analytics, h2)
       ),
       body: Container(
+        color: const Color.fromARGB(255, 240, 240, 240),
         alignment: Alignment.topLeft,
         padding: EdgeInsets.only(
             top: size.height / 12, left: regular, right: regular),

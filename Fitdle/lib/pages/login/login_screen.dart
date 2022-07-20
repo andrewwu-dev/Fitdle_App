@@ -66,18 +66,15 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                fitdleText(appName, h1),
+                fitdleText(appName, h1, align: TextAlign.left),
                 SizedBox(height: size.height / 6),
                 fitdleTextField(emailController, email),
                 const SizedBox(height: regular),
                 fitdlePasswordField(passwordController, password),
                 const SizedBox(height: 14),
-                const Align(
+                Align(
                   alignment: Alignment.topRight,
-                  child: Text(
-                      forgotPassword,
-                      style: TextStyle(fontFamily: 'Roboto', fontSize: hint)
-                  ),
+                  child: fitdleText(forgotPassword, hint)
                 ),
                 const SizedBox(height: regular),
                 primaryButton(login, loginButtonPressed),
@@ -95,12 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Colors.black12)
                         ),
                         onPressed: signupButtonPressed,
-                        child: const Text(
-                          signup,
-                          style: TextStyle(fontFamily: 'Roboto',
-                              fontSize: hint,
-                              color: Colors.purple),
-                        )
+                        child: fitdleText(signup, hint, color: Colors.purple)
                     )
                   ],
                 )
