@@ -43,6 +43,7 @@ dependencies:
   flutter_polyline_points: ^1.0.0
   google_maps_flutter: ^2.1.7
   location: ^4.4.0
+  camera: ^0.10.0
 
 dev_dependencies:
   flutter_test:
