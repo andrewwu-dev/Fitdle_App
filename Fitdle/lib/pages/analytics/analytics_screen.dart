@@ -16,7 +16,6 @@ class AnalyticsScreen extends StatefulWidget {
 
 class _AnalyticsScreenState extends State<AnalyticsScreen> {
   late final AnalyticsVM _analyticsVM;
-  late StreamSubscription _navigationSubscription;
   late TooltipBehavior _tooltip;
 
   int selectedGraph = 0;
@@ -34,7 +33,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   void dispose() {
     super.dispose();
     _analyticsVM.dispose();
-    _navigationSubscription.cancel();
   }
 
   @override
