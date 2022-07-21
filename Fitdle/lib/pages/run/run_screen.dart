@@ -1,12 +1,11 @@
 import 'dart:async';
+import 'dart:math';
 import 'marker_icon.dart';
 import 'stats_display.dart';
-import 'package:fitdle/auth/secrets.dart';
 import 'package:fitdle/components/common.dart';
 import 'package:fitdle/constants/all_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fitdle/pages/run/run_vm.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
@@ -37,6 +36,8 @@ class _RunScreenState extends State<RunScreen> {
   String seconds = "00";
   double cameraZoom = 16;
 
+  double totalDistance = 0;
+
   void getLocationPermission() async {
     bool serviceEnabled;
     PermissionStatus permissionGranted;
@@ -56,7 +57,8 @@ class _RunScreenState extends State<RunScreen> {
       }
     }
 
-    location.changeSettings(accuracy: LocationAccuracy.high, interval: 1000, distanceFilter: 0);
+    location.changeSettings(
+        accuracy: LocationAccuracy.high, interval: 1000, distanceFilter: 0);
     location.enableBackgroundMode(enable: true);
   }
 
@@ -79,8 +81,12 @@ class _RunScreenState extends State<RunScreen> {
     GoogleMapController googleMapController = await _controller.future;
 
     locationSubscription = location.onLocationChanged.listen((newLoc) {
+      LatLng latestPosition =
+          polylineCoordinates[polylineCoordinates.length - 1];
       currentLocation = newLoc;
       polylineCoordinates.add(LatLng(newLoc.latitude!, newLoc.longitude!));
+      totalDistance += coordinateDistance(latestPosition.latitude,
+          latestPosition.longitude, newLoc.latitude, newLoc.longitude);
       markers.add(Marker(
           markerId: const MarkerId("current"),
           position: LatLng(newLoc.latitude!, newLoc.longitude!),
@@ -88,26 +94,11 @@ class _RunScreenState extends State<RunScreen> {
 
       googleMapController.animateCamera(CameraUpdate.newCameraPosition(
           CameraPosition(
-              zoom: cameraZoom, target: LatLng(newLoc.latitude!, newLoc.longitude!))));
+              zoom: cameraZoom,
+              target: LatLng(newLoc.latitude!, newLoc.longitude!))));
       setState(() {});
     });
   }
-
-  // void getPolyPoints() async {
-  //   PolylinePoints polylinePoints = PolylinePoints();
-  //   PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-  //       googleMapsKey,
-  //       PointLatLng(startLocation.latitude, startLocation.longitude),
-  //       PointLatLng(endLocation.latitude, endLocation.longitude),
-  //       travelMode: TravelMode.walking);
-
-  //   if (result.points.isNotEmpty) {
-  //     for (var point in result.points) {
-  //       polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-  //     }
-  //     setState(() {});
-  //   }
-  // }
 
   @override
   void initState() {
@@ -184,8 +175,8 @@ class _RunScreenState extends State<RunScreen> {
                                   label: timeFormat,
                                   valueFontSize: h2,
                                   labelFontSize: h4),
-                              const StatsDisplay(
-                                  value: "3.00",
+                              StatsDisplay(
+                                  value: totalDistance.toStringAsFixed(2),
                                   label: distance,
                                   valueFontSize: h2,
                                   labelFontSize: h4),
@@ -200,7 +191,7 @@ class _RunScreenState extends State<RunScreen> {
                       ],
                     ))
                   ],
-              )));
+                )));
   }
 
   buttonPressed() {
@@ -247,6 +238,20 @@ class _RunScreenState extends State<RunScreen> {
         break;
     }
   }
+
+  double coordinateDistance(lat1, lon1, lat2, lon2) {
+    const double p = pi / 180;
+    const int radiusEarthKm = 6371;
+    double a = 0.5 -
+        cos((lat2 - lat1) * p) / 2 +
+        cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
+    return 2 * radiusEarthKm * asin(sqrt(a));
+  }
+
+  // double caloriesBurnt(double speed) {
+  //   const double kmToM = 0.62137;
+  //   return 0.75 * weightLbs * totalDistance * kmToM;
+  // }
 
   Stream<int> stopWatchStream() {
     late StreamController<int> streamController;

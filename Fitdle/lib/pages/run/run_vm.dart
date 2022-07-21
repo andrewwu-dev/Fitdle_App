@@ -35,7 +35,5 @@ class RunVM extends ChangeNotifier {
     _done.close();
   }
 
-  Future<void> createRunLog(RunObject runObject) async {
-
-  }
+  Future<void> createRunLog(RunObject runObject) async {}
 }
