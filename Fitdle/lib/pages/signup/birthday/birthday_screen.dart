@@ -3,6 +3,7 @@ import 'package:fitdle/constants/all_constants.dart';
 import 'package:fitdle/pages/signup/birthday/brithday_vm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../../components/common.dart';
 
 class BirthdayScreen extends StatefulWidget {
@@ -15,6 +16,8 @@ class BirthdayScreen extends StatefulWidget {
 class _BirthdayScreenState extends State<BirthdayScreen> {
   late final BirthdayVM _birthdayVM;
   late StreamSubscription _navigationSubscription;
+  late StreamSubscription _errorSubscription;
+  bool _isloading = false;
 
   @override
   void initState() {
@@ -28,17 +31,30 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     super.dispose();
     _birthdayVM.dispose();
     _navigationSubscription.cancel();
+    _errorSubscription.cancel();
   }
 
   _listen() {
     _navigationSubscription = _birthdayVM.done.listen((value) {
       Navigator.pushNamedAndRemoveUntil(context, "dashboard", (_) => false);
     });
+
+    _errorSubscription = _birthdayVM.error.listen((msg) {
+      _isloading = false;
+      setState(() {});
+      Fluttertoast.showToast(
+          msg: msg.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 1
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    if (_isloading) return fitdleSpinner();
 
     return Scaffold(
         body: Container(
@@ -83,6 +99,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   doneButtonPressed() {
     //YYYY-MM-DD
     String birthday = "${date.year}-${date.month}-${date.day}";
+    setState(() {_isloading = true;});
     _birthdayVM.saveUser(birthday);
   }
 }

@@ -108,9 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   loginButtonPressed() {
     setState(() {_isLoading = true;});
-    _loginVM.login(emailController.text, passwordController.text).then((_) {
-      setState(() {});
-    });
+    _loginVM.login(emailController.text, passwordController.text);
   }
 
   signupButtonPressed() {
