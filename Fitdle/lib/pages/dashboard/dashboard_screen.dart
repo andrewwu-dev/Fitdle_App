@@ -75,8 +75,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               label: run),
           ActionButton(
               onPressed: () async {
-                await availableCameras().then((value) => Navigator.pushNamed(
-                    context, "camera"));
+                await availableCameras().then(
+                    (value) => Navigator.pushNamed(context, "camera", arguments: pushups));
               },
               icon: const Icon(AppIcons.pushup),
               label: pushups),

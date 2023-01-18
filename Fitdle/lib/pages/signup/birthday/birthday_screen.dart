@@ -43,7 +43,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     return Scaffold(
         body: Container(
             alignment: Alignment.topLeft,
-            padding: EdgeInsets.fromLTRB (regular, size.height / 6, regular, 0),
+            padding: EdgeInsets.fromLTRB(regular, size.height / 6, regular, 0),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -71,8 +71,8 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: date,
-        firstDate: DateTime(1930, 1),
-        lastDate: DateTime(2023));
+        firstDate: DateTime(1980, 1),
+        lastDate: DateTime(2040));
     if (picked != null && picked != date) {
       setState(() {
         date = picked;
@@ -82,7 +82,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
 
   doneButtonPressed() {
     //YYYY-MM-DD
-    String birthday = "${date.year}-${date.month}-${date.day}";
+    String birthday = date.toString().substring(0, 10);
     _birthdayVM.saveUser(birthday);
   }
 }

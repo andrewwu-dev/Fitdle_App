@@ -40,48 +40,44 @@ class _RedeemScreenState extends State<RedeemScreen> {
     if (_isLoading) return fitdleSpinner();
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: false,
-        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-        title: fitdleText(redeem, h2)
-      ),
-      body: body(size)
-    );
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+            automaticallyImplyLeading: false,
+            centerTitle: false,
+            backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+            title: fitdleText(redeem, h2)),
+        body: body(size));
   }
 
   body(size) {
-    if(_redeemVM.rewards.isEmpty) {
+    if (_redeemVM.rewards.isEmpty) {
       return Center(
         child: fitdleText(noRewardsAvailable, h3),
       );
     } else {
       return Container(
-        alignment: Alignment.topLeft,
-        padding: const EdgeInsets.fromLTRB(regular, regular, regular, 0),
-        child: Column(
-          children: [
-            fitdleText("Your balance: ${_redeemVM.user.numPoints}", h2),
-            const SizedBox(height: regular),
-            Expanded(child: ListView.separated(
-                primary: false,
-                itemCount: _redeemVM.rewards.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final reward = _redeemVM.rewards[index];
-                  return RewardBox(
-                      imgURL: reward.imgURL,
-                      title: reward.title,
-                      description: reward.description ?? "",
-                      cost: reward.cost
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 20)
-              )
-            )
-          ],
-        )
-      );
+          alignment: Alignment.topLeft,
+          padding: const EdgeInsets.fromLTRB(regular, regular, regular, 0),
+          child: Column(
+            children: [
+              fitdleText("Your balance: ${_redeemVM.user.numPoints}", h2),
+              const SizedBox(height: regular),
+              Expanded(
+                  child: ListView.separated(
+                      primary: false,
+                      itemCount: _redeemVM.rewards.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final reward = _redeemVM.rewards[index];
+                        return RewardBox(
+                            imgURL: reward.imgURL,
+                            title: reward.title,
+                            description: reward.description ?? "",
+                            cost: reward.cost);
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const SizedBox(height: 20)))
+            ],
+          ));
     }
   }
 }

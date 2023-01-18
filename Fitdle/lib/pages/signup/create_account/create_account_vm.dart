@@ -32,23 +32,12 @@ class CreateAccountVM extends ChangeNotifier {
 
   Future<void> firebaseSignup(email, password) async {
     var passwordHash = sha256.convert(utf8.encode(password)).toString();
-    // var res = await _authRepo.createAccount(email, passwordHash);
-    try {
-      final credential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-      }
-    }
+    var res = await _authRepo.createAccount(email, passwordHash);
     _userRepo.user.update(email: email);
-    // if (res is Failure) {
-    //   _subject.sink.addError(res.data.toString());
-    // } else {
-    //   _done.sink.add(null);
-    // }
-    _done.sink.add(null);
+    if (res is Failure) {
+      _subject.sink.addError(res.data.toString());
+    } else {
+      _done.sink.add(null);
+    }
   }
 }
