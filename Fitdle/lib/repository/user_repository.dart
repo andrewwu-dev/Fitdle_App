@@ -7,7 +7,8 @@ import 'package:fitdle/models/user.dart';
 abstract class UserRepositoryProtocol {
   Future<Object> createUser();
   Future<Object> fetchUser(email);
-  Future<Object> fetchDailyProgress(timeRange);
+  Future<Object> fetchExcercises(timeRange);
+  Future<Object> fetchEarnings(start, end);
 }
 
 class UserRepository extends BaseRepository implements UserRepositoryProtocol {
@@ -21,7 +22,8 @@ class UserRepository extends BaseRepository implements UserRepositoryProtocol {
 
   @override
   Future<Object> fetchUser(email) async {
-    var res = await fetch("/users/", email);
+    var queryParam = {"email": email};
+    var res = await fetch("/users/", queryParam);
     if (res is Success && (res.data != null || res.data != "")) {
       var jsonList = res.data as List;
       var json = jsonList[0] as Map<String, dynamic>;
@@ -37,8 +39,23 @@ class UserRepository extends BaseRepository implements UserRepositoryProtocol {
   }
 
   @override
-  Future<Object> fetchDailyProgress(timeRange) async {
-    var res = await fetch("/users/exercises/${user.id}", timeRange);
+  Future<Object> fetchExcercises(start, [end]) async {
+    var queryParam = {
+      "start": start
+    };
+    if(end != Null) { queryParam["end"] = end; };
+    var res = await fetch("/users/exercises/${user.id}", queryParam);
+    return res;
+  }
+  
+  @override
+  Future<Object> fetchEarnings(start, end) async {
+    var endpoint = "/users/earnings/${user.id}";
+    var params = {
+      "start": start,
+      "end": end
+    };
+    var res = await fetch(endpoint, params);
     return res;
   }
 }

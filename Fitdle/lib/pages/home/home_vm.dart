@@ -55,9 +55,8 @@ class HomeVM extends ChangeNotifier {
   Future<Progress> getDailyProgress() async {
     DateTime now = DateTime.now();
     DateTime startTime = DateTime(now.year, now.month, now.day);
-    var queryParam = {"start": startTime.toIso8601String()};
 
-    var res = await _userRepo.fetchDailyProgress(queryParam);
+    var res = await _userRepo.fetchExcercises(startTime.toIso8601String());
 
     Progress progress = Progress(lpa: 0, mvpa: 0, strength: 0);
     if (res is Success) {

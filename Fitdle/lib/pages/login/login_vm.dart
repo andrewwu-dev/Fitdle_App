@@ -36,8 +36,7 @@ class LoginVM extends ChangeNotifier {
       _error.sink.add(res.data.toString());
       return;
     }
-    var queryParam = {"email": email};
-    res = await _userRepo.fetchUser(queryParam);
+    res = await _userRepo.fetchUser(email);
     if (res is Failure) {
       _error.sink.add("Unable to retrieve user data");
     } else {
