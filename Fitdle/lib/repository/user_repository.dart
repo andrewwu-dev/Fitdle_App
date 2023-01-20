@@ -1,8 +1,11 @@
+import 'dart:ffi';
+
 import 'package:fitdle/repository/api_response.dart';
 import 'package:fitdle/repository/base_repository.dart';
 import 'package:fitdle/models/user.dart';
 
 abstract class UserRepositoryProtocol {
+  void clearUser();
   Future<Object> createUser();
   Future<Object> fetchUser(email);
   Future<Object> fetchExcercises(timeRange);
@@ -11,6 +14,11 @@ abstract class UserRepositoryProtocol {
 
 class UserRepository extends BaseRepository implements UserRepositoryProtocol {
   final User user = User();
+
+  @override
+  void clearUser() {
+    user.clear();
+  }
 
   @override
   Future<Object> createUser() async {

@@ -1,3 +1,5 @@
+import 'package:camera/camera.dart';
+
 import 'expandable_fab.dart';
 import 'package:fitdle/constants/all_constants.dart';
 import 'package:fitdle/pages/analytics/analytics_screen.dart';
@@ -72,7 +74,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               icon: const Icon(Icons.directions_run),
               label: run),
           ActionButton(
-              onPressed: () {},
+              onPressed: () async {
+                await availableCameras().then(
+                    (value) => Navigator.pushNamed(context, "camera", arguments: pushups));
+              },
               icon: const Icon(AppIcons.pushup),
               label: pushups),
           ActionButton(
