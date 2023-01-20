@@ -26,6 +26,18 @@ class User {
     this.age = null;
   }
 
+  update({id, email, firstName, lastName, birthDate, numPoints}) {
+    this.id ??= id;
+    this.email ??= email;
+    this.firstName ??= firstName;
+    this.lastName ??= lastName;
+    this.birthDate ??= birthDate;
+    this.numPoints ??= numPoints;
+    age = (birthDate != null)
+        ? calculateAge(DateTime.parse(this.birthDate!))
+        : null;
+  }
+
   int calculateAge(DateTime birthDate) {
     DateTime currentDate = DateTime.now();
     int age = currentDate.year - birthDate.year;
