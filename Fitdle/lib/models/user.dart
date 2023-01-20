@@ -16,6 +16,16 @@ class User {
         "birthDate": birthDate
       };
 
+  clear() {
+    this.id = null;
+    this.email = null;
+    this.firstName = null;
+    this.lastName = null;
+    this.birthDate = null;
+    this.numPoints = null;
+    this.age = null;
+  }
+
   update({id, email, firstName, lastName, birthDate, numPoints}) {
     this.id ??= id;
     this.email ??= email;

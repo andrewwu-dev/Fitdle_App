@@ -14,44 +14,35 @@ class CameraScreen extends StatefulWidget {
 }
 
 class _CameraScreenState extends State<CameraScreen> {
-  late CameraController _controller;
+  late CameraController _camera;
   late final CameraVM _cameraVM;
 
   @override
   void initState() {
     super.initState();
-    _cameraVM = CameraVM();
+    _initCamera();
+  }
 
-    _controller = CameraController(widget.camera, ResolutionPreset.max);
-    _controller.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    }).catchError((Object e) {
-      if (e is CameraException) {
-        switch (e.code) {
-          case 'CameraAccessDenied':
-            print('User denied camera access.');
-            break;
-          default:
-            print('Handle other errors.');
-            break;
-        }
-      }
+  void _initCamera() async {
+    _cameraVM = CameraVM();
+    _camera = CameraController(widget.camera, ResolutionPreset.max);
+    await _camera.initialize();
+    setState(() {});
+    _camera.startImageStream((CameraImage image) {
+        // process image/frame here
     });
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _camera.dispose();
     _cameraVM.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_controller.value.isInitialized) {
+    if (!_camera.value.isInitialized) {
       return Container();
     } else { 
       final header = ModalRoute.of(context)!.settings.arguments as String;
@@ -76,7 +67,7 @@ class _CameraScreenState extends State<CameraScreen> {
           children: [
             Expanded(
               flex: 7,
-              child:  CameraPreview(_controller)
+              child:  CameraPreview(_camera)
             ),
             Expanded(
               flex: 3,

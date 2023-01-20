@@ -87,8 +87,9 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: date,
-        firstDate: DateTime(1980, 1),
-        lastDate: DateTime(2040));
+        firstDate: DateTime(1930, 1),
+        lastDate: DateTime.now().add(Duration(days: 1))
+    );
     if (picked != null && picked != date) {
       setState(() {
         date = picked;
