@@ -15,7 +15,7 @@ class User {
         "lastName": lastName,
         "birthDate": birthDate
       };
-
+      
   clear() {
     this.id = null;
     this.email = null;
@@ -24,18 +24,6 @@ class User {
     this.birthDate = null;
     this.numPoints = null;
     this.age = null;
-  }
-
-  update({id, email, firstName, lastName, birthDate, numPoints}) {
-    this.id ??= id;
-    this.email ??= email;
-    this.firstName ??= firstName;
-    this.lastName ??= lastName;
-    this.birthDate ??= birthDate;
-    this.numPoints ??= numPoints;
-    age = (birthDate != null)
-        ? calculateAge(DateTime.parse(this.birthDate!))
-        : null;
   }
 
   int calculateAge(DateTime birthDate) {
