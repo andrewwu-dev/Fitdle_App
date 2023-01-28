@@ -41,4 +41,17 @@ class RedeemVM extends ChangeNotifier {
       _error.add(res.data.toString());
     }
   }
+
+  Future<String?> redeemReward(rewardID) async {
+    var res = await _rewardsRepo.redeemReward(user.id!, rewardID);
+    if (res is Success) {
+      var result = res.data as Map<String, dynamic>;
+      _userRepo.updateUser(result["user"]);
+      return result["code"];
+    } else {
+      res = res as Failure;
+      _error.add(res.data.toString());
+      return null;
+    }
+  }
 }
