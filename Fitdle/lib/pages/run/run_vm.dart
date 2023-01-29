@@ -9,7 +9,7 @@ class RunObject {
   DateTime startTime;
   late DateTime endTime;
   double distance = 0;
-  List<LatLng> path = [];
+  List<Object> path = [];
   int exerciseType = 1;
 
   RunObject(this.startTime);

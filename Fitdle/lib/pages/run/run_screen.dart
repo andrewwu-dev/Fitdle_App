@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'marker_icon.dart';
+import 'run_vm.dart';
 import 'stats_display.dart';
 import 'package:fitdle/components/common.dart';
 import 'package:fitdle/constants/all_constants.dart';
@@ -17,6 +18,7 @@ class RunScreen extends StatefulWidget {
 }
 
 class _RunScreenState extends State<RunScreen> {
+  late final RunVM _runVM;
   final Completer<GoogleMapController> _controller = Completer();
   late LatLng startLocation;
   late LatLng endLocation;
@@ -37,6 +39,7 @@ class _RunScreenState extends State<RunScreen> {
   double cameraZoom = 16;
 
   double totalDistance = 0;
+  double totalCalories = 0;
 
   void getLocationPermission() async {
     bool serviceEnabled;
@@ -85,8 +88,12 @@ class _RunScreenState extends State<RunScreen> {
           polylineCoordinates[polylineCoordinates.length - 1];
       currentLocation = newLoc;
       polylineCoordinates.add(LatLng(newLoc.latitude!, newLoc.longitude!));
-      totalDistance += coordinateDistance(latestPosition.latitude,
+
+      var distance = coordinateDistance(latestPosition.latitude,
           latestPosition.longitude, newLoc.latitude, newLoc.longitude);
+      totalDistance += distance;
+      print(newLoc);
+      totalCalories += caloriesBurnt(newLoc.speed ?? 1, distance);
       markers.add(Marker(
           markerId: const MarkerId("current"),
           position: LatLng(newLoc.latitude!, newLoc.longitude!),
@@ -103,6 +110,7 @@ class _RunScreenState extends State<RunScreen> {
   @override
   void initState() {
     super.initState();
+    _runVM = RunVM();
 
     MarkerGenerator(80)
         .createIcon(
@@ -111,6 +119,12 @@ class _RunScreenState extends State<RunScreen> {
 
     getLocationPermission();
     getStartLocation();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _runVM.dispose();
   }
 
   @override
@@ -160,9 +174,9 @@ class _RunScreenState extends State<RunScreen> {
                         Row(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               StatsDisplay(
-                                  value: "150",
+                                  value: totalCalories.round().toString(),
                                   label: calories,
                                   valueFontSize: h1,
                                   labelFontSize: h4),
@@ -231,7 +245,13 @@ class _RunScreenState extends State<RunScreen> {
               icon: icon));
         });
         setState(() {});
-        // TODO: update runObject and save exercise
+        // update runObject and save exercise
+        runObject.calories = totalCalories.round();
+        runObject.distance = totalDistance;
+        for (final point in polylineCoordinates) {
+          runObject.path.add(point.toJson());
+        }
+        _runVM.createRunLog(runObject);
         break;
       case done:
         Navigator.popAndPushNamed(context, "dashboard");
@@ -248,10 +268,11 @@ class _RunScreenState extends State<RunScreen> {
     return 2 * radiusEarthKm * asin(sqrt(a));
   }
 
-  // double caloriesBurnt(double speed) {
-  //   const double kmToM = 0.62137;
-  //   return 0.75 * weightLbs * totalDistance * kmToM;
-  // }
+  double caloriesBurnt(double speed, double distance) {
+    const double kmToM = 0.62137;
+    const weightLbs = 140;
+    return 0.75 * weightLbs * distance * kmToM;
+  }
 
   Stream<int> stopWatchStream() {
     late StreamController<int> streamController;
