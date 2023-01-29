@@ -69,7 +69,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           ActionButton(
               onPressed: () {
-                Navigator.pushNamed(context, "camera", arguments: run);
+                Navigator.popAndPushNamed(context, "run");
               },
               icon: const Icon(Icons.directions_run),
               label: run),
