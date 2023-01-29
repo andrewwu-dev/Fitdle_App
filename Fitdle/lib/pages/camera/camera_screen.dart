@@ -20,8 +20,8 @@ class _CameraScreenState extends State<CameraScreen> {
 
   @override
   void initState() {
-    super.initState();
     _initCamera();
+    super.initState();
   }
 
   Tuple2 getCameraError(String code) {
@@ -73,8 +73,15 @@ class _CameraScreenState extends State<CameraScreen> {
     super.dispose();
   }
 
+  double getCameraScale(Size size) {
+    return 1;
+  }
+
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    final cameraScale = getCameraScale(size);
+
     if (!_camera.value.isInitialized) {
       return Container();
     } else { 
@@ -89,36 +96,28 @@ class _CameraScreenState extends State<CameraScreen> {
           centerTitle: true,
           backgroundColor: const Color.fromARGB(255, 240, 240, 240),
           title: fitdleText(header, h2)),
-        body: body()
+        body: body(size)
       );
     }
   }
 
-  Widget body() {
+  Widget body(Size size) {
     return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              flex: 7,
-              child:  CameraPreview(_camera)
-            ),
-            Expanded(
-              flex: 3,
-              child: Container(
-                padding: const EdgeInsets.only(left: regular, right: regular),
-                color: Colors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // TODO: connect this to viewmodel
-                    fitdleText("4/10 reps", h2),
-                    primaryButton("Finish", () => { Navigator.of(context).pop() })
-                  ],
-                ),
-              ),
-            )
-          ]
-        );
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Transform.scale(
+        scale: getCameraScale(size),
+        child: Center(
+          child: CameraPreview(_camera)
+          )
+        ),
+        Spacer(),
+        fitdleText("4/10 reps", h2),
+        Spacer(),
+        primaryButton("Finish", () => { Navigator.of(context).pop() }),
+        Spacer(),
+      ],
+    );
   }
 }
