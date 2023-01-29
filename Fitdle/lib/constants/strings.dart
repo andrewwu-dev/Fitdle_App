@@ -2,6 +2,7 @@ const appName = "Fitdle";
 const next = "Next";
 const ctn = "Continue";
 const done = "Done";
+const ok = "OK";
 
 // Login
 const noAccount = "Don't have an account?";
@@ -64,3 +65,13 @@ const timeFormat = "Time (min:sec)";
 const distance = "Distance (km)";
 const startRun = "Start Run";
 const stopRun = "Stop Run";
+
+// Camera
+const cameraAccessDenied = "Camera Access Denied";
+const pleaseGrantCameraAccess = "Please grant camera access to use this feature.";
+const cameraNotFound = "Camera Not Found";
+const audioAccessDenied = "Audio Access Denied";
+const pleaseGrantAudioAccess = "Please grant audio access to use this feature.";
+const goToSettingsCamera = "Grant access in Settings > Privacy > Camera.";
+const goToSettingsMicrophone = "Grant access in Settings > Privacy > Microphone.";
+
