@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:fitdle/repository/api_response.dart';
 import 'package:fitdle/repository/base_repository.dart';
 import '../models/reward.dart';

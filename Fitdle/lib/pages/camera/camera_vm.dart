@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:fitdle/locator.dart';
 import 'package:fitdle/repository/auth_repository.dart';
 import 'package:flutter/foundation.dart';

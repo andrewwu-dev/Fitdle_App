@@ -22,7 +22,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  di_setup();
+  diSetup();
   try {
     WidgetsFlutterBinding.ensureInitialized();
     _cameras = await availableCameras();

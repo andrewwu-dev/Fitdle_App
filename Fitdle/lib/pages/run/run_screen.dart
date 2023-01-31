@@ -5,8 +5,9 @@ import 'run_vm.dart';
 import 'stats_display.dart';
 import 'package:fitdle/components/common.dart';
 import 'package:fitdle/constants/all_constants.dart';
-import 'package:flutter/material.dart';
 import 'package:fitdle/pages/run/run_vm.dart';
+import 'package:fitdle/models/exercise.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
@@ -40,6 +41,7 @@ class _RunScreenState extends State<RunScreen> {
 
   double totalDistance = 0;
   double totalCalories = 0;
+  double totalPace = 0;
 
   void getLocationPermission() async {
     bool serviceEnabled;
@@ -92,8 +94,9 @@ class _RunScreenState extends State<RunScreen> {
       var distance = coordinateDistance(latestPosition.latitude,
           latestPosition.longitude, newLoc.latitude, newLoc.longitude);
       totalDistance += distance;
-      print(newLoc);
-      totalCalories += caloriesBurnt(newLoc.speed ?? 1, distance);
+      var pace = newLoc.speed ?? 1;
+      totalCalories += caloriesBurnt(pace, distance);
+      totalPace += pace;
       markers.add(Marker(
           markerId: const MarkerId("current"),
           position: LatLng(newLoc.latitude!, newLoc.longitude!),
@@ -248,6 +251,8 @@ class _RunScreenState extends State<RunScreen> {
         // update runObject and save exercise
         runObject.calories = totalCalories.round();
         runObject.distance = totalDistance;
+        runObject.avgPace = totalPace / polylineCoordinates.length;
+        runObject.numSteps = ((totalDistance * 1000) / 0.64).round();
         for (final point in polylineCoordinates) {
           runObject.path.add(point.toJson());
         }
