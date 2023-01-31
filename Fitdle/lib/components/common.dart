@@ -35,11 +35,11 @@ Widget fitdlePasswordField(controller, placeholder) {
   );
 }
 
-Widget primaryButton(label, action, {isEnabled=true}) {
+Widget primaryButton(label, action, {size=button, isEnabled=true}) {
   return CupertinoButton(
     color: Colors.purple,
     onPressed: isEnabled ? action : null,
-    child: fitdleText(label, button, color: Colors.white)
+    child: fitdleText(label, size, color: Colors.white)
   );
 }
 

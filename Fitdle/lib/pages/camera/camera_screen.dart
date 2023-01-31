@@ -115,7 +115,7 @@ class _CameraScreenState extends State<CameraScreen> {
         Spacer(),
         fitdleText("4/10 reps", h2),
         Spacer(),
-        primaryButton("Finish", () => { Navigator.of(context).pop() }),
+        primaryButton("Finish", () => { Navigator.of(context).pop() }, size: button),
         Spacer(),
       ],
     );
