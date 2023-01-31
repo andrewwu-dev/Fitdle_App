@@ -14,6 +14,20 @@ class CameraScreen extends StatefulWidget {
   State<CameraScreen> createState() => _CameraScreenState();
 }
 
+// https://stackoverflow.com/questions/56735552/how-to-set-flutter-camerapreview-size-fullscreen
+class _MediaSizeClipper extends CustomClipper<Rect> {
+  final Size mediaSize;
+  const _MediaSizeClipper(this.mediaSize);
+  @override
+  Rect getClip(Size size) {
+    return Rect.fromLTWH(0, 0, mediaSize.width, mediaSize.height);
+  }
+  @override
+  bool shouldReclip(CustomClipper<Rect> oldClipper) {
+    return true;
+  }
+}
+
 class _CameraScreenState extends State<CameraScreen> {
   late CameraController _camera;
   late final CameraVM _cameraVM;
@@ -101,23 +115,58 @@ class _CameraScreenState extends State<CameraScreen> {
     }
   }
 
-  Widget body(Size size) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Transform.scale(
-        scale: getCameraScale(size),
-        child: Center(
-          child: CameraPreview(_camera)
-          )
+  // https://stackoverflow.com/questions/52146269/how-to-decorate-text-stroke-in-flutter
+  Widget borderedText(String text) {
+    return Stack(
+      children: <Widget>[
+        // Stroked text as border.
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: h2,
+            foreground: Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 6
+              ..color = Colors.black,
+          ),
         ),
-        Spacer(),
-        fitdleText("4/10 reps", h2),
-        Spacer(),
-        primaryButton("Finish", () => { Navigator.of(context).pop() }, size: button),
-        Spacer(),
+        // Solid text as fill.
+        Text(
+          text,
+          style: const TextStyle(
+            fontSize: h2,
+            color: Colors.white,
+          ),
+        ),
       ],
+    );
+  }
+
+  Widget body(Size size) {
+    final mediaSize = MediaQuery.of(context).size;
+    final scale = 1 / (_camera.value.aspectRatio * mediaSize.aspectRatio);
+    return ClipRect(
+      clipper: _MediaSizeClipper(mediaSize),
+      child: Stack(
+        alignment: AlignmentDirectional.topCenter,
+        children: [
+          Transform.scale(
+          scale: scale,
+          alignment: Alignment.topCenter,
+          child: CameraPreview(_camera),
+          ),
+          Column(
+            verticalDirection: VerticalDirection.down,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+            borderedText("4 reps"),
+              const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
+              primaryButton("Finish", () => { Navigator.of(context).pop() }),
+              const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 10))
+            ],
+          )
+        ],
+      )
     );
   }
 }
