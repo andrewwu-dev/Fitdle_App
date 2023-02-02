@@ -6,8 +6,7 @@ import 'package:fitdle/constants/all_constants.dart';
 import 'package:tuple/tuple.dart';
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({Key? key, required this.camera})
-    : super(key: key);
+  const CameraScreen({Key? key, required this.camera}) : super(key: key);
   final CameraDescription camera;
 
   @override
@@ -22,6 +21,7 @@ class _MediaSizeClipper extends CustomClipper<Rect> {
   Rect getClip(Size size) {
     return Rect.fromLTWH(0, 0, mediaSize.width, mediaSize.height);
   }
+
   @override
   bool shouldReclip(CustomClipper<Rect> oldClipper) {
     return true;
@@ -62,20 +62,21 @@ class _CameraScreenState extends State<CameraScreen> {
       }
       setState(() {});
       _camera.startImageStream((CameraImage image) {
-          // process image/frame here
+        // process image/frame here
       });
     }).catchError((Object e) {
       if (e is CameraException) {
         final error = getCameraError(e.code);
-        showDialog(context: context, builder: (context) => AlertDialog(
-              title: Text(error.item1),
-              content: Text(error.item2),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text(ok))
-              ]
-            ));
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                    title: Text(error.item1),
+                    content: Text(error.item2),
+                    actions: [
+                      TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text(ok))
+                    ]));
       }
     });
   }
@@ -98,20 +99,19 @@ class _CameraScreenState extends State<CameraScreen> {
 
     if (!_camera.value.isInitialized) {
       return Container();
-    } else { 
+    } else {
       final header = ModalRoute.of(context)!.settings.arguments as String;
       return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-          title: fitdleText(header, h2)),
-        body: body(size)
-      );
+          appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              automaticallyImplyLeading: false,
+              centerTitle: true,
+              backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+              title: fitdleText(header, h2)),
+          body: body(size));
     }
   }
 
@@ -145,28 +145,30 @@ class _CameraScreenState extends State<CameraScreen> {
   Widget body(Size size) {
     final mediaSize = MediaQuery.of(context).size;
     final scale = 1 / (_camera.value.aspectRatio * mediaSize.aspectRatio);
-    return ClipRect(
-      clipper: _MediaSizeClipper(mediaSize),
-      child: Stack(
-        alignment: AlignmentDirectional.topCenter,
-        children: [
-          Transform.scale(
-          scale: scale,
-          alignment: Alignment.topCenter,
-          child: CameraPreview(_camera),
-          ),
-          Column(
-            verticalDirection: VerticalDirection.down,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-            borderedText("4 reps"),
-              const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
-              primaryButton("Finish", () => { Navigator.of(context).pop() }),
-              const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 10))
-            ],
-          )
-        ],
-      )
-    );
+    return Container(
+        alignment: Alignment.center,
+        child: ClipRect(
+            clipper: _MediaSizeClipper(mediaSize),
+            child: Stack(
+              alignment: AlignmentDirectional.topCenter,
+              children: [
+                Transform.scale(
+                  scale: scale,
+                  alignment: Alignment.topCenter,
+                  child: CameraPreview(_camera),
+                ),
+                Column(
+                  verticalDirection: VerticalDirection.down,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    borderedText("4 reps"),
+                    const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
+                    primaryButton(
+                        "Finish", () => {Navigator.of(context).pop()}),
+                    const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 10))
+                  ],
+                )
+              ],
+            )));
   }
 }
