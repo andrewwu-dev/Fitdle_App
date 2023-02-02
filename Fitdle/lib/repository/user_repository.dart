@@ -6,6 +6,7 @@ import 'package:fitdle/models/user.dart';
 
 abstract class UserRepositoryProtocol {
   void clearUser();
+  void updateUser(user);
   Future<Object> createUser();
   Future<Object> fetchUser(email);
   Future<Object> fetchExcercises(timeRange);
@@ -18,6 +19,17 @@ class UserRepository extends BaseRepository implements UserRepositoryProtocol {
   @override
   void clearUser() {
     user.clear();
+  }
+
+  @override
+  void updateUser(json) {
+    user.update(
+        id: json["userID"],
+        email: json["email"],
+        firstName: json["firstName"],
+        lastName: json["lastName"],
+        birthDate: json["birthDate"],
+        numPoints: json["numPoints"]);
   }
 
   @override

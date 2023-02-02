@@ -68,11 +68,30 @@ class _RedeemScreenState extends State<RedeemScreen> {
                       itemCount: _redeemVM.rewards.length,
                       itemBuilder: (BuildContext context, int index) {
                         final reward = _redeemVM.rewards[index];
-                        return RewardBox(
-                            imgURL: reward.imgURL,
-                            title: reward.title,
-                            description: reward.description ?? "",
-                            cost: reward.cost);
+                        return GestureDetector(
+                            onTap: () {
+                              _redeemVM.redeemReward(reward.id).then((code) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: fitdleText("Code", h4, align: TextAlign.left),
+                                    content: fitdleText(code, h5),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: fitdleText(ok, h4, color: Colors.purple))
+                                    ],
+                                  )
+                                );
+                                setState(() {});
+                              });
+                            },
+                            child: RewardBox(
+                                imgURL: reward.imgURL,
+                                title: reward.title,
+                                description: reward.description ?? "",
+                                cost: reward.cost));
                       },
                       separatorBuilder: (BuildContext context, int index) =>
                           const SizedBox(height: 20)))
