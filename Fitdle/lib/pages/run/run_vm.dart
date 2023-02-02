@@ -1,22 +1,13 @@
 import 'package:fitdle/locator.dart';
 import 'package:fitdle/repository/user_repository.dart';
+import 'package:fitdle/repository/exercise_repository.dart';
+import 'package:fitdle/models/exercise.dart';
 import 'package:flutter/foundation.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rxdart/rxdart.dart';
-
-class RunObject {
-  int calories = 0;
-  DateTime startTime;
-  late DateTime endTime;
-  double distance = 0;
-  List<LatLng> path = [];
-  int exerciseType = 1;
-
-  RunObject(this.startTime);
-}
 
 class RunVM extends ChangeNotifier {
   late final UserRepository _userRepo;
+  late final ExerciseRepository _exerciseRepo;
 
   final PublishSubject<String> _error = PublishSubject();
   final PublishSubject _done = PublishSubject();
@@ -24,8 +15,9 @@ class RunVM extends ChangeNotifier {
   PublishSubject<String> get error => _error;
   PublishSubject get done => _done;
 
-  RunVM([authRepo, userRepo]) {
+  RunVM([authRepo, userRepo, exerciseRepo]) {
     _userRepo = userRepo ?? locator.get<UserRepository>();
+    _exerciseRepo = exerciseRepo ?? locator.get<ExerciseRepository>();
   }
 
   @override
@@ -35,5 +27,7 @@ class RunVM extends ChangeNotifier {
     _done.close();
   }
 
-  Future<void> createRunLog(RunObject runObject) async {}
+  Future<void> createRunLog(RunObject runObject) async {
+    _exerciseRepo.logRun(_userRepo.user.id!, runObject);
+  }
 }

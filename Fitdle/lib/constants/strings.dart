@@ -53,7 +53,6 @@ const analytics = "Analytics";
 // Redeem
 const redeem = "Redeem";
 const noRewardsAvailable = "No rewards available at this time";
-const ok = "OK";
 
 // Settings
 const settings = "Settings";
