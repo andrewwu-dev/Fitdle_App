@@ -12,14 +12,15 @@ class AnalyticsVM extends ChangeNotifier {
   late DateTime _endDate;
   late List<ChartData> _selectedData;
   var _options = [];
+  var _shouldShowNextWeek = false;
   List<ChartData> _earningData = [
-    ChartData('MON', 12),
-    ChartData('TUE', 15),
-    ChartData('WED', 30),
-    ChartData('THU', 6),
-    ChartData('FRI', 14),
-    ChartData('SAT', 3),
-    ChartData('SUN', 17),
+    // ChartData('MON', 12),
+    // ChartData('TUE', 15),
+    // ChartData('WED', 30),
+    // ChartData('THU', 6),
+    // ChartData('FRI', 14),
+    // ChartData('SAT', 3),
+    // ChartData('SUN', 17),
   ];
   List<ChartData> _calorieData = [
     ChartData('MON', 3),
@@ -37,6 +38,7 @@ class AnalyticsVM extends ChangeNotifier {
   List<ChartData> get selectedData => _selectedData;
   String get startDate => "${_startDate.year}/${_startDate.month}/${_startDate.day}";
   String get endDate => "${_endDate.year}/${_endDate.month}/${_endDate.day}";
+  bool get shouldShowNextWeek => _shouldShowNextWeek;
 
   AnalyticsVM([userRepo]) {
     _userRepo = userRepo ?? locator.get<UserRepository>();
@@ -61,13 +63,19 @@ class AnalyticsVM extends ChangeNotifier {
   }
 
   moveDateBack() {
-    _startDate = _startDate.subtract(Duration(days: 7));
-    _endDate = _endDate.subtract(Duration(days: 7));
+    var now = DateTime.now();
+    _startDate = _startDate.subtract(const Duration(days: 7));
+    _endDate = _endDate.subtract(const Duration(days: 7));
+    _shouldShowNextWeek = !_endDate.isAfter(now);
+    notifyListeners();
   }
 
   moveDateForward() {
-    _startDate = _startDate.add(Duration(days: 7));
-    _endDate = _endDate.add(Duration(days: 7));
+    var now = DateTime.now();
+    _startDate = _startDate.add(const Duration(days: 7));
+    _endDate = _endDate.add(const Duration(days: 7));
+    _shouldShowNextWeek = !_endDate.isAfter(now);
+    notifyListeners();
   }
 
   Future<void> getEarningData() async {

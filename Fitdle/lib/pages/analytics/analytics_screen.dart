@@ -82,11 +82,17 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
             icon: const Icon(Icons.chevron_left, color: Colors.purple)
         ),
         fitdleText("${_analyticsVM.startDate} - ${_analyticsVM.endDate}", hint),
-        IconButton(
+        Visibility(
+          visible: _analyticsVM.shouldShowNextWeek, 
+          maintainSize: true,
+          maintainAnimation: true,
+          maintainState: true,
+          child: IconButton(
             onPressed:() {
               setState(() {_analyticsVM.moveDateForward();});
             },
             icon: const Icon(Icons.chevron_right, color: Colors.purple)
+          )
         )
       ],
     );
