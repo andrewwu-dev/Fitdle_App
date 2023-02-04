@@ -165,7 +165,9 @@ class _CameraScreenState extends State<CameraScreen> {
                     const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
                     primaryButton(
                         "Finish", () => {Navigator.of(context).pop()}),
-                    const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 10))
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    )
                   ],
                 )
               ],
