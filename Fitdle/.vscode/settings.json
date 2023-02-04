@@ -1,6 +1,9 @@
 {
     "[dart]": {
         "editor.formatOnSave": true,
-        "editor.formatOnPaste": true
-    }
+        "editor.formatOnPaste": true,
+        "editor.defaultFormatter": "Dart-Code.dart-code"
+    },
+    "editor.defaultFormatter": "Dart-Code.flutter",
+    "rust-analyzer.joinLines.removeTrailingComma": false
 }

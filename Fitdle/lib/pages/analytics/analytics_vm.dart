@@ -5,6 +5,7 @@ import 'package:fitdle/repository/user_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 import '../../models/chart_data.dart';
+import 'package:intl/intl.dart';
 
 class AnalyticsVM extends ChangeNotifier {
   late final UserRepository _userRepo;
@@ -13,16 +14,9 @@ class AnalyticsVM extends ChangeNotifier {
   late List<ChartData> _selectedData;
   var _options = [];
   var _shouldShowNextWeek = false;
-  List<ChartData> _earningData = [
-    // ChartData('MON', 12),
-    // ChartData('TUE', 15),
-    // ChartData('WED', 30),
-    // ChartData('THU', 6),
-    // ChartData('FRI', 14),
-    // ChartData('SAT', 3),
-    // ChartData('SUN', 17),
-  ];
-  List<ChartData> _calorieData = [
+  var _isLoading = true;
+  final List<ChartData> _earningData = [];
+  final List<ChartData> _calorieData = [
     ChartData('MON', 3),
     ChartData('TUE', 2),
     ChartData('WED', 5),
@@ -36,9 +30,11 @@ class AnalyticsVM extends ChangeNotifier {
 
   PublishSubject get error => _error;
   List<ChartData> get selectedData => _selectedData;
-  String get startDate => "${_startDate.year}/${_startDate.month}/${_startDate.day}";
+  String get startDate =>
+      "${_startDate.year}/${_startDate.month}/${_startDate.day}";
   String get endDate => "${_endDate.year}/${_endDate.month}/${_endDate.day}";
   bool get shouldShowNextWeek => _shouldShowNextWeek;
+  bool get isLoading => _isLoading;
 
   AnalyticsVM([userRepo]) {
     _userRepo = userRepo ?? locator.get<UserRepository>();
@@ -49,7 +45,7 @@ class AnalyticsVM extends ChangeNotifier {
     // which is still monday
     var now = DateTime.now();
     _startDate = now.subtract(Duration(days: now.weekday - 1));
-    _endDate = _startDate.add(Duration(days: 6));
+    _endDate = _startDate.add(const Duration(days: 6));
   }
 
   @override
@@ -78,22 +74,46 @@ class AnalyticsVM extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> getChartData() async {
+    if (_selectedData == _earningData) {
+      await getEarningData();
+    } else {
+      await getCalorieData();
+    }
+  }
+
   Future<void> getEarningData() async {
-    var res = await _userRepo.fetchEarnings(startDate, endDate);
-    if(res is Success) {
+    _isLoading = true;
+    var res = await _userRepo.fetchEarnings(
+        DateFormat('yyyy-MM-dd').format(_startDate),
+        DateFormat('yyyy-MM-dd').format(_endDate.add(const Duration(days: 1))));
+    if (res is Success) {
       var earningsJson = res.data as List;
-      List<Earning> earnings = earningsJson.map((json) => Earning.fromJson(json)).toList();
-      for(Earning earning in earnings) {
-        // TODO: sort earnings into _earningData
+      List<Earning> earnings =
+          earningsJson.map((json) => Earning.fromJson(json)).toList();
+      _earningData.clear();
+      var earningMap = Map<String, int>();
+      for (Earning earning in earnings) {
         // There can multiple earning per day so remember to accumulate
+        final timestamp = DateFormat('yyyy-MM-dd').parse(earning.timestamp);
+        final day = DateFormat('E').format(timestamp);
+        earningMap[day] = (earningMap[day] ?? 0) + earning.points;
       }
+      earningMap.forEach((key, value) {
+        _earningData.add(ChartData(key, value));
+      });
     } else {
       res = res as Failure;
       _error.add(res.data);
     }
+    _isLoading = false;
+    notifyListeners();
   }
 
   Future<void> getCalorieData() async {
+    _isLoading = true;
     // TODO: Fetch calorie data
+    _isLoading = false;
+    notifyListeners();
   }
 }
