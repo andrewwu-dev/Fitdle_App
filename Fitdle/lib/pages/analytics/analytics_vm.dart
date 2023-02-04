@@ -86,6 +86,7 @@ class AnalyticsVM extends ChangeNotifier {
     _isLoading = true;
     var res = await _userRepo.fetchEarnings(
         DateFormat('yyyy-MM-dd').format(_startDate),
+        // Add one day to the end date to include the last day
         DateFormat('yyyy-MM-dd').format(_endDate.add(const Duration(days: 1))));
     if (res is Success) {
       var earningsJson = res.data as List;
