@@ -1,5 +1,5 @@
 // Exercise state data:
-export EXERCISES = {
+var EXERCISES = {
     'squat' : {
         'name': 'Squat',
         'allowed_err': 15,
@@ -31,7 +31,7 @@ export EXERCISES = {
 };
 
 // Dictionary that maps from joint names to keypoint indices.
-export KEYPOINT_DICT = {
+var KEYPOINT_DICT = {
     'nose': 0,
     'left_eye': 1,
     'right_eye': 2,
@@ -53,7 +53,7 @@ export KEYPOINT_DICT = {
 
 // Maps bones to a rbg color value
 // rn theyre all the same colour (neon green) can change if needed
-export KEYPOINT_EDGE_INDS_TO_COLOR = {
+var KEYPOINT_EDGE_INDS_TO_COLOR = {
     (0, 1): (57,255,20),
     (0, 2): (57,255,20),
     (1, 3): (57,255,20),

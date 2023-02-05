@@ -11,6 +11,58 @@ import 'dart:typed_data';
 import 'dart:math';
 import 'dart:isolate';
 
+var KEYPOINT_DICT = {
+    'nose': 0,
+    'left_eye': 1,
+    'right_eye': 2,
+    'left_ear': 3,
+    'right_ear': 4,
+    'left_shoulder': 5,
+    'right_shoulder': 6,
+    'left_elbow': 7,
+    'right_elbow': 8,
+    'left_wrist': 9,
+    'right_wrist': 10,
+    'left_hip': 11,
+    'right_hip': 12,
+    'left_knee': 13,
+    'right_knee': 14,
+    'left_ankle': 15,
+    'right_ankle': 16
+};
+
+var EXERCISES = {
+    'squat' : {
+        'name': 'Squat',
+        'allowed_err': 15,
+        'alert_err': 10,
+        'states': [
+            {
+                ('both_knee,both_hip,both_ankle'): 100,
+            },
+            {
+                ('both_knee,both_hip,both_ankle'): 180,
+            }
+        ]
+    },
+    'pushup' : {
+        'name': 'Pushup',
+        'allowed_err': 25,
+        'alert_err': 5,
+        'states': [
+            {
+                'both_elbow,both_wrist,both_shoulder': 180,
+                'both_hip,both_shoulder,both_ankle': 180,
+            },
+            {
+                'both_elbow,both_wrist,both_shoulder': 90,
+                'both_hip,both_shoulder,both_ankle': 180,
+            }
+        ]
+    },
+};
+
+
 class CameraScreen extends StatefulWidget {
   const CameraScreen({Key? key, required this.camera}) : super(key: key);
   final CameraDescription camera;
@@ -38,45 +90,14 @@ class _CameraScreenState extends State<CameraScreen> {
   late CameraController _camera;
   late final CameraVM _cameraVM;
   late Classifier classifier;
-  late List parsedData;
   late List<dynamic> inferences;
   late IsolateUtils isolate;
   bool isDetecting = false;
   bool initialized = false;
 
-  // TEST VARIABLES
-  double test_angle1 = 0;
-  double test_angle2 = 0;
-
-   // WORKOUT AND WEEK DATA
-  // late JsonHandler jsonHandler;
-  late List<dynamic> exercise;
-  late String workout;
-  late var dayToday;
-
-  // DAY WORKOUT VARIABLES
-  late var handler;
-
-  int workoutIndex = 0;
-  String exerciseName = "";
-  String exerciseDisplayName = "";
-  String imgUrl = "";
-  int reps = 0;
-  int sets = 0;
-
-  int doneReps = 0;
-  int doneSets = 0;
-  var stage = "up";
-  bool rest = false;
-  int restTime = 0;
-
-  // POSE AND FORM VALIDATION
-  bool isProperForm = false;
-  List<dynamic> limbs = [];
-  List<dynamic> targets = [];
-
-  // HAS WORKOUTS TODAY
-  bool hasWorkoutsToday = false;
+  int state = 0;
+  int repCounts = 0;
+  var curr_err = new Map();
 
   @override
   void initState() {
@@ -132,16 +153,53 @@ class _CameraScreenState extends State<CameraScreen> {
     });
   }
 
-  double getAngle(List<int> pointA, List<int> pointB, List<int> pointC) {
-    double radians = atan2(pointC[1] - pointB[1], pointC[0] - pointB[0]) -
-        atan2(pointA[1] - pointB[1], pointA[0] - pointB[0]);
-    double angle = (radians * 180 / pi).abs();
+  Map _verify_output(List keypoints_scores, Map expectedPose, [ double threshold=0.11 ]) {
+    var diffs = Map();
+    expectedPose.forEach((posture, expectedAngle) {
+    List postures = posture.split(',');
+      if (postures[0].contains("both")) {
+          double angle_r = 99999;
+          double angle_l = 99999;
+          List<int> p1_r = keypoints_scores[KEYPOINT_DICT[postures[0].replaceAll('both', 'right')]!];
+          List<int> p2_r = keypoints_scores[KEYPOINT_DICT[postures[1].replaceAll('both', 'right')]!];
+          List<int> p3_r = keypoints_scores[KEYPOINT_DICT[postures[2].replaceAll('both', 'right')]!];
+          List<int> p1_l = keypoints_scores[KEYPOINT_DICT[postures[0].replaceAll('both', 'left')]!];
+          List<int> p2_l = keypoints_scores[KEYPOINT_DICT[postures[1].replaceAll('both', 'left')]!];
+          List<int> p3_l = keypoints_scores[KEYPOINT_DICT[postures[2].replaceAll('both', 'left')]!];
 
-    if (angle > 180) {
-      angle = 360 - angle;
+          if (p1_r[2] > threshold && p2_r[2] > threshold && p3_r[2] > threshold){
+            angle_r = _angle_between(p2_r, p1_r, p3_r);
+          }
+
+          if (p1_l[2] > threshold && p2_l[2] > threshold && p3_l[2] > threshold){
+            angle_l = _angle_between(p2_l, p1_l, p3_l);
+          }
+          diffs[postures[0]] = min((angle_r - expectedAngle).abs(), (angle_l - expectedAngle).abs());
+      } else {
+        List<int>  p1 = keypoints_scores[KEYPOINT_DICT[postures[0]]!];
+        List<int>  p2 = keypoints_scores[KEYPOINT_DICT[postures[1]]!];
+        List<int>  p3 = keypoints_scores[KEYPOINT_DICT[postures[2]]!];
+        if (p1[2] > threshold && p2[2] > threshold && p3[2] > threshold){
+          double angle = _angle_between(p2, p1, p3);
+          double error = (angle - expectedAngle).abs();
+          diffs[postures[0]] = error;
+        }
+      }
+    });
+    return diffs;
+  }
+
+  double _angle_between(List<int> pointA, List<int> pointB, List<int> pointC) {
+    double rad1 = (360 + atan2(pointA[0] - pointB[0], pointA[1] - pointB[1])) % 360;
+    double rad2 = (360 + atan2(pointC[0] - pointB[0], pointC[1] - pointB[1])) % 360;
+    double deg1 = (rad1 * 180 / pi).abs();
+    double deg2 = (rad2 * 180 / pi).abs();
+
+    if ((deg2-deg1).abs() <= 180) {
+      return (deg2-deg1).abs();
+    } else {
+      return (deg1-deg2).abs();
     }
-
-    return angle;
   }
 
 
@@ -164,82 +222,44 @@ class _CameraScreenState extends State<CameraScreen> {
       isDetecting = false;
       initialized = true;
 
-      List<int> pointA = [inferenceResults[7][0], inferenceResults[7][1]];
-      List<int> pointB = [inferenceResults[5][0], inferenceResults[5][1]];
-      List<int> pointC = [inferenceResults[11][0], inferenceResults[11][1]];
-      test_angle2 = getAngle(pointA, pointB, pointC);
+      // TODO, TEMP VARS, NEED TO CHANGE TO ACTUAL
+      int numStates = 5;
+      int allowed_err = 10;
+      var curr_err = Map();
 
-      int limbsIndex = 0;
+      var diffs_curr = _verify_output(inferences, EXERCISES['squat']![state] as Map);
+      var diffs_next = _verify_output(inferences, EXERCISES['squat']![(state+1)%numStates] as Map);
 
-      //   if (!rest) {
-      //     if (doneSets < sets) {
-      //       if (doneReps < reps) {
-      //         checkLimbs(inferenceResults, limbsIndex);
-      //         isProperForm = isPostureCorrect();
-      //         doReps(inferenceResults);
-      //       } else {
-      //         setState(() {
-      //           doneReps = 0;
-      //           doneSets++;
-      //           rest = true;
-      //           restTime = 30;
-      //         });
-      //       }
-      //     } else {
-      //       setState(() {
-      //         doneSets = 0;
-      //         doneReps = 0;
-      //         nextWorkout();
-      //         rest = true;
-      //         restTime = 60;
-      //       });
-      //     }
-      //   } else {
-      //     setState(() {
-      //       restTime = 0;
-      //       rest = false;
-      //     });
-      //   }
-      // });
+      bool best_pose = true;
+      diffs_curr.forEach((k, v) {
+        // Can't break foreach lol :)
 
-      // if (!rest) {
-      //   if (handler.doneSets < sets) {
-      //     if (handler.doneReps < reps) {
-      //       handler.checkLimbs(inferenceResults, limbsIndex);
-      //       isProperForm = handler.isPostureCorrect();
-      //       handler.doReps(inferenceResults);
-      //       setState(() {
-      //         doneReps = handler.doneReps;
-      //         stage = handler.stage;
-      //         test_angle1 = handler.angle;
-      //       });
-      //     } else {
-      //       handler.doneReps = 0;
-      //       handler.doneSets++;
-      //       setState(() {
-      //         doneReps = handler.doneReps;
-      //         doneSets = handler.doneSets;
-      //         rest = true;
-      //         restTime = 30;
-      //       });
-      //     }
-      //   } else {
-      //     handler.doneSets = 0;
-      //     handler.doneReps = 0;
-      //     setState(() {
-      //       doneReps = handler.doneReps;
-      //       doneSets = handler.doneSets;
-      //       nextWorkout();
-      //       rest = true;
-      //       restTime = 60;
-      //     });
-      //   }
-      // } else {
-      //   setState(() {
-      //     restTime = 0;
-      //     rest = false;
-      //   });
-      // }
+        // if (!curr_err.containsKey(k)) {
+        //   break;
+        // }
+        if (curr_err[k] < v) {
+          best_pose = false;
+          // break;
+        }
+      });
+
+      if (best_pose){
+        curr_err = diffs_curr;
+      }
+
+      if (diffs_next.values.every((err) => err < allowed_err)){
+          curr_err.forEach((k, v) {
+            // if v > alert_err{
+            //     message.append(f"Your form at your {k.replaceAll('both_', '')} is a bit off");
+            // }
+          });
+          curr_err = {};
+          state = (state + 1)%numStates;
+          if (state == 0){
+            repCounts += 1;
+          }
+      }
+
     });
   }
   

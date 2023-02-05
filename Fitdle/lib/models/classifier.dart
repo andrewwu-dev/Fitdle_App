@@ -157,8 +157,8 @@ class Classifier {
     var x, y, c;
 
     for (var i = 0; i < 51; i += 3) {
-      y = (data[0 + i] * 640).toInt();
       x = (data[1 + i] * 480).toInt();
+      y = (data[0 + i] * 640).toInt();
       c = (data[2 + i]);
       result.add([x, y, c]);
     }
