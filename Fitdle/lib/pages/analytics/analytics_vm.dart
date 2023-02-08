@@ -96,7 +96,7 @@ class AnalyticsVM extends ChangeNotifier {
       for (Earning earning in earnings) {
         // There can multiple earning per day so remember to accumulate
         final timestamp = DateFormat('yyyy-MM-dd').parse(earning.timestamp);
-        final day = DateFormat('E').format(timestamp);
+        final day = DateFormat('E MM/dd').format(timestamp);
         earningMap[day] = (earningMap[day] ?? 0) + earning.points;
       }
       earningMap.forEach((key, value) {

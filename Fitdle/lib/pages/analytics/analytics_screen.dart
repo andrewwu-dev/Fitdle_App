@@ -54,7 +54,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
   _buildChart(data) {
     return SfCartesianChart(
-      primaryXAxis: CategoryAxis(),
+      primaryXAxis: CategoryAxis(labelRotation: -45),
       tooltipBehavior: _tooltip,
       series: <ChartSeries<ChartData, String>>[
         ColumnSeries<ChartData, String>(
