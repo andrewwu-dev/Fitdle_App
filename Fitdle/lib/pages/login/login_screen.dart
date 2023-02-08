@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'package:fitdle/constants/all_constants.dart';
 import 'package:fitdle/pages/dashboard/dashboard_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:rxdart/rxdart.dart';
 import '../../components/common.dart';
 import 'login_vm.dart';
 

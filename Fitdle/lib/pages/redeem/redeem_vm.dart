@@ -42,7 +42,11 @@ class RedeemVM extends ChangeNotifier {
     }
   }
 
-  Future<String?> redeemReward(rewardID) async {
+  Future<String?> redeemReward(index, rewardID) async {
+    if ((_userRepo.user.numPoints ?? 0) < rewards[index].cost) {
+      _error.add("You don't have enough points to redeem this reward");
+      return null;
+    }
     var res = await _rewardsRepo.redeemReward(user.id!, rewardID);
     if (res is Success) {
       var result = res.data as Map<String, dynamic>;
