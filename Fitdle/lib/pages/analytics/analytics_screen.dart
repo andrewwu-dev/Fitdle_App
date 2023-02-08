@@ -21,6 +21,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   int selectedGraph = 0;
   Color rewardsColor = Colors.white;
   Color caloriesColor = Colors.purple;
+  late Future<List<ChartData>> _chartData;
 
   @override
   void initState() {
@@ -51,6 +52,40 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     );
   }
 
+  _buildChart(data) {
+    return SfCartesianChart(
+      primaryXAxis: CategoryAxis(),
+      tooltipBehavior: _tooltip,
+      series: <ChartSeries<ChartData, String>>[
+        ColumnSeries<ChartData, String>(
+            dataSource: data,
+            xValueMapper: (ChartData data, _) => data.x,
+            yValueMapper: (ChartData data, _) => data.y,
+            name: (selectedGraph == 0) ? "Earnings" : "Calories",
+            color: Colors.deepPurpleAccent),
+      ],
+    );
+  }
+
+  _moveDateBack() {
+    _analyticsVM.moveDateBack();
+    setState(() {});
+  }
+
+  _moveDateForward() {
+    _analyticsVM.moveDateForward();
+    setState(() {});
+  }
+
+  _switchGraphs(index) {
+    setState(() {
+      selectedGraph = index;
+      _analyticsVM.switchGraph(index);
+      rewardsColor = index == 0 ? Colors.white : Colors.purple;
+      caloriesColor = index == 0 ? Colors.purple : Colors.white;
+    });
+  }
+
   body(size) {
     return Container(
       alignment: Alignment.topCenter,
@@ -64,18 +99,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
             future: _analyticsVM.getChartData(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                return SfCartesianChart(
-                  primaryXAxis: CategoryAxis(),
-                  tooltipBehavior: _tooltip,
-                  series: <ChartSeries<ChartData, String>>[
-                    ColumnSeries<ChartData, String>(
-                        dataSource: _analyticsVM.selectedData,
-                        xValueMapper: (ChartData data, _) => data.x,
-                        yValueMapper: (ChartData data, _) => data.y,
-                        name: (selectedGraph == 0) ? "Earnings" : "Calories",
-                        color: Colors.deepPurpleAccent),
-                  ],
-                );
+                return _buildChart(snapshot.data);
               } else {
                 return const CircularProgressIndicator(color: Colors.purple);
               }
@@ -90,9 +114,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       children: [
         IconButton(
           onPressed: () {
-            setState(() {
-              _analyticsVM.moveDateBack();
-            });
+            _moveDateBack();
           },
           icon: const Icon(Icons.chevron_left, color: Colors.purple),
         ),
@@ -104,9 +126,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           maintainState: true,
           child: IconButton(
               onPressed: () {
-                setState(() {
-                  _analyticsVM.moveDateForward();
-                });
+                _moveDateForward();
               },
               icon: const Icon(Icons.chevron_right, color: Colors.purple)),
         ),
@@ -128,12 +148,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         1: buildSegment("Calories", caloriesColor),
       },
       onValueChanged: (int index) {
-        setState(() {
-          selectedGraph = index;
-          _analyticsVM.switchGraph(index);
-          rewardsColor = index == 0 ? Colors.white : Colors.purple;
-          caloriesColor = index == 0 ? Colors.purple : Colors.white;
-        });
+        _switchGraphs(index);
       },
       groupValue: selectedGraph,
       borderColor: Colors.purple,
