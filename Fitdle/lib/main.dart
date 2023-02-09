@@ -46,7 +46,6 @@ class Fitdle extends StatelessWidget {
           'create_account': (context) => const CreateAccountScreen(),
           'personal_info': (context) => const PersonalInfoScreen(),
           'birthday': (context) => const BirthdayScreen(),
-          'dashboard': (context) => const DashboardScreen(),
           'run': (context) => const RunScreen(),
           'camera': (context) => CameraScreen(camera: _cameras![0])
         });

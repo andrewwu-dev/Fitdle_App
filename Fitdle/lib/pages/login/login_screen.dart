@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:fitdle/constants/all_constants.dart';
+import 'package:fitdle/pages/dashboard/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../components/common.dart';
@@ -35,7 +36,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _listen() {
     _navigationSubscription = _loginVM.done.listen((value) {
-      Navigator.popAndPushNamed(context, "dashboard");
+      Navigator.pop(context);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const DashboardScreen(),
+        ),
+      );
     });
 
     _errorSubscription = _loginVM.error.listen((msg) {
