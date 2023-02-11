@@ -97,7 +97,8 @@ class _CameraScreenState extends State<CameraScreen> {
 
   int state = 0;
   int repCounts = 0;
-  var curr_err = new Map();
+  List<String> message = [];
+  var curr_err = Map();
 
   @override
   void initState() {
@@ -153,33 +154,40 @@ class _CameraScreenState extends State<CameraScreen> {
     });
   }
 
-  Map _verify_output(List keypoints_scores, Map expectedPose, [ double threshold=0.11 ]) {
+  Map _verify_output(List keypoints_scores, Map expectedPose, [ double threshold=0 ]) {
     var diffs = Map();
     expectedPose.forEach((posture, expectedAngle) {
-    List postures = posture.split(',');
+      List postures = posture.split(',');
       if (postures[0].contains("both")) {
           double angle_r = 99999;
           double angle_l = 99999;
-          List<int> p1_r = keypoints_scores[KEYPOINT_DICT[postures[0].replaceAll('both', 'right')]!];
-          List<int> p2_r = keypoints_scores[KEYPOINT_DICT[postures[1].replaceAll('both', 'right')]!];
-          List<int> p3_r = keypoints_scores[KEYPOINT_DICT[postures[2].replaceAll('both', 'right')]!];
-          List<int> p1_l = keypoints_scores[KEYPOINT_DICT[postures[0].replaceAll('both', 'left')]!];
-          List<int> p2_l = keypoints_scores[KEYPOINT_DICT[postures[1].replaceAll('both', 'left')]!];
-          List<int> p3_l = keypoints_scores[KEYPOINT_DICT[postures[2].replaceAll('both', 'left')]!];
+          List<int> p1_r = keypoints_scores[KEYPOINT_DICT[postures[0].replaceAll('both', 'right')]!].take(2).toList().cast<int>();
+          List<int> p2_r = keypoints_scores[KEYPOINT_DICT[postures[1].replaceAll('both', 'right')]!].take(2).toList().cast<int>();
+          List<int> p3_r = keypoints_scores[KEYPOINT_DICT[postures[2].replaceAll('both', 'right')]!].take(2).toList().cast<int>();
+          List<int> p1_l = keypoints_scores[KEYPOINT_DICT[postures[0].replaceAll('both', 'left')]!].take(2).toList().cast<int>();
+          List<int> p2_l = keypoints_scores[KEYPOINT_DICT[postures[1].replaceAll('both', 'left')]!].take(2).toList().cast<int>();
+          List<int> p3_l = keypoints_scores[KEYPOINT_DICT[postures[2].replaceAll('both', 'left')]!].take(2).toList().cast<int>();
 
-          if (p1_r[2] > threshold && p2_r[2] > threshold && p3_r[2] > threshold){
+          print("random arr");
+          print(p1_r);
+
+          if ((keypoints_scores[KEYPOINT_DICT[postures[0].replaceAll('both', 'right')]!][2] as double) > threshold && 
+              (keypoints_scores[KEYPOINT_DICT[postures[1].replaceAll('both', 'right')]!][2] as double) > threshold && 
+              (keypoints_scores[KEYPOINT_DICT[postures[2].replaceAll('both', 'right')]!][2] as double) > threshold){
             angle_r = _angle_between(p2_r, p1_r, p3_r);
           }
 
-          if (p1_l[2] > threshold && p2_l[2] > threshold && p3_l[2] > threshold){
+          if ((keypoints_scores[KEYPOINT_DICT[postures[0].replaceAll('both', 'left')]!][2] as double) > threshold && 
+              (keypoints_scores[KEYPOINT_DICT[postures[1].replaceAll('both', 'left')]!][2] as double) > threshold && 
+              (keypoints_scores[KEYPOINT_DICT[postures[2].replaceAll('both', 'left')]!][2] as double) > threshold){
             angle_l = _angle_between(p2_l, p1_l, p3_l);
           }
           diffs[postures[0]] = min((angle_r - expectedAngle).abs(), (angle_l - expectedAngle).abs());
       } else {
-        List<int>  p1 = keypoints_scores[KEYPOINT_DICT[postures[0]]!];
-        List<int>  p2 = keypoints_scores[KEYPOINT_DICT[postures[1]]!];
-        List<int>  p3 = keypoints_scores[KEYPOINT_DICT[postures[2]]!];
-        if (p1[2] > threshold && p2[2] > threshold && p3[2] > threshold){
+        List<int> p1 = keypoints_scores[KEYPOINT_DICT[postures[0]]!];
+        List<int> p2 = keypoints_scores[KEYPOINT_DICT[postures[1]]!];
+        List<int> p3 = keypoints_scores[KEYPOINT_DICT[postures[2]]!];
+        if (p1[2].toDouble() > threshold && p2[2].toDouble() > threshold && p3[2].toDouble() > threshold){
           double angle = _angle_between(p2, p1, p3);
           double error = (angle - expectedAngle).abs();
           diffs[postures[0]] = error;
@@ -190,10 +198,13 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   double _angle_between(List<int> pointA, List<int> pointB, List<int> pointC) {
-    double rad1 = (360 + atan2(pointA[0] - pointB[0], pointA[1] - pointB[1])) % 360;
-    double rad2 = (360 + atan2(pointC[0] - pointB[0], pointC[1] - pointB[1])) % 360;
+    double rad1 = atan2(pointA[0] - pointB[0], pointA[1] - pointB[1]);
+    double rad2 = atan2(pointC[0] - pointB[0], pointC[1] - pointB[1]);
     double deg1 = (rad1 * 180 / pi).abs();
     double deg2 = (rad2 * 180 / pi).abs();
+    print("angle results");
+    print(deg1);
+    print(deg2);
 
     if ((deg2-deg1).abs() <= 180) {
       return (deg2-deg1).abs();
@@ -221,45 +232,65 @@ class _CameraScreenState extends State<CameraScreen> {
       inferences = inferenceResults;
       isDetecting = false;
       initialized = true;
-
+    });
       // TODO, TEMP VARS, NEED TO CHANGE TO ACTUAL
-      int numStates = 5;
-      int allowed_err = 10;
-      var curr_err = Map();
+    var exercise = 'squat';
+    int numStates = (EXERCISES[exercise]!['states'] as List).length;
+    int allowed_err = EXERCISES[exercise]!['allowed_err'] as int;
+    int alert_err = EXERCISES[exercise]!['alert_err'] as int;
 
-      var diffs_curr = _verify_output(inferences, EXERCISES['squat']![state] as Map);
-      var diffs_next = _verify_output(inferences, EXERCISES['squat']![(state+1)%numStates] as Map);
+    var diffs_curr = _verify_output(inferences, (EXERCISES[exercise]!['states'] as List)[state] as Map);
+    var diffs_next = _verify_output(inferences, (EXERCISES[exercise]!['states'] as List)[(state+1)%numStates] as Map);
 
-      bool best_pose = true;
-      diffs_curr.forEach((k, v) {
-        // Can't break foreach lol :)
+    print("diffs curr:");
+    print(diffs_curr);
 
-        // if (!curr_err.containsKey(k)) {
-        //   break;
-        // }
-        if (curr_err[k] < v) {
-          best_pose = false;
-          // break;
+    bool best_pose = true;
+    // diffs_curr.forEach((k, v) {
+    //   // Can't break foreach lol :)
+
+    //   // if (!curr_err.containsKey(k)) {
+    //   //   break;
+    //   // }
+    //   if (!curr_err.containsKey(k) && curr_err[k] < v) {
+    //     best_pose = false;
+    //     // break;
+    //   }
+    // });
+    for(final k in diffs_curr.keys){
+      if (!curr_err.containsKey(k)) {
+        break;
+      }
+      if (curr_err[k] < diffs_curr[k]) {
+        best_pose = false;
+        break;
+      }
+    }
+
+    if (best_pose){
+      curr_err = diffs_curr;
+    }
+
+    if (diffs_next.values.every((err) => err < allowed_err)){
+      curr_err.forEach((k, v) {
+        if (v > alert_err) {
+          message.add("Your form at your ${k.replaceAll('both_', '')} is a bit off");
         }
       });
 
-      if (best_pose){
-        curr_err = diffs_curr;
+      setState(() {
+        curr_err = {};
+        state = (state + 1)%numStates;
+      });
+      if (state == 0){
+        setState(() {
+          repCounts += 1;
+        });
       }
+    }
 
-      if (diffs_next.values.every((err) => err < allowed_err)){
-          curr_err.forEach((k, v) {
-            // if v > alert_err{
-            //     message.append(f"Your form at your {k.replaceAll('both_', '')} is a bit off");
-            // }
-          });
-          curr_err = {};
-          state = (state + 1)%numStates;
-          if (state == 0){
-            repCounts += 1;
-          }
-      }
-
+    setState(() {
+      isDetecting = false;
     });
   }
   
