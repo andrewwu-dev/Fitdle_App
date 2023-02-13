@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'package:fitdle/constants/all_constants.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:fitdle/pages/dashboard/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:rxdart/rxdart.dart';
 import '../../components/common.dart';
 import 'login_vm.dart';
 
@@ -37,7 +36,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _listen() {
     _navigationSubscription = _loginVM.done.listen((value) {
-      Navigator.popAndPushNamed(context, "dashboard");
+      Navigator.pop(context);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const DashboardScreen(),
+        ),
+      );
     });
 
     _errorSubscription = _loginVM.error.listen((msg) {
@@ -46,8 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Fluttertoast.showToast(
           msg: msg.toString(),
           toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 1
-      );
+          timeInSecForIosWeb: 1);
     });
   }
 
@@ -62,42 +65,36 @@ class _LoginScreenState extends State<LoginScreen> {
         resizeToAvoidBottomInset: false,
         body: Container(
           alignment: Alignment.topLeft,
-          padding: EdgeInsets.only(top: size.height/12, left: regular, right: regular),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+          padding: EdgeInsets.only(
+              top: size.height / 12, left: regular, right: regular),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            fitdleText(appName, h1, align: TextAlign.left),
+            SizedBox(height: size.height / 6),
+            fitdleTextField(emailController, email),
+            const SizedBox(height: regular),
+            fitdlePasswordField(passwordController, password),
+            const SizedBox(height: 14),
+            Align(
+                alignment: Alignment.topRight,
+                child: fitdleText(forgotPassword, hint)),
+            const SizedBox(height: regular),
+            primaryButton(login, loginButtonPressed),
+            // Push create account button to bottom of screen
+            SizedBox(height: size.height / 6),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                fitdleText(appName, h1, align: TextAlign.left),
-                SizedBox(height: size.height / 6),
-                fitdleTextField(emailController, email),
-                const SizedBox(height: regular),
-                fitdlePasswordField(passwordController, password),
-                const SizedBox(height: 14),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: fitdleText(forgotPassword, hint)
-                ),
-                const SizedBox(height: regular),
-                primaryButton(login, loginButtonPressed),
-                // Push create account button to bottom of screen
-                SizedBox(height: size.height / 6),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                        noAccount
-                    ),
-                    TextButton(
-                        style: ButtonStyle(
-                            overlayColor: MaterialStateProperty.all<Color>(
-                                Colors.black12)
-                        ),
-                        onPressed: signupButtonPressed,
-                        child: fitdleText(signup, hint, color: Colors.purple)
-                    )
-                  ],
-                )
-              ]
-          ),
+                const Text(noAccount),
+                TextButton(
+                    style: ButtonStyle(
+                        overlayColor:
+                            MaterialStateProperty.all<Color>(Colors.black12)),
+                    onPressed: signupButtonPressed,
+                    child: fitdleText(signup, hint, color: Colors.purple))
+              ],
+            )
+          ]),
         ),
       ),
     );
@@ -107,7 +104,9 @@ class _LoginScreenState extends State<LoginScreen> {
   var passwordController = TextEditingController();
 
   loginButtonPressed() {
-    setState(() {_isLoading = true;});
+    setState(() {
+      _isLoading = true;
+    });
     _loginVM.login(emailController.text, passwordController.text);
   }
 
@@ -115,4 +114,3 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.pushNamed(context, "create_account");
   }
 }
-
