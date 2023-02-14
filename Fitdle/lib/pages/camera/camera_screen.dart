@@ -161,7 +161,9 @@ class _CameraScreenState extends State<CameraScreen> {
                   verticalDirection: VerticalDirection.down,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    borderedText("4 reps"),
+                    borderedText(
+                      _cameraVM.strengthObject.repetitions.toString(),
+                    ),
                     const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
                     primaryButton(
                         "Finish", () => {Navigator.of(context).pop()}),

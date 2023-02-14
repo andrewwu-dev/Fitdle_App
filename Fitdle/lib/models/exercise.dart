@@ -85,6 +85,24 @@ class Run {
       };
 }
 
+class StrengthObject {
+  DateTime startTimestamp;
+  late DateTime endTimestamp;
+  int exerciseType = 0;
+  int repetitions = 0;
+  double score = 0;
+
+  StrengthObject(this.startTimestamp);
+
+  Map<String, dynamic> toJson() => {
+        "startTimestamp": startTimestamp.toIso8601String(),
+        "endTimestamp": endTimestamp.toIso8601String(),
+        "exerciseType": exerciseType,
+        "repetitions": repetitions,
+        "score": score
+      };
+}
+
 class Strength {
   DateTime startTimestamp;
   DateTime endTimestamp;

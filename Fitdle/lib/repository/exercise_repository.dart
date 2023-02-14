@@ -1,9 +1,10 @@
+import 'package:fitdle/constants/strings.dart';
 import 'package:fitdle/repository/base_repository.dart';
 import 'package:fitdle/models/exercise.dart';
 
 abstract class ExerciseRepositoryProtocol {
   Future<Object> logRun(int userID, RunObject runObject);
-  Future<Object> logStrength(int userID, Strength strengthObject);
+  Future<Object> logStrength(int userID, StrengthObject strengthObject);
 }
 
 class ExerciseRepository extends BaseRepository
