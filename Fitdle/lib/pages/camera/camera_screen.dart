@@ -12,60 +12,62 @@ import 'dart:math';
 import 'dart:isolate';
 
 var KEYPOINT_DICT = {
-    'nose': 0,
-    'left_eye': 1,
-    'right_eye': 2,
-    'left_ear': 3,
-    'right_ear': 4,
-    'left_shoulder': 5,
-    'right_shoulder': 6,
-    'left_elbow': 7,
-    'right_elbow': 8,
-    'left_wrist': 9,
-    'right_wrist': 10,
-    'left_hip': 11,
-    'right_hip': 12,
-    'left_knee': 13,
-    'right_knee': 14,
-    'left_ankle': 15,
-    'right_ankle': 16
+  'nose': 0,
+  'left_eye': 1,
+  'right_eye': 2,
+  'left_ear': 3,
+  'right_ear': 4,
+  'left_shoulder': 5,
+  'right_shoulder': 6,
+  'left_elbow': 7,
+  'right_elbow': 8,
+  'left_wrist': 9,
+  'right_wrist': 10,
+  'left_hip': 11,
+  'right_hip': 12,
+  'left_knee': 13,
+  'right_knee': 14,
+  'left_ankle': 15,
+  'right_ankle': 16
 };
 
 var EXERCISES = {
-    'squat' : {
-        'name': 'Squat',
-        'allowed_err': 15,
-        'alert_err': 10,
-        'states': [
-            {
-                ('both_knee,both_hip,both_ankle'): 100,
-            },
-            {
-                ('both_knee,both_hip,both_ankle'): 180,
-            }
-        ]
-    },
-    'pushup' : {
-        'name': 'Pushup',
-        'allowed_err': 25,
-        'alert_err': 5,
-        'states': [
-            {
-                'both_elbow,both_wrist,both_shoulder': 180,
-                'both_hip,both_shoulder,both_ankle': 180,
-            },
-            {
-                'both_elbow,both_wrist,both_shoulder': 90,
-                'both_hip,both_shoulder,both_ankle': 180,
-            }
-        ]
-    },
+  'squat': {
+    'name': 'Squat',
+    'allowed_err': 15,
+    'alert_err': 10,
+    'states': [
+      {
+        ('both_knee,both_hip,both_ankle'): 100,
+      },
+      {
+        ('both_knee,both_hip,both_ankle'): 180,
+      }
+    ]
+  },
+  'pushup': {
+    'name': 'Pushup',
+    'allowed_err': 25,
+    'alert_err': 5,
+    'states': [
+      {
+        'both_elbow,both_wrist,both_shoulder': 180,
+        'both_hip,both_shoulder,both_ankle': 180,
+      },
+      {
+        'both_elbow,both_wrist,both_shoulder': 90,
+        'both_hip,both_shoulder,both_ankle': 180,
+      }
+    ]
+  },
 };
 
-
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({Key? key, required this.camera}) : super(key: key);
+  const CameraScreen(
+      {Key? key, required this.camera, required this.exerciseName})
+      : super(key: key);
   final CameraDescription camera;
+  final String exerciseName;
 
   @override
   State<CameraScreen> createState() => _CameraScreenState();
@@ -154,40 +156,86 @@ class _CameraScreenState extends State<CameraScreen> {
     });
   }
 
-  Map _verify_output(List keypoints_scores, Map expectedPose, [ double threshold=0 ]) {
+  Map _verify_output(List keypoints_scores, Map expectedPose,
+      [double threshold = 0]) {
     var diffs = Map();
     expectedPose.forEach((posture, expectedAngle) {
       List postures = posture.split(',');
       if (postures[0].contains("both")) {
-          double angle_r = 99999;
-          double angle_l = 99999;
-          List<int> p1_r = keypoints_scores[KEYPOINT_DICT[postures[0].replaceAll('both', 'right')]!].take(2).toList().cast<int>();
-          List<int> p2_r = keypoints_scores[KEYPOINT_DICT[postures[1].replaceAll('both', 'right')]!].take(2).toList().cast<int>();
-          List<int> p3_r = keypoints_scores[KEYPOINT_DICT[postures[2].replaceAll('both', 'right')]!].take(2).toList().cast<int>();
-          List<int> p1_l = keypoints_scores[KEYPOINT_DICT[postures[0].replaceAll('both', 'left')]!].take(2).toList().cast<int>();
-          List<int> p2_l = keypoints_scores[KEYPOINT_DICT[postures[1].replaceAll('both', 'left')]!].take(2).toList().cast<int>();
-          List<int> p3_l = keypoints_scores[KEYPOINT_DICT[postures[2].replaceAll('both', 'left')]!].take(2).toList().cast<int>();
+        double angle_r = 99999;
+        double angle_l = 99999;
+        List<int> p1_r = keypoints_scores[
+                KEYPOINT_DICT[postures[0].replaceAll('both', 'right')]!]
+            .take(2)
+            .toList()
+            .cast<int>();
+        List<int> p2_r = keypoints_scores[
+                KEYPOINT_DICT[postures[1].replaceAll('both', 'right')]!]
+            .take(2)
+            .toList()
+            .cast<int>();
+        List<int> p3_r = keypoints_scores[
+                KEYPOINT_DICT[postures[2].replaceAll('both', 'right')]!]
+            .take(2)
+            .toList()
+            .cast<int>();
+        List<int> p1_l = keypoints_scores[
+                KEYPOINT_DICT[postures[0].replaceAll('both', 'left')]!]
+            .take(2)
+            .toList()
+            .cast<int>();
+        List<int> p2_l = keypoints_scores[
+                KEYPOINT_DICT[postures[1].replaceAll('both', 'left')]!]
+            .take(2)
+            .toList()
+            .cast<int>();
+        List<int> p3_l = keypoints_scores[
+                KEYPOINT_DICT[postures[2].replaceAll('both', 'left')]!]
+            .take(2)
+            .toList()
+            .cast<int>();
 
-          print("random arr");
-          print(p1_r);
+        print("random arr");
+        print(p1_r);
 
-          if ((keypoints_scores[KEYPOINT_DICT[postures[0].replaceAll('both', 'right')]!][2] as double) > threshold && 
-              (keypoints_scores[KEYPOINT_DICT[postures[1].replaceAll('both', 'right')]!][2] as double) > threshold && 
-              (keypoints_scores[KEYPOINT_DICT[postures[2].replaceAll('both', 'right')]!][2] as double) > threshold){
-            angle_r = _angle_between(p2_r, p1_r, p3_r);
-          }
+        if ((keypoints_scores[
+                        KEYPOINT_DICT[postures[0].replaceAll('both', 'right')]!]
+                    [2] as double) >
+                threshold &&
+            (keypoints_scores[
+                        KEYPOINT_DICT[postures[1].replaceAll('both', 'right')]!]
+                    [2] as double) >
+                threshold &&
+            (keypoints_scores[
+                        KEYPOINT_DICT[postures[2].replaceAll('both', 'right')]!]
+                    [2] as double) >
+                threshold) {
+          angle_r = _angle_between(p2_r, p1_r, p3_r);
+        }
 
-          if ((keypoints_scores[KEYPOINT_DICT[postures[0].replaceAll('both', 'left')]!][2] as double) > threshold && 
-              (keypoints_scores[KEYPOINT_DICT[postures[1].replaceAll('both', 'left')]!][2] as double) > threshold && 
-              (keypoints_scores[KEYPOINT_DICT[postures[2].replaceAll('both', 'left')]!][2] as double) > threshold){
-            angle_l = _angle_between(p2_l, p1_l, p3_l);
-          }
-          diffs[postures[0]] = min((angle_r - expectedAngle).abs(), (angle_l - expectedAngle).abs());
+        if ((keypoints_scores[
+                        KEYPOINT_DICT[postures[0].replaceAll('both', 'left')]!]
+                    [2] as double) >
+                threshold &&
+            (keypoints_scores[
+                        KEYPOINT_DICT[postures[1].replaceAll('both', 'left')]!]
+                    [2] as double) >
+                threshold &&
+            (keypoints_scores[
+                        KEYPOINT_DICT[postures[2].replaceAll('both', 'left')]!]
+                    [2] as double) >
+                threshold) {
+          angle_l = _angle_between(p2_l, p1_l, p3_l);
+        }
+        diffs[postures[0]] = min(
+            (angle_r - expectedAngle).abs(), (angle_l - expectedAngle).abs());
       } else {
         List<int> p1 = keypoints_scores[KEYPOINT_DICT[postures[0]]!];
         List<int> p2 = keypoints_scores[KEYPOINT_DICT[postures[1]]!];
         List<int> p3 = keypoints_scores[KEYPOINT_DICT[postures[2]]!];
-        if (p1[2].toDouble() > threshold && p2[2].toDouble() > threshold && p3[2].toDouble() > threshold){
+        if (p1[2].toDouble() > threshold &&
+            p2[2].toDouble() > threshold &&
+            p3[2].toDouble() > threshold) {
           double angle = _angle_between(p2, p1, p3);
           double error = (angle - expectedAngle).abs();
           diffs[postures[0]] = error;
@@ -206,13 +254,12 @@ class _CameraScreenState extends State<CameraScreen> {
     print(deg1);
     print(deg2);
 
-    if ((deg2-deg1).abs() <= 180) {
-      return (deg2-deg1).abs();
+    if ((deg2 - deg1).abs() <= 180) {
+      return (deg2 - deg1).abs();
     } else {
-      return (deg1-deg2).abs();
+      return (deg1 - deg2).abs();
     }
   }
-
 
   void createIsolate(CameraImage imageStream) async {
     if (isDetecting == true) {
@@ -233,14 +280,18 @@ class _CameraScreenState extends State<CameraScreen> {
       isDetecting = false;
       initialized = true;
     });
-      // TODO, TEMP VARS, NEED TO CHANGE TO ACTUAL
-    var exercise = 'squat';
+    // TODO, TEMP VARS, NEED TO CHANGE TO ACTUAL
+    var exercise = widget.exerciseName;
     int numStates = (EXERCISES[exercise]!['states'] as List).length;
     int allowed_err = EXERCISES[exercise]!['allowed_err'] as int;
     int alert_err = EXERCISES[exercise]!['alert_err'] as int;
 
-    var diffs_curr = _verify_output(inferences, (EXERCISES[exercise]!['states'] as List)[state] as Map);
-    var diffs_next = _verify_output(inferences, (EXERCISES[exercise]!['states'] as List)[(state+1)%numStates] as Map);
+    var diffs_curr = _verify_output(
+        inferences, (EXERCISES[exercise]!['states'] as List)[state] as Map);
+    var diffs_next = _verify_output(
+        inferences,
+        (EXERCISES[exercise]!['states'] as List)[(state + 1) % numStates]
+            as Map);
 
     print("diffs curr:");
     print(diffs_curr);
@@ -257,7 +308,7 @@ class _CameraScreenState extends State<CameraScreen> {
     //     // break;
     //   }
     // });
-    for(final k in diffs_curr.keys){
+    for (final k in diffs_curr.keys) {
       if (!curr_err.containsKey(k)) {
         break;
       }
@@ -267,22 +318,23 @@ class _CameraScreenState extends State<CameraScreen> {
       }
     }
 
-    if (best_pose){
+    if (best_pose) {
       curr_err = diffs_curr;
     }
 
-    if (diffs_next.values.every((err) => err < allowed_err)){
+    if (diffs_next.values.every((err) => err < allowed_err)) {
       curr_err.forEach((k, v) {
         if (v > alert_err) {
-          message.add("Your form at your ${k.replaceAll('both_', '')} is a bit off");
+          message.add(
+              "Your form at your ${k.replaceAll('both_', '')} is a bit off");
         }
       });
 
       setState(() {
         curr_err = {};
-        state = (state + 1)%numStates;
+        state = (state + 1) % numStates;
       });
-      if (state == 0){
+      if (state == 0) {
         setState(() {
           repCounts += 1;
         });
@@ -293,7 +345,7 @@ class _CameraScreenState extends State<CameraScreen> {
       isDetecting = false;
     });
   }
-  
+
   Future<List<dynamic>> inference(IsolateData isolateData) async {
     ReceivePort responsePort = ReceivePort();
     isolate.sendPort.send(isolateData..responsePort = responsePort.sendPort);
@@ -320,7 +372,6 @@ class _CameraScreenState extends State<CameraScreen> {
     if (!_camera.value.isInitialized) {
       return Container();
     } else {
-      final header = ModalRoute.of(context)!.settings.arguments as String;
       return Scaffold(
           appBar: AppBar(
               leading: IconButton(
@@ -330,7 +381,7 @@ class _CameraScreenState extends State<CameraScreen> {
               automaticallyImplyLeading: false,
               centerTitle: true,
               backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-              title: fitdleText(header, h2)),
+              title: fitdleText(widget.exerciseName, h2)),
           body: body(size));
     }
   }

@@ -47,7 +47,11 @@ class Fitdle extends StatelessWidget {
           'personal_info': (context) => const PersonalInfoScreen(),
           'birthday': (context) => const BirthdayScreen(),
           'run': (context) => const RunScreen(),
-          'camera': (context) => CameraScreen(camera: _cameras![0])
+          'camera': (context) => CameraScreen(
+                camera: _cameras![0],
+                excerciseName:
+                    ModalRoute.of(context)?.settings.arguments as String,
+              )
         });
   }
 }
