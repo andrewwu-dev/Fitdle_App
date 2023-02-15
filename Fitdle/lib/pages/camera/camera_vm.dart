@@ -46,7 +46,8 @@ class CameraVM extends ChangeNotifier {
   Future<void> logStrength(ExerciseType type) async {
     if (_userRepo.user.id == null) return;
     _strenghtObject.endTimestamp = DateTime.now();
-    _strenghtObject.exerciseType = _exerciseRepo.getExerciseTypeIndex(type);
+    // +1 because the enum starts at 0, but the API expects 1.
+    _strenghtObject.exerciseType = type.index + 1;
     _calculateScore();
     final res = await _exerciseRepo.logStrength(
       _userRepo.user.id!,
