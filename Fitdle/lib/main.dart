@@ -1,6 +1,5 @@
 import 'package:camera/camera.dart';
 import 'package:fitdle/pages/camera/camera_screen.dart';
-import 'package:fitdle/pages/dashboard/dashboard_screen.dart';
 import 'package:fitdle/pages/login/login_screen.dart';
 import 'package:fitdle/pages/run/run_screen.dart';
 import 'package:fitdle/pages/signup/birthday/birthday_screen.dart';
@@ -10,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'locator.dart';
+import 'package:fitdle/models/exercise.dart';
 
 // Used so that navigation doesn't require context to be passed in.
 // TODO: Implement a better navigation pattern
@@ -47,7 +47,11 @@ class Fitdle extends StatelessWidget {
           'personal_info': (context) => const PersonalInfoScreen(),
           'birthday': (context) => const BirthdayScreen(),
           'run': (context) => const RunScreen(),
-          'camera': (context) => CameraScreen(camera: _cameras![0])
+          'camera': (context) => CameraScreen(
+                camera: _cameras![0],
+                exerciseType:
+                    ModalRoute.of(context)?.settings.arguments as ExerciseType,
+              )
         });
   }
 }

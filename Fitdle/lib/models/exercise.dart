@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+enum ExerciseType { run, pushups, squats }
+
 class ExerciseHistory {
   List<Run> runs;
   List<Strength> strengthExercises;
