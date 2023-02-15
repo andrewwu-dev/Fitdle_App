@@ -2,6 +2,11 @@ import 'dart:convert';
 
 enum ExerciseType { run, pushups, squats }
 
+final Map _caloriesPerRepetition = {
+  ExerciseType.pushups: 0.5,
+  ExerciseType.squats: 0.32,
+};
+
 class ExerciseHistory {
   List<Run> runs;
   List<Strength> strengthExercises;
@@ -134,4 +139,11 @@ class Strength {
         "repetitions": repetitions,
         "score": score
       };
+
+  int getCalories() {
+    // -1 because the api starts at 1
+    return (repetitions *
+            _caloriesPerRepetition[ExerciseType.values[exerciseType - 1]])
+        .floor();
+  }
 }
