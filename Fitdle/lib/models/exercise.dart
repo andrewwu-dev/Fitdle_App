@@ -111,7 +111,7 @@ class Strength {
   int exerciseType;
   int exerciseID;
   int repetitions;
-  double score;
+  num score;
 
   Strength(this.startTimestamp, this.endTimestamp, this.exerciseType,
       this.exerciseID, this.repetitions, this.score);
@@ -123,7 +123,7 @@ class Strength {
         json['exerciseType'] as int,
         json['exerciseID'] as int,
         json['repetitions'] as int,
-        json['score'] as double);
+        json['score'] as num);
   }
 
   Map<String, dynamic> toJson() => {

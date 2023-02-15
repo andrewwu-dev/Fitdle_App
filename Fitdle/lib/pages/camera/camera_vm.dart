@@ -39,7 +39,7 @@ class CameraVM extends ChangeNotifier {
 
   _calculateScore() {
     // TODO: Figure out how to calculate score based on exercise?
-    final pointsPerRep = 10.0;
+    const pointsPerRep = 10.0;
     _strenghtObject.score = pointsPerRep * _strenghtObject.repetitions;
   }
 

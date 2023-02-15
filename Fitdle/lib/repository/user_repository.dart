@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:fitdle/repository/api_response.dart';
 import 'package:fitdle/repository/base_repository.dart';
 import 'package:fitdle/models/user.dart';
@@ -57,21 +55,18 @@ class UserRepository extends BaseRepository implements UserRepositoryProtocol {
 
   @override
   Future<Object> fetchExcercises(start, [end]) async {
-    var queryParam = {
-      "start": start
-    };
-    if(end != Null) { queryParam["end"] = end; };
+    var queryParam = {"start": start};
+    if (end != Null) {
+      queryParam["end"] = end;
+    }
     var res = await fetch("/users/exercises/${user.id}", queryParam);
     return res;
   }
-  
+
   @override
   Future<Object> fetchEarnings(start, end) async {
     var endpoint = "/users/earnings/${user.id}";
-    var params = {
-      "start": start,
-      "end": end
-    };
+    var params = {"start": start, "end": end};
     var res = await fetch(endpoint, params);
     return res;
   }

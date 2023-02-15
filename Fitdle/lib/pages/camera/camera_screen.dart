@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:camera/camera.dart';
 import 'package:fitdle/models/exercise.dart';
 import 'package:fitdle/pages/camera/camera_vm.dart';

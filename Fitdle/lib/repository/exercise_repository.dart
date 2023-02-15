@@ -1,4 +1,3 @@
-import 'package:fitdle/constants/strings.dart';
 import 'package:fitdle/repository/base_repository.dart';
 import 'package:fitdle/models/exercise.dart';
 
