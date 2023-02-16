@@ -61,9 +61,32 @@ class _RunScreenState extends State<RunScreen> {
       }
     }
 
+    final backgroundPermissionGranted =
+        await location.isBackgroundModeEnabled();
+    if (!backgroundPermissionGranted) {
+      try {
+        await location.enableBackgroundMode();
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+      try {
+        await location.enableBackgroundMode();
+      } catch (e) {
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                    title: const Text(backgroundPermissionDenied),
+                    content: const Text(pleaseSetLocationPermissions),
+                    actions: [
+                      TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text(ok))
+                    ])).then((_) => Navigator.of(context).pop());
+      }
+    }
+
     location.changeSettings(
         accuracy: LocationAccuracy.high, interval: 1000, distanceFilter: 0);
-    location.enableBackgroundMode(enable: true);
   }
 
   void getStartLocation() {
@@ -258,7 +281,7 @@ class _RunScreenState extends State<RunScreen> {
         _runVM.createRunLog(runObject);
         break;
       case done:
-        Navigator.popAndPushNamed(context, "dashboard");
+        Navigator.pop(context);
         break;
     }
   }

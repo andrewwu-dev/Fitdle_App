@@ -64,13 +64,17 @@ const timeFormat = "Time (min:sec)";
 const distance = "Distance (km)";
 const startRun = "Start Run";
 const stopRun = "Stop Run";
+const pleaseSetLocationPermissions =
+    "Please set location permissions to 'Allow all the time' in Settings > Privacy > Location Services and try again.";
+const backgroundPermissionDenied = "Background Permission Denied";
 
 // Camera
 const cameraAccessDenied = "Camera Access Denied";
-const pleaseGrantCameraAccess = "Please grant camera access to use this feature.";
+const pleaseGrantCameraAccess =
+    "Please grant camera access to use this feature.";
 const cameraNotFound = "Camera Not Found";
 const audioAccessDenied = "Audio Access Denied";
 const pleaseGrantAudioAccess = "Please grant audio access to use this feature.";
 const goToSettingsCamera = "Grant access in Settings > Privacy > Camera.";
-const goToSettingsMicrophone = "Grant access in Settings > Privacy > Microphone.";
-
+const goToSettingsMicrophone =
+    "Grant access in Settings > Privacy > Microphone.";
