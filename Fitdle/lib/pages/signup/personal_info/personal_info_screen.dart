@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:fitdle/constants/all_constants.dart';
 import 'package:fitdle/pages/signup/personal_info/personal_info_vm.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../components/common.dart';
 
@@ -46,7 +45,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
           onWillPop: () async => false,
           child: Container(
             alignment: Alignment.topLeft,
-            padding: EdgeInsets.fromLTRB (regular, size.height / 6, regular, 0),
+            padding: EdgeInsets.fromLTRB(regular, size.height / 6, regular, 0),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -58,19 +57,16 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   fitdleTextField(lastNameController, lastName),
                   const SizedBox(height: large),
                   primaryButton(ctn, continueButtonTapped)
-                ]
-            ),
+                ]),
           ),
-        )
-    );
+        ));
   }
 
   var firstNameController = TextEditingController();
   var lastNameController = TextEditingController();
 
   continueButtonTapped() {
-    _personalInfoVM.updatePersonalInfo(firstNameController.text, lastNameController.text);
+    _personalInfoVM.updatePersonalInfo(
+        firstNameController.text, lastNameController.text);
   }
-
-
 }

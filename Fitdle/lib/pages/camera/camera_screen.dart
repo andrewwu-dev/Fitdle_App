@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'package:camera/camera.dart';
+import 'package:fitdle/models/exercise.dart';
 import 'package:fitdle/pages/camera/camera_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:fitdle/components/common.dart';
 import 'package:fitdle/constants/all_constants.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tuple/tuple.dart';
 import 'package:fitdle/models/classifier.dart';
 import 'package:fitdle/models/isolate.dart';
@@ -64,10 +67,10 @@ var EXERCISES = {
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen(
-      {Key? key, required this.camera, required this.exerciseName})
+      {Key? key, required this.camera, required this.exerciseType})
       : super(key: key);
   final CameraDescription camera;
-  final String exerciseName;
+  final ExerciseType exerciseType;
 
   @override
   State<CameraScreen> createState() => _CameraScreenState();
@@ -91,24 +94,27 @@ class _MediaSizeClipper extends CustomClipper<Rect> {
 class _CameraScreenState extends State<CameraScreen> {
   late CameraController _camera;
   late final CameraVM _cameraVM;
-  late Classifier classifier;
-  late List<dynamic> inferences;
-  late IsolateUtils isolate;
-  bool isDetecting = false;
-  bool initialized = false;
-
-  int state = 0;
-  int repCounts = 0;
-  List<String> message = [];
-  var curr_err = Map();
+  late StreamSubscription _navigationSubscription;
+  late StreamSubscription _errorSubscription;
+  var _isLoading = false;
 
   @override
   void initState() {
     _initCamera();
+    _listen();
     super.initState();
   }
 
-  Tuple2 getCameraError(String code) {
+  @override
+  void dispose() {
+    _camera.dispose();
+    _cameraVM.dispose();
+    _navigationSubscription.cancel();
+    _errorSubscription.cancel();
+    super.dispose();
+  }
+
+  Tuple2 _getCameraError(String code) {
     switch (code) {
       case "CameraAccessDenied":
         return const Tuple2(cameraAccessDenied, pleaseGrantCameraAccess);
@@ -141,7 +147,7 @@ class _CameraScreenState extends State<CameraScreen> {
       });
     }).catchError((Object e) {
       if (e is CameraException) {
-        final error = getCameraError(e.code);
+        final error = _getCameraError(e.code);
         showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -156,218 +162,32 @@ class _CameraScreenState extends State<CameraScreen> {
     });
   }
 
-  Map _verify_output(List keypoints_scores, Map expectedPose,
-      [double threshold = 0]) {
-    var diffs = Map();
-    expectedPose.forEach((posture, expectedAngle) {
-      List postures = posture.split(',');
-      if (postures[0].contains("both")) {
-        double angle_r = 99999;
-        double angle_l = 99999;
-        List<int> p1_r = keypoints_scores[
-                KEYPOINT_DICT[postures[0].replaceAll('both', 'right')]!]
-            .take(2)
-            .toList()
-            .cast<int>();
-        List<int> p2_r = keypoints_scores[
-                KEYPOINT_DICT[postures[1].replaceAll('both', 'right')]!]
-            .take(2)
-            .toList()
-            .cast<int>();
-        List<int> p3_r = keypoints_scores[
-                KEYPOINT_DICT[postures[2].replaceAll('both', 'right')]!]
-            .take(2)
-            .toList()
-            .cast<int>();
-        List<int> p1_l = keypoints_scores[
-                KEYPOINT_DICT[postures[0].replaceAll('both', 'left')]!]
-            .take(2)
-            .toList()
-            .cast<int>();
-        List<int> p2_l = keypoints_scores[
-                KEYPOINT_DICT[postures[1].replaceAll('both', 'left')]!]
-            .take(2)
-            .toList()
-            .cast<int>();
-        List<int> p3_l = keypoints_scores[
-                KEYPOINT_DICT[postures[2].replaceAll('both', 'left')]!]
-            .take(2)
-            .toList()
-            .cast<int>();
-
-        print("random arr");
-        print(p1_r);
-
-        if ((keypoints_scores[
-                        KEYPOINT_DICT[postures[0].replaceAll('both', 'right')]!]
-                    [2] as double) >
-                threshold &&
-            (keypoints_scores[
-                        KEYPOINT_DICT[postures[1].replaceAll('both', 'right')]!]
-                    [2] as double) >
-                threshold &&
-            (keypoints_scores[
-                        KEYPOINT_DICT[postures[2].replaceAll('both', 'right')]!]
-                    [2] as double) >
-                threshold) {
-          angle_r = _angle_between(p2_r, p1_r, p3_r);
-        }
-
-        if ((keypoints_scores[
-                        KEYPOINT_DICT[postures[0].replaceAll('both', 'left')]!]
-                    [2] as double) >
-                threshold &&
-            (keypoints_scores[
-                        KEYPOINT_DICT[postures[1].replaceAll('both', 'left')]!]
-                    [2] as double) >
-                threshold &&
-            (keypoints_scores[
-                        KEYPOINT_DICT[postures[2].replaceAll('both', 'left')]!]
-                    [2] as double) >
-                threshold) {
-          angle_l = _angle_between(p2_l, p1_l, p3_l);
-        }
-        diffs[postures[0]] = min(
-            (angle_r - expectedAngle).abs(), (angle_l - expectedAngle).abs());
-      } else {
-        List<int> p1 = keypoints_scores[KEYPOINT_DICT[postures[0]]!];
-        List<int> p2 = keypoints_scores[KEYPOINT_DICT[postures[1]]!];
-        List<int> p3 = keypoints_scores[KEYPOINT_DICT[postures[2]]!];
-        if (p1[2].toDouble() > threshold &&
-            p2[2].toDouble() > threshold &&
-            p3[2].toDouble() > threshold) {
-          double angle = _angle_between(p2, p1, p3);
-          double error = (angle - expectedAngle).abs();
-          diffs[postures[0]] = error;
-        }
-      }
-    });
-    return diffs;
-  }
-
-  double _angle_between(List<int> pointA, List<int> pointB, List<int> pointC) {
-    double rad1 = atan2(pointA[0] - pointB[0], pointA[1] - pointB[1]);
-    double rad2 = atan2(pointC[0] - pointB[0], pointC[1] - pointB[1]);
-    double deg1 = (rad1 * 180 / pi).abs();
-    double deg2 = (rad2 * 180 / pi).abs();
-    print("angle results");
-    print(deg1);
-    print(deg2);
-
-    if ((deg2 - deg1).abs() <= 180) {
-      return (deg2 - deg1).abs();
-    } else {
-      return (deg1 - deg2).abs();
-    }
-  }
-
-  void createIsolate(CameraImage imageStream) async {
-    if (isDetecting == true) {
-      return;
-    }
-
+  Future<void> _finishExercise() async {
     setState(() {
-      isDetecting = true;
+      _isLoading = true;
     });
-
-    var isolateData = IsolateData(imageStream, classifier.interpreter.address);
-    List<dynamic> inferenceResults = await inference(isolateData);
-    print("inference results");
-    print(inferenceResults);
-
+    await _cameraVM.logStrength(widget.exerciseType);
     setState(() {
-      inferences = inferenceResults;
-      isDetecting = false;
-      initialized = true;
-    });
-    // TODO, TEMP VARS, NEED TO CHANGE TO ACTUAL
-    var exercise = widget.exerciseName;
-    int numStates = (EXERCISES[exercise]!['states'] as List).length;
-    int allowed_err = EXERCISES[exercise]!['allowed_err'] as int;
-    int alert_err = EXERCISES[exercise]!['alert_err'] as int;
-
-    var diffs_curr = _verify_output(
-        inferences, (EXERCISES[exercise]!['states'] as List)[state] as Map);
-    var diffs_next = _verify_output(
-        inferences,
-        (EXERCISES[exercise]!['states'] as List)[(state + 1) % numStates]
-            as Map);
-
-    print("diffs curr:");
-    print(diffs_curr);
-
-    bool best_pose = true;
-    // diffs_curr.forEach((k, v) {
-    //   // Can't break foreach lol :)
-
-    //   // if (!curr_err.containsKey(k)) {
-    //   //   break;
-    //   // }
-    //   if (!curr_err.containsKey(k) && curr_err[k] < v) {
-    //     best_pose = false;
-    //     // break;
-    //   }
-    // });
-    for (final k in diffs_curr.keys) {
-      if (!curr_err.containsKey(k)) {
-        break;
-      }
-      if (curr_err[k] < diffs_curr[k]) {
-        best_pose = false;
-        break;
-      }
-    }
-
-    if (best_pose) {
-      curr_err = diffs_curr;
-    }
-
-    if (diffs_next.values.every((err) => err < allowed_err)) {
-      curr_err.forEach((k, v) {
-        if (v > alert_err) {
-          message.add(
-              "Your form at your ${k.replaceAll('both_', '')} is a bit off");
-        }
-      });
-
-      setState(() {
-        curr_err = {};
-        state = (state + 1) % numStates;
-      });
-      if (state == 0) {
-        setState(() {
-          repCounts += 1;
-        });
-      }
-    }
-
-    setState(() {
-      isDetecting = false;
+      _isLoading = false;
     });
   }
 
-  Future<List<dynamic>> inference(IsolateData isolateData) async {
-    ReceivePort responsePort = ReceivePort();
-    isolate.sendPort.send(isolateData..responsePort = responsePort.sendPort);
-    var results = await responsePort.first;
-    return results;
-  }
+  _listen() {
+    _errorSubscription = _cameraVM.error.listen((msg) {
+      Fluttertoast.showToast(
+          msg: msg.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 1);
+    });
 
-  @override
-  void dispose() {
-    _camera.dispose();
-    _cameraVM.dispose();
-    super.dispose();
-  }
-
-  double getCameraScale(Size size) {
-    return 1;
+    _navigationSubscription = _cameraVM.done.listen((value) {
+      Navigator.pop(context);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final cameraScale = getCameraScale(size);
 
     if (!_camera.value.isInitialized) {
       return Container();
@@ -381,7 +201,7 @@ class _CameraScreenState extends State<CameraScreen> {
               automaticallyImplyLeading: false,
               centerTitle: true,
               backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-              title: fitdleText(widget.exerciseName, h2)),
+              title: fitdleText(widget.exerciseType.name, h2)),
           body: body(size));
     }
   }
@@ -416,30 +236,35 @@ class _CameraScreenState extends State<CameraScreen> {
   Widget body(Size size) {
     final mediaSize = MediaQuery.of(context).size;
     final scale = 1 / (_camera.value.aspectRatio * mediaSize.aspectRatio);
-    return Container(
+    return Stack(children: [
+      Container(
         alignment: Alignment.center,
         child: ClipRect(
-            clipper: _MediaSizeClipper(mediaSize),
-            child: Stack(
-              alignment: AlignmentDirectional.topCenter,
+          clipper: _MediaSizeClipper(mediaSize),
+          child: Stack(alignment: AlignmentDirectional.topCenter, children: [
+            Transform.scale(
+              scale: scale,
+              alignment: Alignment.topCenter,
+              child: CameraPreview(_camera),
+            ),
+            Column(
+              verticalDirection: VerticalDirection.down,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Transform.scale(
-                  scale: scale,
-                  alignment: Alignment.topCenter,
-                  child: CameraPreview(_camera),
+                borderedText(
+                  _cameraVM.strengthObject.repetitions.toString(),
                 ),
-                Column(
-                  verticalDirection: VerticalDirection.down,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    borderedText("4 reps"),
-                    const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
-                    primaryButton(
-                        "Finish", () => {Navigator.of(context).pop()}),
-                    const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 10))
-                  ],
+                const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
+                primaryButton("Finish", () => {_finishExercise()}),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
                 )
               ],
-            )));
+            )
+          ]),
+        ),
+      ),
+      if (_isLoading) const CircularProgressIndicator(color: Colors.purple)
+    ]);
   }
 }

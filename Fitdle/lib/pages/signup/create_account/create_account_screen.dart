@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:fitdle/constants/all_constants.dart';
 import 'package:fitdle/pages/signup/create_account/create_account_vm.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../../components/common.dart';
@@ -49,47 +48,46 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     return StreamBuilder(
         stream: _createAccountVM.subject.stream,
         builder: (context, snapshot) {
-          if(snapshot.hasError) {
+          if (snapshot.hasError) {
             Fluttertoast.showToast(
-              msg: snapshot.error.toString(),
-              toastLength: Toast.LENGTH_SHORT
-            );
+                msg: snapshot.error.toString(),
+                toastLength: Toast.LENGTH_SHORT);
           }
 
           return Scaffold(
-            resizeToAvoidBottomInset: false,
-            // TODO: Wrap in SingleChildScrollView so keyboard doesn't cause overflow
-            body: Stack (
-              children: [
-                Container(
-                  alignment: Alignment.topLeft,
-                  padding: EdgeInsets.fromLTRB (regular, size.height / 10, regular, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      fitdleText(createAccount, h1, align: TextAlign.left),
-                      const SizedBox(height: large),
-                      fitdleTextField(emailController, email),
-                      const SizedBox(height: regular),
-                      fitdlePasswordField(passwordController, password),
-                      const SizedBox(height: regular),
-                      fitdlePasswordField(confirmPasswordController, confirmPassword),
-                      const SizedBox(height: regular),
-                      primaryButton(signup, signupButtonPressed, isEnabled: !_isLoading),
-                      SizedBox(height: size.height / 8),
-                      loginButton()
-                    ],
+              resizeToAvoidBottomInset: false,
+              // TODO: Wrap in SingleChildScrollView so keyboard doesn't cause overflow
+              body: Stack(
+                children: [
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.fromLTRB(
+                        regular, size.height / 10, regular, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        fitdleText(createAccount, h1, align: TextAlign.left),
+                        const SizedBox(height: large),
+                        fitdleTextField(emailController, email),
+                        const SizedBox(height: regular),
+                        fitdlePasswordField(passwordController, password),
+                        const SizedBox(height: regular),
+                        fitdlePasswordField(
+                            confirmPasswordController, confirmPassword),
+                        const SizedBox(height: regular),
+                        primaryButton(signup, signupButtonPressed,
+                            isEnabled: !_isLoading),
+                        SizedBox(height: size.height / 8),
+                        loginButton()
+                      ],
+                    ),
                   ),
-                ),
-                Visibility(
-                    visible: _isLoading,
-                    child: const CircularProgressIndicator()
-                )
-              ],
-            )
-          );
-        }
-    );
+                  Visibility(
+                      visible: _isLoading,
+                      child: const CircularProgressIndicator())
+                ],
+              ));
+        });
   }
 
   var emailController = TextEditingController();
@@ -100,17 +98,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
-            alreadyHaveAccount
-        ),
+        const Text(alreadyHaveAccount),
         TextButton(
             style: ButtonStyle(
-                overlayColor: MaterialStateProperty.all<Color>(
-                    Colors.black12)
-            ),
+                overlayColor: MaterialStateProperty.all<Color>(Colors.black12)),
             onPressed: loginButtonPressed,
-            child: fitdleText(login, hint, color: Colors.purple)
-        )
+            child: fitdleText(login, hint, color: Colors.purple))
       ],
     );
   }
@@ -120,8 +113,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   }
 
   signupButtonPressed() {
-    setState(() {_isLoading = true;});
-    _createAccountVM.firebaseSignup(emailController.text, passwordController.text).then((_) {
+    setState(() {
+      _isLoading = true;
+    });
+    _createAccountVM
+        .firebaseSignup(emailController.text, passwordController.text)
+        .then((_) {
       _isLoading = false;
       setState(() {});
     });

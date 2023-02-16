@@ -1,6 +1,5 @@
 import 'package:fitdle/locator.dart';
 import 'package:fitdle/repository/api_response.dart';
-import 'package:fitdle/repository/auth_repository.dart';
 import 'package:fitdle/repository/user_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
@@ -15,7 +14,6 @@ class BirthdayVM extends ChangeNotifier {
   PublishSubject<String> get error => _error;
   PublishSubject<String> get subject => _subject;
   PublishSubject get done => _done;
-
 
   BirthdayVM([userRepo]) {
     _userRepo = userRepo ?? locator.get<UserRepository>();
