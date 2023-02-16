@@ -48,7 +48,7 @@ class Run {
   DateTime endTimestamp;
   int exerciseType;
   int exerciseID;
-  double avgPace;
+  num avgPace;
   String? path;
   int calories;
   int? numSteps;
@@ -71,7 +71,7 @@ class Run {
       DateTime.parse(json['endTimestamp']),
       json['exerciseType'] as int,
       json['exerciseID'] as int,
-      json['avgPace'] as double,
+      json['avgPace'] as num,
       json['path'] as String?,
       json['calories'] as int,
       json['numSteps'] as int,
