@@ -264,7 +264,8 @@ class _CameraScreenState extends State<CameraScreen> {
           ]),
         ),
       ),
-      if (_isLoading) const CircularProgressIndicator(color: Colors.purple)
+      if (_isLoading)
+        const Center(child: CircularProgressIndicator(color: Colors.purple))
     ]);
   }
 }
