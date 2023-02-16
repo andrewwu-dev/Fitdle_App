@@ -7,6 +7,7 @@ import 'package:fitdle/pages/home/home_screen.dart';
 import 'package:fitdle/pages/redeem/redeem_screen.dart';
 import 'package:fitdle/pages/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:fitdle/models/exercise.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -69,20 +70,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           ActionButton(
               onPressed: () {
-                Navigator.popAndPushNamed(context, "run");
+                Navigator.pushNamed(context, "run");
               },
               icon: const Icon(Icons.directions_run),
               label: run),
           ActionButton(
               onPressed: () async {
-                await availableCameras().then(
-                    (value) => Navigator.pushNamed(context, "camera", arguments: pushups));
+                await availableCameras().then((value) => Navigator.pushNamed(
+                    context, "camera",
+                    arguments: ExerciseType.pushups));
               },
               icon: const Icon(AppIcons.pushup),
               label: pushups),
           ActionButton(
               onPressed: () {
-                Navigator.pushNamed(context, "camera", arguments: squats);
+                Navigator.pushNamed(context, "camera",
+                    arguments: ExerciseType.squats);
               },
               icon: const Icon(AppIcons.squat),
               label: squats),

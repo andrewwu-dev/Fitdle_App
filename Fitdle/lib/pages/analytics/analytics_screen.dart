@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:fitdle/components/common.dart';
 import 'package:fitdle/models/chart_data.dart';
 import 'package:fitdle/pages/analytics/analytics_vm.dart';
@@ -21,7 +20,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   int selectedGraph = 0;
   Color rewardsColor = Colors.white;
   Color caloriesColor = Colors.purple;
-  late Future<List<ChartData>> _chartData;
 
   @override
   void initState() {

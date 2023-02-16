@@ -17,22 +17,22 @@ class User {
       };
 
   clear() {
-    this.id = null;
-    this.email = null;
-    this.firstName = null;
-    this.lastName = null;
-    this.birthDate = null;
-    this.numPoints = null;
-    this.age = null;
+    id = null;
+    email = null;
+    firstName = null;
+    lastName = null;
+    birthDate = null;
+    numPoints = null;
+    age = null;
   }
 
   update({id, email, firstName, lastName, birthDate, numPoints}) {
-    this.id = id ?? null;
-    this.email = email ?? null;
-    this.firstName = firstName ?? null;
-    this.lastName = lastName ?? null;
-    this.birthDate = birthDate ?? null;
-    this.numPoints = numPoints ?? null;
+    this.id = id;
+    this.email = email;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.birthDate = birthDate;
+    this.numPoints = numPoints;
     age = (birthDate != null)
         ? calculateAge(DateTime.parse(this.birthDate!))
         : null;

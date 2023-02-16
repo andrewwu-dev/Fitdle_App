@@ -1,5 +1,12 @@
 import 'dart:convert';
 
+enum ExerciseType { run, pushups, squats }
+
+final Map _caloriesPerRepetition = {
+  ExerciseType.pushups: 0.5,
+  ExerciseType.squats: 0.32,
+};
+
 class ExerciseHistory {
   List<Run> runs;
   List<Strength> strengthExercises;
@@ -41,7 +48,7 @@ class Run {
   DateTime endTimestamp;
   int exerciseType;
   int exerciseID;
-  double avgPace;
+  num avgPace;
   String? path;
   int calories;
   int? numSteps;
@@ -64,7 +71,7 @@ class Run {
       DateTime.parse(json['endTimestamp']),
       json['exerciseType'] as int,
       json['exerciseID'] as int,
-      json['avgPace'] as double,
+      json['avgPace'] as num,
       json['path'] as String?,
       json['calories'] as int,
       json['numSteps'] as int,
@@ -85,13 +92,31 @@ class Run {
       };
 }
 
+class StrengthObject {
+  DateTime startTimestamp;
+  late DateTime endTimestamp;
+  int exerciseType = 0;
+  int repetitions = 0;
+  double score = 0;
+
+  StrengthObject(this.startTimestamp);
+
+  Map<String, dynamic> toJson() => {
+        "startTimestamp": startTimestamp.toIso8601String(),
+        "endTimestamp": endTimestamp.toIso8601String(),
+        "exerciseType": exerciseType,
+        "repetitions": repetitions,
+        "score": score
+      };
+}
+
 class Strength {
   DateTime startTimestamp;
   DateTime endTimestamp;
   int exerciseType;
   int exerciseID;
   int repetitions;
-  double score;
+  num score;
 
   Strength(this.startTimestamp, this.endTimestamp, this.exerciseType,
       this.exerciseID, this.repetitions, this.score);
@@ -103,7 +128,7 @@ class Strength {
         json['exerciseType'] as int,
         json['exerciseID'] as int,
         json['repetitions'] as int,
-        json['score'] as double);
+        json['score'] as num);
   }
 
   Map<String, dynamic> toJson() => {
@@ -114,4 +139,11 @@ class Strength {
         "repetitions": repetitions,
         "score": score
       };
+
+  int getCalories() {
+    // -1 because the api starts at 1
+    return (repetitions *
+            _caloriesPerRepetition[ExerciseType.values[exerciseType - 1]])
+        .floor();
+  }
 }
