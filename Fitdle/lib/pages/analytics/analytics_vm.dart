@@ -18,7 +18,6 @@ class AnalyticsVM extends ChangeNotifier {
   late DateTime _endDate;
   var _selectedGraph = GraphType.earnings;
   var _shouldShowNextWeek = false;
-  var _isLoading = true;
 
   final PublishSubject _error = PublishSubject();
 
@@ -27,7 +26,6 @@ class AnalyticsVM extends ChangeNotifier {
       "${_startDate.year}/${_startDate.month}/${_startDate.day}";
   String get endDate => "${_endDate.year}/${_endDate.month}/${_endDate.day}";
   bool get shouldShowNextWeek => _shouldShowNextWeek;
-  bool get isLoading => _isLoading;
 
   AnalyticsVM([userRepo]) {
     _userRepo = userRepo ?? locator.get<UserRepository>();

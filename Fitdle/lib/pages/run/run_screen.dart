@@ -5,7 +5,6 @@ import 'run_vm.dart';
 import 'stats_display.dart';
 import 'package:fitdle/components/common.dart';
 import 'package:fitdle/constants/all_constants.dart';
-import 'package:fitdle/pages/run/run_vm.dart';
 import 'package:fitdle/models/exercise.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';

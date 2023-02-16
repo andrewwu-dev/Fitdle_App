@@ -1,13 +1,19 @@
+import 'dart:async';
 import 'package:camera/camera.dart';
+import 'package:fitdle/models/exercise.dart';
 import 'package:fitdle/pages/camera/camera_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:fitdle/components/common.dart';
 import 'package:fitdle/constants/all_constants.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tuple/tuple.dart';
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({Key? key, required this.camera}) : super(key: key);
+  const CameraScreen(
+      {Key? key, required this.camera, required this.exerciseType})
+      : super(key: key);
   final CameraDescription camera;
+  final ExerciseType exerciseType;
 
   @override
   State<CameraScreen> createState() => _CameraScreenState();
@@ -31,14 +37,27 @@ class _MediaSizeClipper extends CustomClipper<Rect> {
 class _CameraScreenState extends State<CameraScreen> {
   late CameraController _camera;
   late final CameraVM _cameraVM;
+  late StreamSubscription _navigationSubscription;
+  late StreamSubscription _errorSubscription;
+  var _isLoading = false;
 
   @override
   void initState() {
     _initCamera();
+    _listen();
     super.initState();
   }
 
-  Tuple2 getCameraError(String code) {
+  @override
+  void dispose() {
+    _camera.dispose();
+    _cameraVM.dispose();
+    _navigationSubscription.cancel();
+    _errorSubscription.cancel();
+    super.dispose();
+  }
+
+  Tuple2 _getCameraError(String code) {
     switch (code) {
       case "CameraAccessDenied":
         return const Tuple2(cameraAccessDenied, pleaseGrantCameraAccess);
@@ -66,7 +85,7 @@ class _CameraScreenState extends State<CameraScreen> {
       });
     }).catchError((Object e) {
       if (e is CameraException) {
-        final error = getCameraError(e.code);
+        final error = _getCameraError(e.code);
         showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -81,26 +100,36 @@ class _CameraScreenState extends State<CameraScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    _camera.dispose();
-    _cameraVM.dispose();
-    super.dispose();
+  Future<void> _finishExercise() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await _cameraVM.logStrength(widget.exerciseType);
+    setState(() {
+      _isLoading = false;
+    });
   }
 
-  double getCameraScale(Size size) {
-    return 1;
+  _listen() {
+    _errorSubscription = _cameraVM.error.listen((msg) {
+      Fluttertoast.showToast(
+          msg: msg.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 1);
+    });
+
+    _navigationSubscription = _cameraVM.done.listen((value) {
+      Navigator.pop(context);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final cameraScale = getCameraScale(size);
 
     if (!_camera.value.isInitialized) {
       return Container();
     } else {
-      final header = ModalRoute.of(context)!.settings.arguments as String;
       return Scaffold(
           appBar: AppBar(
               leading: IconButton(
@@ -110,7 +139,7 @@ class _CameraScreenState extends State<CameraScreen> {
               automaticallyImplyLeading: false,
               centerTitle: true,
               backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-              title: fitdleText(header, h2)),
+              title: fitdleText(widget.exerciseType.name, h2)),
           body: body(size));
     }
   }
@@ -145,30 +174,35 @@ class _CameraScreenState extends State<CameraScreen> {
   Widget body(Size size) {
     final mediaSize = MediaQuery.of(context).size;
     final scale = 1 / (_camera.value.aspectRatio * mediaSize.aspectRatio);
-    return Container(
+    return Stack(children: [
+      Container(
         alignment: Alignment.center,
         child: ClipRect(
-            clipper: _MediaSizeClipper(mediaSize),
-            child: Stack(
-              alignment: AlignmentDirectional.topCenter,
+          clipper: _MediaSizeClipper(mediaSize),
+          child: Stack(alignment: AlignmentDirectional.topCenter, children: [
+            Transform.scale(
+              scale: scale,
+              alignment: Alignment.topCenter,
+              child: CameraPreview(_camera),
+            ),
+            Column(
+              verticalDirection: VerticalDirection.down,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Transform.scale(
-                  scale: scale,
-                  alignment: Alignment.topCenter,
-                  child: CameraPreview(_camera),
+                borderedText(
+                  _cameraVM.strengthObject.repetitions.toString(),
                 ),
-                Column(
-                  verticalDirection: VerticalDirection.down,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    borderedText("4 reps"),
-                    const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
-                    primaryButton(
-                        "Finish", () => {Navigator.of(context).pop()}),
-                    const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 10))
-                  ],
+                const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
+                primaryButton("Finish", () => {_finishExercise()}),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
                 )
               ],
-            )));
+            )
+          ]),
+        ),
+      ),
+      if (_isLoading) const CircularProgressIndicator(color: Colors.purple)
+    ]);
   }
 }

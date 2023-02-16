@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+enum ExerciseType { run, pushups, squats }
+
 class ExerciseHistory {
   List<Run> runs;
   List<Strength> strengthExercises;
@@ -85,13 +87,31 @@ class Run {
       };
 }
 
+class StrengthObject {
+  DateTime startTimestamp;
+  late DateTime endTimestamp;
+  int exerciseType = 0;
+  int repetitions = 0;
+  double score = 0;
+
+  StrengthObject(this.startTimestamp);
+
+  Map<String, dynamic> toJson() => {
+        "startTimestamp": startTimestamp.toIso8601String(),
+        "endTimestamp": endTimestamp.toIso8601String(),
+        "exerciseType": exerciseType,
+        "repetitions": repetitions,
+        "score": score
+      };
+}
+
 class Strength {
   DateTime startTimestamp;
   DateTime endTimestamp;
   int exerciseType;
   int exerciseID;
   int repetitions;
-  double score;
+  num score;
 
   Strength(this.startTimestamp, this.endTimestamp, this.exerciseType,
       this.exerciseID, this.repetitions, this.score);
@@ -103,7 +123,7 @@ class Strength {
         json['exerciseType'] as int,
         json['exerciseID'] as int,
         json['repetitions'] as int,
-        json['score'] as double);
+        json['score'] as num);
   }
 
   Map<String, dynamic> toJson() => {

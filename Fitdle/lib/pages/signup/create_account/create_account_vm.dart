@@ -6,7 +6,6 @@ import 'package:rxdart/rxdart.dart';
 import '../../../repository/api_response.dart';
 import '../../../repository/auth_repository.dart';
 import '../../../repository/user_repository.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class CreateAccountVM extends ChangeNotifier {
   late final AuthRepository _authRepo;

@@ -35,29 +35,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
       Navigator.popAndPushNamed(context, "login");
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: false,
-        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-        title: fitdleText(settings, h2)
-      ),
+          automaticallyImplyLeading: false,
+          centerTitle: false,
+          backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+          title: fitdleText(settings, h2)),
       body: Container(
-        alignment: Alignment.topLeft,
-        color: const Color.fromARGB(255, 240, 240, 240),
-        child: ListView(
-          primary: false,
-          children: [
-            const SizedBox(height: regular),
-            option(Icons.logout, "Log out", logoutPressed)
-          ],
-        )
-      ),
+          alignment: Alignment.topLeft,
+          color: const Color.fromARGB(255, 240, 240, 240),
+          child: ListView(
+            primary: false,
+            children: [
+              const SizedBox(height: regular),
+              option(Icons.logout, "Log out", logoutPressed)
+            ],
+          )),
     );
   }
 
@@ -67,13 +64,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Container option(IconData icon, String label, action) {
     return Container(
-      color: Colors.white,
-      child: ListTile(
-        leading: Icon(icon, color: Colors.purple),
-        title: fitdleText(label, body, align: TextAlign.left),
-        onTap: action,
-        contentPadding: const EdgeInsets.fromLTRB(regular, 0, regular, 0)
-      )
-    );
+        color: Colors.white,
+        child: ListTile(
+            leading: Icon(icon, color: Colors.purple),
+            title: fitdleText(label, body, align: TextAlign.left),
+            onTap: action,
+            contentPadding: const EdgeInsets.fromLTRB(regular, 0, regular, 0)));
   }
 }

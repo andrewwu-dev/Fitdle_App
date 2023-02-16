@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:fitdle/constants/all_constants.dart';
 import 'package:fitdle/pages/signup/birthday/brithday_vm.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../../components/common.dart';
@@ -45,8 +44,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
       Fluttertoast.showToast(
           msg: msg.toString(),
           toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 1
-      );
+          timeInSecForIosWeb: 1);
     });
   }
 
@@ -68,17 +66,11 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
                   TextButton(
                       onPressed: () => _selectDate(context),
                       child: fitdleText(
-                        "${date.month}-${date.day}-${date.year}",
-                        30.0,
-                        color: Colors.purple
-                      )
-                  ),
+                          "${date.month}-${date.day}-${date.year}", 30.0,
+                          color: Colors.purple)),
                   SizedBox(height: size.height / 6),
                   primaryButton(done, doneButtonPressed)
-                ]
-            )
-        )
-    );
+                ])));
   }
 
   DateTime date = DateTime.now();
@@ -88,8 +80,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
         context: context,
         initialDate: date,
         firstDate: DateTime(1930, 1),
-        lastDate: DateTime.now().add(Duration(days: 1))
-    );
+        lastDate: DateTime.now().add(const Duration(days: 1)));
     if (picked != null && picked != date) {
       setState(() {
         date = picked;
