@@ -233,7 +233,7 @@ class _RunScreenState extends State<RunScreen> {
                 )));
   }
 
-  buttonPressed() {
+  buttonPressed() async {
     switch (buttonState) {
       case startRun:
         updateCurrentLocation();
@@ -278,7 +278,7 @@ class _RunScreenState extends State<RunScreen> {
         for (final point in polylineCoordinates) {
           runObject.path.add(point.toJson());
         }
-        _runVM.createRunLog(runObject);
+        await _runVM.createRunLog(runObject);
         break;
       case done:
         Navigator.pop(context);

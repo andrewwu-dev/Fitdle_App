@@ -1,3 +1,4 @@
+import 'package:fitdle/models/earning.dart';
 import 'package:fitdle/repository/api_response.dart';
 import 'package:fitdle/repository/base_repository.dart';
 import '../models/reward.dart';
@@ -5,6 +6,7 @@ import '../models/reward.dart';
 abstract class RewardsRepositoryProtocol {
   Future<Object> getRewards();
   Future<Object> redeemReward(int userID, int rewardID);
+  Future<Object> savePoints(int userID, Earning earning);
 }
 
 class RewardsRepository extends BaseRepository
@@ -25,6 +27,12 @@ class RewardsRepository extends BaseRepository
   @override
   Future<Object> redeemReward(userID, rewardID) async {
     var res = await post("/rewards/redeem/$userID", {"rewardID": rewardID});
+    return res;
+  }
+
+  @override
+  Future<Object> savePoints(int userID, Earning earning) async {
+    final res = await post("/rewards/earnings/$userID", earning.toJson());
     return res;
   }
 }
