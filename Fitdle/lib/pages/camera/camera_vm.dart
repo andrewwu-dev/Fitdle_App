@@ -1,15 +1,22 @@
+import 'package:camera/camera.dart';
 import 'package:fitdle/locator.dart';
+import 'package:fitdle/pages/camera/pose_estimation.dart';
+import 'package:fitdle/repository/api_response.dart';
 import 'package:fitdle/repository/exercise_repository.dart';
 import 'package:fitdle/repository/user_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fitdle/models/exercise.dart';
 import 'package:rxdart/rxdart.dart';
-import '../../repository/api_response.dart';
+import 'classifier.dart';
+import 'package:fitdle/pages/camera/isolate.dart';
+import 'dart:isolate';
+import 'package:fitdle/constants/exercise_positions.dart';
 
 class CameraVM extends ChangeNotifier {
   late final ExerciseRepository _exerciseRepo;
   late final UserRepository _userRepo;
   final StrengthObject _strenghtObject = StrengthObject(DateTime.now());
+  final PoseEstimation poseEstimation = PoseEstimation();
 
   final PublishSubject<String> _error = PublishSubject();
   final PublishSubject _done = PublishSubject();
@@ -18,11 +25,26 @@ class CameraVM extends ChangeNotifier {
   PublishSubject get done => _done;
   StrengthObject get strengthObject => _strenghtObject;
 
+  late Classifier classifier;
+  List<dynamic> inferences = [];
+  late IsolateUtils isolate;
+
+  int state = 0;
+  List<String> message = [];
+  var currErr = {};
+
   CameraVM([userRepo, exerciseRepo]) {
     _userRepo = userRepo ?? locator.get<UserRepository>();
     _exerciseRepo = exerciseRepo ?? locator.get<ExerciseRepository>();
     // TODO: Only used to test right now, replace with actual pose estimation.
     _strenghtObject.repetitions = 5;
+  }
+
+  initIsolate() async {
+    isolate = IsolateUtils();
+    await isolate.start();
+    classifier = Classifier();
+    classifier.loadModel();
   }
 
   @override
@@ -57,6 +79,79 @@ class CameraVM extends ChangeNotifier {
       _error.sink.add("Unable to save exercise data");
     } else {
       _done.sink.add(null);
+    }
+  }
+
+  Future<List<dynamic>> inference(IsolateData isolateData) async {
+    ReceivePort responsePort = ReceivePort();
+    isolate.sendPort.send(isolateData..responsePort = responsePort.sendPort);
+    var results = await responsePort.first;
+    return results;
+  }
+
+  Future<void> createIsolate(
+      CameraImage imageStream, ExerciseType exerciseType) async {
+    var isolateData = IsolateData(imageStream, classifier.interpreter.address);
+    List<dynamic> inferenceResults = await inference(isolateData);
+    inferences = inferenceResults;
+    print("inference results");
+    print(inferenceResults);
+
+    // TODO, TEMP VARS, NEED TO CHANGE TO ACTUAL
+    final exercise = exerciseType.name;
+    int numStates = (EXERCISES[exercise]!['states'] as List).length;
+    int allowed_err = EXERCISES[exercise]!['allowed_err'] as int;
+    int alert_err = EXERCISES[exercise]!['alert_err'] as int;
+
+    var diffs_curr = poseEstimation.verifyOutput(
+        inferences, (EXERCISES[exercise]!['states'] as List)[state] as Map);
+    var diffs_next = poseEstimation.verifyOutput(
+        inferences,
+        (EXERCISES[exercise]!['states'] as List)[(state + 1) % numStates]
+            as Map);
+
+    print("diffs curr:");
+    print(diffs_curr);
+
+    bool best_pose = true;
+    // diffs_curr.forEach((k, v) {
+    //   // Can't break foreach lol :)
+
+    //   // if (!curr_err.containsKey(k)) {
+    //   //   break;
+    //   // }
+    //   if (!curr_err.containsKey(k) && curr_err[k] < v) {
+    //     best_pose = false;
+    //     // break;
+    //   }
+    // });
+    for (final k in diffs_curr.keys) {
+      if (!currErr.containsKey(k)) {
+        break;
+      }
+      if (currErr[k] < diffs_curr[k]) {
+        best_pose = false;
+        break;
+      }
+    }
+
+    if (best_pose) {
+      currErr = diffs_curr;
+    }
+
+    if (diffs_next.values.every((err) => err < allowed_err)) {
+      currErr.forEach((k, v) {
+        if (v > alert_err) {
+          message.add(
+              "Your form at your ${k.replaceAll('both_', '')} is a bit off");
+        }
+      });
+
+      currErr = {};
+      state = (state + 1) % numStates;
+      if (state == 0) {
+        _strenghtObject.repetitions += 1;
+      }
     }
   }
 }

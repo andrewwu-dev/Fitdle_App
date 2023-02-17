@@ -29,8 +29,7 @@ class IsolateUtils {
 
     await for (final IsolateData isolateData in port) {
       Classifier classifier = Classifier(
-          interpreter:
-              Interpreter.fromAddress(isolateData.interpreterAddress));
+          interpreter: Interpreter.fromAddress(isolateData.interpreterAddress));
       classifier.performOperations(isolateData.cameraImage);
       classifier.runModel();
       List<dynamic> results = classifier.parseLandmarkData();
