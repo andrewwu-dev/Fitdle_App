@@ -48,7 +48,8 @@ class Fitdle extends StatelessWidget {
           'birthday': (context) => const BirthdayScreen(),
           'run': (context) => const RunScreen(),
           'camera': (context) => CameraScreen(
-                camera: _cameras![0],
+                camera: _cameras!.firstWhere((camera) =>
+                    camera.lensDirection == CameraLensDirection.front),
                 exerciseType:
                     ModalRoute.of(context)?.settings.arguments as ExerciseType,
               )
