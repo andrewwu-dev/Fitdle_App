@@ -16,6 +16,7 @@ class AnalyticsScreen extends StatefulWidget {
 class _AnalyticsScreenState extends State<AnalyticsScreen> {
   late final AnalyticsVM _analyticsVM;
   late TooltipBehavior _tooltip;
+  late Future<List<ChartData>> _chartData;
 
   int selectedGraph = 0;
   Color rewardsColor = Colors.white;
@@ -26,6 +27,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     super.initState();
     _analyticsVM = AnalyticsVM();
     _tooltip = TooltipBehavior(enable: true);
+    _chartData = _analyticsVM.getChartData();
   }
 
   @override
@@ -46,7 +48,13 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         backgroundColor: const Color.fromARGB(255, 240, 240, 240),
         title: fitdleText(analytics, h2),
       ),
-      body: body(size),
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: body(size),
+        ),
+      ),
     );
   }
 
@@ -82,6 +90,14 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       rewardsColor = index == 0 ? Colors.white : Colors.purple;
       caloriesColor = index == 0 ? Colors.purple : Colors.white;
     });
+    _refresh();
+  }
+
+  Future<void> _refresh() async {
+    final res = await _analyticsVM.getChartData();
+    setState(() {
+      _chartData = Future.value(res);
+    });
   }
 
   body(size) {
@@ -94,7 +110,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         buildWeekSwitch(),
         const SizedBox(height: large),
         FutureBuilder(
-            future: _analyticsVM.getChartData(),
+            future: _chartData,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 return _buildChart(snapshot.data);
