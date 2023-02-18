@@ -1,13 +1,16 @@
 import 'package:fitdle/locator.dart';
+import 'package:fitdle/models/earning.dart';
 import 'package:fitdle/repository/exercise_repository.dart';
+import 'package:fitdle/repository/rewards_repository.dart';
 import 'package:fitdle/repository/user_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fitdle/models/exercise.dart';
 import 'package:rxdart/rxdart.dart';
-import '../../repository/api_response.dart';
+import 'package:fitdle/repository/api_response.dart';
 
 class CameraVM extends ChangeNotifier {
   late final ExerciseRepository _exerciseRepo;
+  late final RewardsRepository _rewardsRepo;
   late final UserRepository _userRepo;
   final StrengthObject _strenghtObject = StrengthObject(DateTime.now());
 
@@ -18,8 +21,9 @@ class CameraVM extends ChangeNotifier {
   PublishSubject get done => _done;
   StrengthObject get strengthObject => _strenghtObject;
 
-  CameraVM([userRepo, exerciseRepo]) {
+  CameraVM([userRepo, exerciseRepo, rewardsRepo]) {
     _userRepo = userRepo ?? locator.get<UserRepository>();
+    _rewardsRepo = rewardsRepo ?? locator.get<RewardsRepository>();
     _exerciseRepo = exerciseRepo ?? locator.get<ExerciseRepository>();
     // TODO: Only used to test right now, replace with actual pose estimation.
     _strenghtObject.repetitions = 5;
@@ -37,10 +41,9 @@ class CameraVM extends ChangeNotifier {
     _strenghtObject.repetitions += 1;
   }
 
-  _calculateScore() {
-    // TODO: Figure out how to calculate score based on exercise?
-    const pointsPerRep = 10.0;
-    _strenghtObject.score = pointsPerRep * _strenghtObject.repetitions;
+  num _calculateScore() {
+    // TODO: Calculate score from pose estimation? 1 - 10 maybe?
+    return 5;
   }
 
   Future<void> logStrength(ExerciseType type) async {
@@ -48,15 +51,27 @@ class CameraVM extends ChangeNotifier {
     _strenghtObject.endTimestamp = DateTime.now();
     // +1 because the enum starts at 0, but the API expects 1.
     _strenghtObject.exerciseType = type.index + 1;
-    _calculateScore();
-    final res = await _exerciseRepo.logStrength(
+    _strenghtObject.score = _calculateScore();
+    var res = await _exerciseRepo.logStrength(
       _userRepo.user.id!,
       _strenghtObject,
     );
     if (res is Failure) {
       _error.sink.add("Unable to save exercise data");
-    } else {
-      _done.sink.add(null);
+      return;
     }
+    res = await _rewardsRepo.savePoints(
+      _userRepo.user.id!,
+      Earning(
+        _userRepo.user.id!,
+        DateTime.now().toIso8601String(),
+        _strenghtObject.getPoints(),
+      ),
+    );
+    if (res is Failure) {
+      _error.sink.add("Unable to save points");
+      return;
+    }
+    _done.sink.add(null);
   }
 }

@@ -7,6 +7,11 @@ final Map _caloriesPerRepetition = {
   ExerciseType.squats: 0.32,
 };
 
+final Map _pointsPerRepetition = {
+  ExerciseType.pushups: 1,
+  ExerciseType.squats: 1,
+};
+
 class ExerciseHistory {
   List<Run> runs;
   List<Strength> strengthExercises;
@@ -41,6 +46,11 @@ class RunObject {
         "numSteps": numSteps,
         "distance": distance
       };
+
+  int getPoints() {
+    const pointsPerCalorie = 0.1;
+    return (calories * pointsPerCalorie).ceil();
+  }
 }
 
 class Run {
@@ -97,7 +107,7 @@ class StrengthObject {
   late DateTime endTimestamp;
   int exerciseType = 0;
   int repetitions = 0;
-  double score = 0;
+  num score = 0;
 
   StrengthObject(this.startTimestamp);
 
@@ -108,6 +118,13 @@ class StrengthObject {
         "repetitions": repetitions,
         "score": score
       };
+
+  int getPoints() {
+    return (repetitions *
+            _pointsPerRepetition[ExerciseType.values[exerciseType - 1]] *
+            score)
+        .floor();
+  }
 }
 
 class Strength {
@@ -141,7 +158,6 @@ class Strength {
       };
 
   int getCalories() {
-    // -1 because the api starts at 1
     return (repetitions *
             _caloriesPerRepetition[ExerciseType.values[exerciseType - 1]])
         .floor();
