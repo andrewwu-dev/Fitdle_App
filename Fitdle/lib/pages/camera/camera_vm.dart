@@ -97,7 +97,6 @@ class CameraVM extends ChangeNotifier {
     print("inference results");
     print(inferenceResults);
 
-    // TODO, TEMP VARS, NEED TO CHANGE TO ACTUAL
     final exercise = exerciseType.name;
     int numStates = (EXERCISES[exercise]!['states'] as List).length;
     int allowed_err = EXERCISES[exercise]!['allowed_err'] as int;
@@ -112,6 +111,8 @@ class CameraVM extends ChangeNotifier {
 
     print("diffs curr:");
     print(diffs_curr);
+    print("testing");
+    print(diffs_next.values.every((err) => err < allowed_err));
 
     bool best_pose = true;
     // diffs_curr.forEach((k, v) {
@@ -140,15 +141,16 @@ class CameraVM extends ChangeNotifier {
     }
 
     if (diffs_next.values.every((err) => err < allowed_err)) {
-      currErr.forEach((k, v) {
-        if (v > alert_err) {
-          message.add(
-              "Your form at your ${k.replaceAll('both_', '')} is a bit off");
-        }
-      });
+      // currErr.forEach((k, v) {
+      //   if (v > alert_err) {
+      //     message.add(
+      //         "Your form at your ${k.replaceAll('both_', '')} is a bit off");
+      //   }
+      // });
 
       currErr = {};
       state = (state + 1) % numStates;
+      print("INCREASE STATE");
       if (state == 0) {
         _strenghtObject.repetitions += 1;
       }

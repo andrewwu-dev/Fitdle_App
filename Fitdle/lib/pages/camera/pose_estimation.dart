@@ -3,7 +3,7 @@ import 'package:fitdle/constants/exercise_positions.dart';
 
 class PoseEstimation {
   Map verifyOutput(List keypointScores, Map expectedPose,
-      [double threshold = 0]) {
+      [double threshold = 0.1]) {
     var diffs = {};
     expectedPose.forEach((posture, expectedAngle) {
       List postures = posture.split(',');
@@ -76,13 +76,24 @@ class PoseEstimation {
         diffs[postures[0]] = min(
             (angle_r - expectedAngle).abs(), (angle_l - expectedAngle).abs());
       } else {
-        List<int> p1 = keypointScores[KEYPOINT_DICT[postures[0]]!];
-        List<int> p2 = keypointScores[KEYPOINT_DICT[postures[1]]!];
-        List<int> p3 = keypointScores[KEYPOINT_DICT[postures[2]]!];
-        if (p1[2].toDouble() > threshold &&
-            p2[2].toDouble() > threshold &&
-            p3[2].toDouble() > threshold) {
+        List<int> p1 = keypointScores[KEYPOINT_DICT[postures[0]]!]
+                      .take(2)
+                      .toList()
+                      .cast<int>();
+        List<int> p2 = keypointScores[KEYPOINT_DICT[postures[1]]!]
+                      .take(2)
+                      .toList()
+                      .cast<int>();
+        List<int> p3 = keypointScores[KEYPOINT_DICT[postures[2]]!]
+                      .take(2)
+                      .toList()
+                      .cast<int>();
+        if ((keypointScores[KEYPOINT_DICT[postures[0]]!][2] as double) > threshold &&
+            (keypointScores[KEYPOINT_DICT[postures[1]]!][2] as double) > threshold &&
+            (keypointScores[KEYPOINT_DICT[postures[2]]!][2] as double) > threshold) {
           double angle = angleBetween(p2, p1, p3);
+          print("angle results");
+          print(angle);
           double error = (angle - expectedAngle).abs();
           diffs[postures[0]] = error;
         }
@@ -96,9 +107,6 @@ class PoseEstimation {
     double rad2 = atan2(pointC[0] - pointB[0], pointC[1] - pointB[1]);
     double deg1 = (rad1 * 180 / pi).abs();
     double deg2 = (rad2 * 180 / pi).abs();
-    print("angle results");
-    print(deg1);
-    print(deg2);
 
     if ((deg2 - deg1).abs() <= 180) {
       return (deg2 - deg1).abs();
