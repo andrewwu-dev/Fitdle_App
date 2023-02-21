@@ -63,9 +63,10 @@ class CameraVM extends ChangeNotifier {
     _strenghtObject.repetitions += 1;
   }
 
-  num _calculateScore() {
-    // TODO: Calculate score from pose estimation? 1 - 10 maybe?
-    return 5;
+  _calculateScore() {
+    // TODO: Figure out how to calculate score based on exercise?
+    const pointsPerRep = 10.0;
+    _strenghtObject.score = pointsPerRep * _strenghtObject.repetitions;
   }
 
   Future<void> logStrength(ExerciseType type) async {
@@ -73,7 +74,7 @@ class CameraVM extends ChangeNotifier {
     _strenghtObject.endTimestamp = DateTime.now();
     // +1 because the enum starts at 0, but the API expects 1.
     _strenghtObject.exerciseType = type.index + 1;
-    _strenghtObject.score = _calculateScore();
+    _calculateScore();
     var res = await _exerciseRepo.logStrength(
       _userRepo.user.id!,
       _strenghtObject,
