@@ -8,86 +8,90 @@ class PoseEstimation {
     expectedPose.forEach((posture, expectedAngle) {
       List postures = posture.split(',');
       if (postures[0].contains("both")) {
-        double angle_r = 99999;
-        double angle_l = 99999;
-        List<double> p1_r = keypointScores[
-                KEYPOINT_DICT[postures[0].replaceAll('both', 'right')]!]
+        double angleR = 99999;
+        double angleL = 99999;
+        List<double> p1R = keypointScores[
+                keyPointDict[postures[0].replaceAll('both', 'right')]!]
             .take(2)
             .toList()
             .cast<double>();
-        List<double> p2_r = keypointScores[
-                KEYPOINT_DICT[postures[1].replaceAll('both', 'right')]!]
+        List<double> p2R = keypointScores[
+                keyPointDict[postures[1].replaceAll('both', 'right')]!]
             .take(2)
             .toList()
             .cast<double>();
-        List<double> p3_r = keypointScores[
-                KEYPOINT_DICT[postures[2].replaceAll('both', 'right')]!]
+        List<double> p3R = keypointScores[
+                keyPointDict[postures[2].replaceAll('both', 'right')]!]
             .take(2)
             .toList()
             .cast<double>();
-        List<double> p1_l = keypointScores[
-                KEYPOINT_DICT[postures[0].replaceAll('both', 'left')]!]
+        List<double> p1L = keypointScores[
+                keyPointDict[postures[0].replaceAll('both', 'left')]!]
             .take(2)
             .toList()
             .cast<double>();
-        List<double> p2_l = keypointScores[
-                KEYPOINT_DICT[postures[1].replaceAll('both', 'left')]!]
+        List<double> p2L = keypointScores[
+                keyPointDict[postures[1].replaceAll('both', 'left')]!]
             .take(2)
             .toList()
             .cast<double>();
-        List<double> p3_l = keypointScores[
-                KEYPOINT_DICT[postures[2].replaceAll('both', 'left')]!]
+        List<double> p3L = keypointScores[
+                keyPointDict[postures[2].replaceAll('both', 'left')]!]
             .take(2)
             .toList()
             .cast<double>();
 
         if ((keypointScores[
-                        KEYPOINT_DICT[postures[0].replaceAll('both', 'right')]!]
+                        keyPointDict[postures[0].replaceAll('both', 'right')]!]
                     [2] as double) >
                 threshold &&
             (keypointScores[
-                        KEYPOINT_DICT[postures[1].replaceAll('both', 'right')]!]
+                        keyPointDict[postures[1].replaceAll('both', 'right')]!]
                     [2] as double) >
                 threshold &&
             (keypointScores[
-                        KEYPOINT_DICT[postures[2].replaceAll('both', 'right')]!]
+                        keyPointDict[postures[2].replaceAll('both', 'right')]!]
                     [2] as double) >
                 threshold) {
-          angle_r = angleBetween(p2_r, p1_r, p3_r);
+          angleR = angleBetween(p2R, p1R, p3R);
         }
 
         if ((keypointScores[
-                        KEYPOINT_DICT[postures[0].replaceAll('both', 'left')]!]
+                        keyPointDict[postures[0].replaceAll('both', 'left')]!]
                     [2] as double) >
                 threshold &&
             (keypointScores[
-                        KEYPOINT_DICT[postures[1].replaceAll('both', 'left')]!]
+                        keyPointDict[postures[1].replaceAll('both', 'left')]!]
                     [2] as double) >
                 threshold &&
             (keypointScores[
-                        KEYPOINT_DICT[postures[2].replaceAll('both', 'left')]!]
+                        keyPointDict[postures[2].replaceAll('both', 'left')]!]
                     [2] as double) >
                 threshold) {
-          angle_l = angleBetween(p2_l, p1_l, p3_l);
+          angleL = angleBetween(p2L, p1L, p3L);
         }
-        diffs[postures[0]] = min(
-            (angle_r - expectedAngle).abs(), (angle_l - expectedAngle).abs());
+        diffs[postures[0]] =
+            min((angleR - expectedAngle).abs(), (angleL - expectedAngle).abs());
       } else {
-        List<double> p1 = keypointScores[KEYPOINT_DICT[postures[0]]!]
-                      .take(2)
-                      .toList()
-                      .cast<double>();
-        List<double> p2 = keypointScores[KEYPOINT_DICT[postures[1]]!]
-                      .take(2)
-                      .toList()
-                      .cast<double>();
-        List<double> p3 = keypointScores[KEYPOINT_DICT[postures[2]]!]
-                      .take(2)
-                      .toList()
-                      .cast<double>();
-        if ((keypointScores[KEYPOINT_DICT[postures[0]]!][2] as double) > threshold &&
-            (keypointScores[KEYPOINT_DICT[postures[1]]!][2] as double) > threshold &&
-            (keypointScores[KEYPOINT_DICT[postures[2]]!][2] as double) > threshold) {
+        List<double> p1 = keypointScores[keyPointDict[postures[0]]!]
+            .take(2)
+            .toList()
+            .cast<double>();
+        List<double> p2 = keypointScores[keyPointDict[postures[1]]!]
+            .take(2)
+            .toList()
+            .cast<double>();
+        List<double> p3 = keypointScores[keyPointDict[postures[2]]!]
+            .take(2)
+            .toList()
+            .cast<double>();
+        if ((keypointScores[keyPointDict[postures[0]]!]
+                    [2] as double) >
+                threshold &&
+            (keypointScores[keyPointDict[postures[1]]!][2] as double) >
+                threshold &&
+            (keypointScores[keyPointDict[postures[2]]!][2] as double) >
+                threshold) {
           double angle = angleBetween(p2, p1, p3);
           print("angle results");
           print(angle);
@@ -99,7 +103,8 @@ class PoseEstimation {
     return diffs;
   }
 
-  double angleBetween(List<double> pointA, List<double> pointB, List<double> pointC) {
+  double angleBetween(
+      List<double> pointA, List<double> pointB, List<double> pointC) {
     double rad1 = atan2(pointA[0] - pointB[0], pointA[1] - pointB[1]);
     double rad2 = atan2(pointC[0] - pointB[0], pointC[1] - pointB[1]);
     double deg1 = (rad1 * 180 / pi).abs();

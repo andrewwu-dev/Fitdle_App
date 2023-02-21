@@ -12,7 +12,6 @@ import 'locator.dart';
 import 'package:fitdle/models/exercise.dart';
 
 // Used so that navigation doesn't require context to be passed in.
-// TODO: Implement a better navigation pattern
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 late List<CameraDescription>? _cameras;
 
@@ -48,7 +47,8 @@ class Fitdle extends StatelessWidget {
           'birthday': (context) => const BirthdayScreen(),
           'run': (context) => const RunScreen(),
           'camera': (context) => CameraScreen(
-                camera: _cameras![0],
+                camera: _cameras!.firstWhere((camera) =>
+                    camera.lensDirection == CameraLensDirection.front),
                 exerciseType:
                     ModalRoute.of(context)?.settings.arguments as ExerciseType,
               )

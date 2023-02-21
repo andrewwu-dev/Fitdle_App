@@ -6,10 +6,9 @@ class Earning {
   Earning(this.userID, this.timestamp, this.points);
 
   factory Earning.fromJson(Map<String, dynamic> json) {
-    return Earning(
-        json["userID"],
-        json["timestamp"],
-        json["points"]
-    );
+    return Earning(json["userID"], json["timestamp"], json["points"]);
   }
+
+  Map<String, dynamic> toJson() =>
+      {"userID": userID, "timestamp": timestamp, "points": points};
 }

@@ -1,4 +1,4 @@
-const KEYPOINT_DICT = {
+const keyPointDict = {
   'nose': 0,
   'left_eye': 1,
   'right_eye': 2,
@@ -18,7 +18,7 @@ const KEYPOINT_DICT = {
   'right_ankle': 16
 };
 
-const EXERCISES = {
+const exercises = {
   'squats': {
     'name': 'Squat',
     'allowed_err': 15,

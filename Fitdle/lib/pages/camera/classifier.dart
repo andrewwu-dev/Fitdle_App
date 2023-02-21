@@ -156,7 +156,7 @@ class Classifier {
     print("raw data");
     print(data);
     List result = [];
-    var x, y, c;
+    num x, y, c;
 
     for (var i = 0; i < 51; i += 3) {
       x = (data[1 + i]);
