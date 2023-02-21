@@ -37,6 +37,7 @@ class _MediaSizeClipper extends CustomClipper<Rect> {
 class _CameraScreenState extends State<CameraScreen> {
   late CameraController _camera;
   late final CameraVM _cameraVM;
+
   late StreamSubscription _navigationSubscription;
   late StreamSubscription _errorSubscription;
   var _isLoading = false;
@@ -77,12 +78,9 @@ class _CameraScreenState extends State<CameraScreen> {
     _camera = CameraController(widget.camera, ResolutionPreset.max);
     await _camera.initialize().then((_) {
       if (!mounted) {
+        // May need to pop camera screen here
         return;
       }
-      setState(() {});
-      _camera.startImageStream((CameraImage image) {
-        // process image/frame here
-      });
     }).catchError((Object e) {
       if (e is CameraException) {
         final error = _getCameraError(e.code);
@@ -98,6 +96,15 @@ class _CameraScreenState extends State<CameraScreen> {
                     ]));
       }
     });
+    await _cameraVM.initIsolate();
+    setState(() {});
+    _camera.startImageStream((CameraImage image) {
+      _createIsolate(image);
+    });
+  }
+
+  void _createIsolate(CameraImage imageStream) async {
+    await _cameraVM.createIsolate(imageStream, widget.exerciseType);
   }
 
   Future<void> _finishExercise() async {

@@ -12,7 +12,6 @@ import 'locator.dart';
 import 'package:fitdle/models/exercise.dart';
 
 // Used so that navigation doesn't require context to be passed in.
-// TODO: Implement a better navigation pattern
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 late List<CameraDescription>? _cameras;
 

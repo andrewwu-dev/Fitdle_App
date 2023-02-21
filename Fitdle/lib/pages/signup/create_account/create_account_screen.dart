@@ -56,7 +56,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
           return Scaffold(
               resizeToAvoidBottomInset: false,
-              // TODO: Wrap in SingleChildScrollView so keyboard doesn't cause overflow
               body: Stack(
                 children: [
                   Container(

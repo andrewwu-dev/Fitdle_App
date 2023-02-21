@@ -49,8 +49,6 @@ class _RedeemScreenState extends State<RedeemScreen> {
     });
   }
 
-  // TODO: Find a way to refresh/redraw when this page becomes visible again
-
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return fitdleSpinner();
