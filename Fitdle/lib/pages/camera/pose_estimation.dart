@@ -3,46 +3,43 @@ import 'package:fitdle/constants/exercise_positions.dart';
 
 class PoseEstimation {
   Map verifyOutput(List keypointScores, Map expectedPose,
-      [double threshold = 0.1]) {
+      [double threshold = 0.0]) {
     var diffs = {};
     expectedPose.forEach((posture, expectedAngle) {
       List postures = posture.split(',');
       if (postures[0].contains("both")) {
         double angle_r = 99999;
         double angle_l = 99999;
-        List<int> p1_r = keypointScores[
+        List<double> p1_r = keypointScores[
                 KEYPOINT_DICT[postures[0].replaceAll('both', 'right')]!]
             .take(2)
             .toList()
-            .cast<int>();
-        List<int> p2_r = keypointScores[
+            .cast<double>();
+        List<double> p2_r = keypointScores[
                 KEYPOINT_DICT[postures[1].replaceAll('both', 'right')]!]
             .take(2)
             .toList()
-            .cast<int>();
-        List<int> p3_r = keypointScores[
+            .cast<double>();
+        List<double> p3_r = keypointScores[
                 KEYPOINT_DICT[postures[2].replaceAll('both', 'right')]!]
             .take(2)
             .toList()
-            .cast<int>();
-        List<int> p1_l = keypointScores[
+            .cast<double>();
+        List<double> p1_l = keypointScores[
                 KEYPOINT_DICT[postures[0].replaceAll('both', 'left')]!]
             .take(2)
             .toList()
-            .cast<int>();
-        List<int> p2_l = keypointScores[
+            .cast<double>();
+        List<double> p2_l = keypointScores[
                 KEYPOINT_DICT[postures[1].replaceAll('both', 'left')]!]
             .take(2)
             .toList()
-            .cast<int>();
-        List<int> p3_l = keypointScores[
+            .cast<double>();
+        List<double> p3_l = keypointScores[
                 KEYPOINT_DICT[postures[2].replaceAll('both', 'left')]!]
             .take(2)
             .toList()
-            .cast<int>();
-
-        print("random arr");
-        print(p1_r);
+            .cast<double>();
 
         if ((keypointScores[
                         KEYPOINT_DICT[postures[0].replaceAll('both', 'right')]!]
@@ -76,18 +73,18 @@ class PoseEstimation {
         diffs[postures[0]] = min(
             (angle_r - expectedAngle).abs(), (angle_l - expectedAngle).abs());
       } else {
-        List<int> p1 = keypointScores[KEYPOINT_DICT[postures[0]]!]
+        List<double> p1 = keypointScores[KEYPOINT_DICT[postures[0]]!]
                       .take(2)
                       .toList()
-                      .cast<int>();
-        List<int> p2 = keypointScores[KEYPOINT_DICT[postures[1]]!]
+                      .cast<double>();
+        List<double> p2 = keypointScores[KEYPOINT_DICT[postures[1]]!]
                       .take(2)
                       .toList()
-                      .cast<int>();
-        List<int> p3 = keypointScores[KEYPOINT_DICT[postures[2]]!]
+                      .cast<double>();
+        List<double> p3 = keypointScores[KEYPOINT_DICT[postures[2]]!]
                       .take(2)
                       .toList()
-                      .cast<int>();
+                      .cast<double>();
         if ((keypointScores[KEYPOINT_DICT[postures[0]]!][2] as double) > threshold &&
             (keypointScores[KEYPOINT_DICT[postures[1]]!][2] as double) > threshold &&
             (keypointScores[KEYPOINT_DICT[postures[2]]!][2] as double) > threshold) {
@@ -102,7 +99,7 @@ class PoseEstimation {
     return diffs;
   }
 
-  double angleBetween(List<int> pointA, List<int> pointB, List<int> pointC) {
+  double angleBetween(List<double> pointA, List<double> pointB, List<double> pointC) {
     double rad1 = atan2(pointA[0] - pointB[0], pointA[1] - pointB[1]);
     double rad2 = atan2(pointC[0] - pointB[0], pointC[1] - pointB[1]);
     double deg1 = (rad1 * 180 / pi).abs();

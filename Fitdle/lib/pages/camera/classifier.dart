@@ -153,12 +153,14 @@ class Classifier {
   parseLandmarkData() {
     List outputParsed = [];
     List<double> data = outputLocations.getDoubleList();
+    print("raw data");
+    print(data);
     List result = [];
     var x, y, c;
 
     for (var i = 0; i < 51; i += 3) {
-      x = (data[1 + i] * 1000).toInt();
-      y = (data[0 + i] * 1000).toInt();
+      x = (data[1 + i]);
+      y = (data[0 + i]);
       c = (data[2 + i]);
       result.add([x, y, c]);
     }
