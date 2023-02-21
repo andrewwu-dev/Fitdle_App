@@ -6,20 +6,12 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 
 class IsolateUtils {
   static const String DEBUG_NAME = "InferenceIsolate";
-
-  late Isolate _isolate;
   final ReceivePort _receivePort = ReceivePort();
   late SendPort _sendPort;
 
   SendPort get sendPort => _sendPort;
 
   Future<void> start() async {
-    _isolate = await Isolate.spawn<SendPort>(
-      entryPoint,
-      _receivePort.sendPort,
-      debugName: DEBUG_NAME,
-    );
-
     _sendPort = await _receivePort.first;
   }
 
