@@ -55,10 +55,14 @@ class _RedeemScreenState extends State<RedeemScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: false,
-        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+        elevation: 0,
+        backgroundColor: appBarColor,
+        toolbarHeight: 100,
+        titleSpacing: appBarPadding,
         title: fitdleText(redeem, h2),
       ),
       body: body(size),

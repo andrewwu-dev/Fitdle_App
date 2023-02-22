@@ -42,17 +42,25 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: false,
-        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+        elevation: 0,
+        toolbarHeight: 100,
+        titleSpacing: appBarPadding,
+        backgroundColor: appBarColor,
         title: fitdleText(analytics, h2),
       ),
       body: RefreshIndicator(
         onRefresh: _refresh,
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: body(size),
+        child: PageView(
+          scrollDirection: Axis.vertical,
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
+          children: [
+            body(size),
+          ],
         ),
       ),
     );
@@ -106,6 +114,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
   body(size) {
     return Container(
+      color: backgroundColor,
       alignment: Alignment.topCenter,
       padding: const EdgeInsets.fromLTRB(regular, regular, regular, 0),
       child: Column(children: [

@@ -41,17 +41,13 @@ class _TaskState extends State<Task> {
             fitdleText(widget.category, body, weight: FontWeight.bold),
           ],
         ),
-        const Divider(
-          height: 10,
-          thickness: 1,
-          color: Colors.black,
-        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             fitdleText(progress, body),
             Row(children: [
-              fitdleText("${widget.taskProgress} / ${widget.goal}", h5, color: Colors.purple, weight: FontWeight.bold),
+              fitdleText("${widget.taskProgress} / ${widget.goal}", h5,
+                  color: Colors.purple, weight: FontWeight.bold),
               const SizedBox(width: 5),
               fitdleText(widget.unit, body),
             ])
