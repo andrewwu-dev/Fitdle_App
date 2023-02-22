@@ -44,19 +44,29 @@ class _HomeScreenState extends State<HomeScreen> {
             Progress progress = snapshot.data!;
             return Scaffold(
               resizeToAvoidBottomInset: false,
+              backgroundColor: backgroundColor,
               appBar: AppBar(
                 automaticallyImplyLeading: false,
                 centerTitle: false,
-                backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+                elevation: 0,
+                backgroundColor: appBarColor,
+                toolbarHeight: 100,
+                titleSpacing: appBarPadding,
                 title: fitdleText(
                     "$hi${_homeVM.getUser().firstName != null ? " ${capitalize(_homeVM.getUser().firstName!)}" : ""},",
                     h2),
               ),
               body: RefreshIndicator(
                 onRefresh: _refresh,
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: body(context, progress),
+                backgroundColor: backgroundColor,
+                color: Colors.purple,
+                child: PageView(
+                  scrollDirection: Axis.vertical,
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  children: [
+                    body(context, progress),
+                  ],
                 ),
               ),
             );
@@ -70,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget body(BuildContext context, Progress progress) {
     return Container(
       padding: const EdgeInsets.only(left: small, right: small),
-      color: const Color.fromARGB(255, 240, 240, 240),
+      color: backgroundColor,
       height: MediaQuery.of(context).size.height,
       child:
           ListView(padding: const EdgeInsets.all(8), primary: false, children: [

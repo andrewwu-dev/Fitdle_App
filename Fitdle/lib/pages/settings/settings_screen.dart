@@ -40,14 +40,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: backgroundColor,
       appBar: AppBar(
           automaticallyImplyLeading: false,
           centerTitle: false,
-          backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+          elevation: 0,
+          backgroundColor: appBarColor,
+          toolbarHeight: 100,
+          titleSpacing: appBarPadding,
           title: fitdleText(settings, h2)),
       body: Container(
           alignment: Alignment.topLeft,
-          color: const Color.fromARGB(255, 240, 240, 240),
           child: ListView(
             primary: false,
             children: [
