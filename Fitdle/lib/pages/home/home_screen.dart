@@ -59,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
               body: RefreshIndicator(
                 onRefresh: _refresh,
                 backgroundColor: backgroundColor,
+                color: Colors.purple,
                 child: PageView(
                   scrollDirection: Axis.vertical,
                   physics: const BouncingScrollPhysics(

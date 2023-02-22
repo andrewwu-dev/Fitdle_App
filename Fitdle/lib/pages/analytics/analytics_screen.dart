@@ -54,6 +54,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       ),
       body: RefreshIndicator(
         onRefresh: _refresh,
+        color: Colors.purple,
         child: PageView(
           scrollDirection: Axis.vertical,
           physics: const BouncingScrollPhysics(
