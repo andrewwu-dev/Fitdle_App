@@ -12,6 +12,11 @@ class IsolateUtils {
   SendPort get sendPort => _sendPort;
 
   Future<void> start() async {
+    await Isolate.spawn<SendPort>(
+      entryPoint,
+      _receivePort.sendPort,
+      debugName: DEBUG_NAME,
+    );
     _sendPort = await _receivePort.first;
   }
 
