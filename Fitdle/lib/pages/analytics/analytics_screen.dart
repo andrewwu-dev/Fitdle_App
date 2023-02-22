@@ -74,13 +74,17 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   }
 
   _moveDateBack() {
-    _analyticsVM.moveDateBack();
-    setState(() {});
+    setState(() {
+      _analyticsVM.moveDateBack();
+    });
+    _refresh();
   }
 
   _moveDateForward() {
-    _analyticsVM.moveDateForward();
-    setState(() {});
+    setState(() {
+      _analyticsVM.moveDateForward();
+    });
+    _refresh();
   }
 
   _switchGraphs(index) {
