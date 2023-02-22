@@ -89,7 +89,7 @@ class CameraVM extends ChangeNotifier {
     return results;
   }
 
-  Future<void> createIsolate(
+  Future<List<dynamic>> createIsolate(
       CameraImage imageStream, ExerciseType exerciseType) async {
     var isolateData = IsolateData(imageStream, classifier.interpreter.address);
     List<dynamic> inferenceResults = await inference(isolateData);
@@ -155,5 +155,6 @@ class CameraVM extends ChangeNotifier {
         _strenghtObject.repetitions += 1;
       }
     }
+    return inferenceResults;
   }
 }
