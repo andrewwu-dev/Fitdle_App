@@ -1,5 +1,3 @@
-import 'package:tuple/tuple.dart';
-
 const keyPointDict = {
   'nose': 0,
   'left_eye': 1,
