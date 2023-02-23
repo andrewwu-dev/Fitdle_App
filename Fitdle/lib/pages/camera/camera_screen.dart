@@ -40,7 +40,9 @@ class _CameraScreenState extends State<CameraScreen> {
 
   late StreamSubscription _navigationSubscription;
   late StreamSubscription _errorSubscription;
-  var _isLoading = false;
+   late List<dynamic> inferenceResults;
+   var _isLoading = false;
+   var _isAnalyzing = false;
 
   @override
   void initState() {
@@ -104,7 +106,17 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   void _createIsolate(CameraImage imageStream) async {
-    await _cameraVM.createIsolate(imageStream, widget.exerciseType);
+    if(_isAnalyzing){
+      return;
+    }
+    setState(() {
+      _isAnalyzing = true;
+    });
+    var _inferenceResults = await _cameraVM.createIsolate(imageStream, widget.exerciseType);
+    setState(() {
+      _isAnalyzing = false;
+      inferenceResults = _inferenceResults;
+    });
   }
 
   Future<void> _finishExercise() async {
