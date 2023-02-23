@@ -282,6 +282,6 @@ class _CameraScreenPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter old) {
-    return false;
+    return true;
   }
 }
