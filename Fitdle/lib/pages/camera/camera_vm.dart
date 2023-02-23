@@ -105,7 +105,7 @@ class CameraVM extends ChangeNotifier {
     return results;
   }
 
-   Future<List<dynamic>> createIsolate(
+  Future<List<dynamic>> createIsolate(
       CameraImage imageStream, ExerciseType exerciseType) async {
     var isolateData = IsolateData(imageStream, classifier.interpreter.address);
     List<dynamic> inferenceResults = await inference(isolateData);
@@ -125,10 +125,10 @@ class CameraVM extends ChangeNotifier {
         (exercises[exercise]!['states'] as List)[(state + 1) % numStates]
             as Map);
 
-    print("diffs curr:");
-    print(diffsCurr);
-    print("testing");
-    print(diffsNext.values.every((err) => err < allowedErr));
+    // print("diffs curr:");
+    // print(diffsCurr);
+    // print("testing");
+    // print(diffsNext.values.every((err) => err < allowedErr));
 
     bool bestPose = true;
     // diffs_curr.forEach((k, v) {

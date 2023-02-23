@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:camera/camera.dart';
+import 'package:fitdle/constants/exercise_positions.dart';
 import 'package:fitdle/models/exercise.dart';
 import 'package:fitdle/pages/camera/camera_vm.dart';
 import 'package:flutter/material.dart';
@@ -40,9 +41,9 @@ class _CameraScreenState extends State<CameraScreen> {
 
   late StreamSubscription _navigationSubscription;
   late StreamSubscription _errorSubscription;
-   late List<dynamic> inferenceResults;
-   var _isLoading = false;
-   var _isAnalyzing = false;
+  List<dynamic>? _inferenceResults;
+  var _isLoading = false;
+  var _isAnalyzing = false;
 
   @override
   void initState() {
@@ -58,6 +59,14 @@ class _CameraScreenState extends State<CameraScreen> {
     _navigationSubscription.cancel();
     _errorSubscription.cancel();
     super.dispose();
+  }
+
+  // Need to check if mounted to prevent setState after dispose in camera image stream
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 
   Tuple2 _getCameraError(String code) {
@@ -106,16 +115,16 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   void _createIsolate(CameraImage imageStream) async {
-    if(_isAnalyzing){
+    if (_isAnalyzing) {
       return;
     }
     setState(() {
       _isAnalyzing = true;
     });
-    var _inferenceResults = await _cameraVM.createIsolate(imageStream, widget.exerciseType);
+    var res = await _cameraVM.createIsolate(imageStream, widget.exerciseType);
     setState(() {
       _isAnalyzing = false;
-      inferenceResults = _inferenceResults;
+      _inferenceResults = res;
     });
   }
 
@@ -203,6 +212,11 @@ class _CameraScreenState extends State<CameraScreen> {
               scale: scale,
               alignment: Alignment.topCenter,
               child: CameraPreview(_camera),
+            ), // Camera
+            CustomPaint(
+              size: Size(size.width, size.height),
+              painter:
+                  _CameraScreenPainter(_isLoading ? null : _inferenceResults),
             ),
             Column(
               verticalDirection: VerticalDirection.down,
@@ -212,7 +226,7 @@ class _CameraScreenState extends State<CameraScreen> {
                   _cameraVM.strengthObject.repetitions.toString(),
                 ),
                 const Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
-                primaryButton("Finish", () => {_finishExercise()}),
+                primaryButton("Finish", () async => {await _finishExercise()}),
                 const Padding(
                   padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
                 )
@@ -224,5 +238,50 @@ class _CameraScreenState extends State<CameraScreen> {
       if (_isLoading)
         const Center(child: CircularProgressIndicator(color: Colors.purple))
     ]);
+  }
+}
+
+class _CameraScreenPainter extends CustomPainter {
+  // 2d array of [x, y, score] for each keypoint
+  final List? _inferences;
+  late Paint _paint;
+  late num _threshold;
+
+  _CameraScreenPainter(this._inferences) {
+    _paint = Paint()
+      ..color = Colors.purple
+      ..strokeWidth = 5
+      ..style = PaintingStyle.stroke;
+    _threshold = 0.11;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (_inferences == null || _inferences!.isEmpty) {
+      return;
+    }
+
+    final width = size.width;
+    final height = size.height;
+    var x = _inferences?.length;
+
+    for (var edgePair in keyPointsEdgeIndsToColor.keys) {
+      final point1 = Offset(width * _inferences![edgePair[0]][0],
+          height * _inferences![edgePair[0]][1]);
+      final point2 = Offset(width * _inferences![edgePair[1]][0],
+          height * _inferences![edgePair[1]][1]);
+      num score1 = _inferences![edgePair[0]][2];
+      num score2 = _inferences![edgePair[1]][2];
+      if (score1 > _threshold && score2 > _threshold) {
+        canvas.drawLine(point1, point2, _paint);
+        canvas.drawCircle(point1, 6.0, _paint);
+        canvas.drawCircle(point2, 6.0, _paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter old) {
+    return false;
   }
 }
