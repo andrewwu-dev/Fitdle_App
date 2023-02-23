@@ -30,7 +30,6 @@ class IsolateUtils {
       classifier.performOperations(isolateData.cameraImage);
       classifier.runModel();
       List<dynamic> results = classifier.parseLandmarkData();
-      print(results);
       isolateData.responsePort.send(results);
     }
   }
