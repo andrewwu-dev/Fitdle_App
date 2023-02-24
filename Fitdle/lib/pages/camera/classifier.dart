@@ -23,25 +23,6 @@ class Classifier {
     loadModel(interpreter: interpreter);
   }
 
-  printDebugData() {
-    print('Frame: ' +
-        frameNo.toString() +
-        " time: " +
-        s.elapsedMilliseconds.toString() +
-        " type: " +
-        inputImage.dataType.toString() +
-        " height: " +
-        inputImage.height.toString() +
-        " width: " +
-        inputImage.width.toString());
-    printWrapped(parseLandmarkData().toString());
-  }
-
-  void printWrapped(String text) {
-    final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
-    pattern.allMatches(text).forEach((match) => print(match.group(0)));
-  }
-
   void performOperations(CameraImage cameraImage) {
     s.start();
 
@@ -59,7 +40,6 @@ class Classifier {
     s.stop();
     frameNo += 1;
 
-    // printDebugData();
     s.reset();
   }
 
@@ -153,8 +133,6 @@ class Classifier {
   parseLandmarkData() {
     List outputParsed = [];
     List<double> data = outputLocations.getDoubleList();
-    print("raw data");
-    print(data);
     List result = [];
     num x, y, c;
 

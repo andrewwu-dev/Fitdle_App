@@ -110,8 +110,6 @@ class CameraVM extends ChangeNotifier {
     var isolateData = IsolateData(imageStream, classifier.interpreter.address);
     List<dynamic> inferenceResults = await inference(isolateData);
     inferences = inferenceResults;
-    print("inference results");
-    print(inferenceResults);
 
     final exercise = exerciseType.name;
     int numStates = (exercises[exercise]!['states'] as List).length;
@@ -166,7 +164,6 @@ class CameraVM extends ChangeNotifier {
 
       currErr = {};
       state = (state + 1) % numStates;
-      print("INCREASE STATE");
       if (state == 0) {
         _strenghtObject.repetitions += 1;
       }
