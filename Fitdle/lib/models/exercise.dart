@@ -62,7 +62,7 @@ class Run {
   String? path;
   int calories;
   int? numSteps;
-  double distance;
+  num distance;
 
   Run(
       this.startTimestamp,
@@ -85,7 +85,7 @@ class Run {
       json['path'] as String?,
       json['calories'] as int,
       json['numSteps'] as int,
-      json['distance'] as double,
+      json['distance'] as num,
     );
   }
 
