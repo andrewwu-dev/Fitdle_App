@@ -50,7 +50,7 @@ class Classifier {
     final int uvRowStride = cameraImage.planes[1].bytesPerRow;
     final int? uvPixelStride = cameraImage.planes[1].bytesPerPixel;
 
-    final image = image_lib.Image(width, height);
+    var image = image_lib.Image(width, height);
 
     for (int w = 0; w < width; w++) {
       for (int h = 0; h < height; h++) {
@@ -65,6 +65,7 @@ class Classifier {
         image.data[index] = yuv2rgb(y, u, v);
       }
     }
+    // image = image_lib.copyResize(image, height: 256, width: 256);
     return image;
   }
 
@@ -89,7 +90,7 @@ class Classifier {
     int padSize = max(inputImage.height, inputImage.width);
     imageProcessor = ImageProcessorBuilder()
         .add(ResizeWithCropOrPadOp(padSize, padSize))
-        .add(ResizeOp(192, 192, ResizeMethod.BILINEAR))
+        .add(ResizeOp(256, 256, ResizeMethod.BILINEAR))
         .build();
 
     inputImage = imageProcessor.process(inputImage);
@@ -105,27 +106,12 @@ class Classifier {
     try {
       _interpreter = interpreter ??
           await Interpreter.fromAsset(
-            "model.tflite",
+            "thunder.tflite",
             options: InterpreterOptions()..threads = 4,
           );
     } catch (e) {
       print("Error while creating interpreter: $e");
     }
-
-    // var outputTensors = interpreter.getOutputTensors();
-    // var inputTensors = interpreter.getInputTensors();
-    // List<List<int>> _outputShapes = [];
-
-    // outputTensors.forEach((tensor) {
-    //   print("Output Tensor: " + tensor.toString());
-    //   _outputShapes.add(tensor.shape);
-    // });
-    // inputTensors.forEach((tensor) {
-    //   print("Input Tensor: " + tensor.toString());
-    // });
-
-    // print("------------------[A}========================\n" +
-    //     _outputShapes.toString());
 
     outputLocations = TensorBufferFloat([1, 1, 17, 3]);
   }

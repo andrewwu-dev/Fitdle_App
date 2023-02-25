@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fitdle/constants/exercise_positions.dart';
 import 'package:flutter/material.dart';
 
@@ -18,10 +20,7 @@ class CameraScreenPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (_inferences == null ||
-        _cameraHeight == null ||
-        _cameraWidth == null ||
-        !torsoVisible()) {
+    if (_inferences == null || _cameraHeight == null || _cameraWidth == null) {
       return;
     }
 
@@ -30,9 +29,13 @@ class CameraScreenPainter extends CustomPainter {
           _inferences![edgePair[0]][0], _inferences![edgePair[0]][1], size);
       final point2 = _cameraPointToScreenPoint(
           _inferences![edgePair[1]][0], _inferences![edgePair[1]][1], size);
-      canvas.drawLine(point1, point2, _paint);
-      canvas.drawCircle(point1, 6.0, _paint);
-      canvas.drawCircle(point2, 6.0, _paint);
+      final confidence1 = _inferences![edgePair[0]][2] >= _threshold;
+      final confidence2 = _inferences![edgePair[1]][2] >= _threshold;
+      if (confidence1 && confidence2) {
+        canvas.drawLine(point1, point2, _paint);
+        canvas.drawCircle(point1, 6.0, _paint);
+        canvas.drawCircle(point2, 6.0, _paint);
+      }
     }
   }
 
@@ -58,12 +61,5 @@ class CameraScreenPainter extends CustomPainter {
       newY = (inferenceY - difH / 2) * scaleH;
     }
     return Offset(newX, newY);
-  }
-
-  bool torsoVisible() {
-    return ((_inferences![keyPointDict['left_hip']!][2] > _threshold ||
-            _inferences![keyPointDict['right_hip']!][2] > _threshold) &&
-        (_inferences![keyPointDict['left_shoulder']!][2] > _threshold ||
-            _inferences![keyPointDict['right_shoulder']!][2] > _threshold));
   }
 }

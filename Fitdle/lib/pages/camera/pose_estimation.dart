@@ -93,8 +93,6 @@ class PoseEstimation {
             (keypointScores[keyPointDict[postures[2]]!][2] as double) >
                 threshold) {
           double angle = angleBetween(p2, p1, p3);
-          print("angle results");
-          print(angle);
           double error = (angle - expectedAngle).abs();
           diffs[postures[0]] = error;
         }
