@@ -41,21 +41,49 @@ const exercises = {
       }
     ]
   },
-  'pushups': {
-    'name': 'Pushup',
-    'allowed_err': 25,
+  'overheadPress': {
+    'name': 'Overhead Press',
+    'allowed_err': 10,
     'alert_err': 5,
     'states': [
       {
-        'both_elbow,both_wrist,both_shoulder': 180,
-        'both_hip,both_shoulder,both_ankle': 180,
+        'both_elbow,both_wrist,both_shoulder': 120,
+        'both_shoulder,both_elbow,both_hip,': 120,
       },
       {
         'both_elbow,both_wrist,both_shoulder': 90,
-        'both_hip,both_shoulder,both_ankle': 180,
+        'both_shoulder,both_elbow,both_hip,': 90,
       }
     ]
   },
+  'pushups': {
+    'name': 'Bicep Curls',
+    'allowed_err': 10,
+    'alert_err': 5,
+    'states': [
+      {
+        'both_elbow,both_wrist,both_shoulder': 150,
+      },
+      {
+        'both_elbow,both_wrist,both_shoulder': 60,
+      }
+    ]
+  },
+  // 'pushups': {
+  //   'name': 'Pushup',
+  //   'allowed_err': 25,
+  //   'alert_err': 5,
+  //   'states': [
+  //     {
+  //       'both_elbow,both_wrist,both_shoulder': 180,
+  //       'both_hip,both_shoulder,both_ankle': 180,
+  //     },
+  //     {
+  //       'both_elbow,both_wrist,both_shoulder': 90,
+  //       'both_hip,both_shoulder,both_ankle': 180,
+  //     }
+  //   ]
+  // },
 };
 
 // Maps bones to a rbg color value

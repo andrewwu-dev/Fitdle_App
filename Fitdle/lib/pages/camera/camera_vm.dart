@@ -123,8 +123,8 @@ class CameraVM extends ChangeNotifier {
         (exercises[exercise]!['states'] as List)[(state + 1) % numStates]
             as Map);
 
-    // print("diffs curr:");
-    // print(diffsCurr);
+    print("diffs curr:");
+    print(diffsCurr);
     // print("testing");
     // print(diffsNext.values.every((err) => err < allowedErr));
 
@@ -153,6 +153,9 @@ class CameraVM extends ChangeNotifier {
           inferenceResults[idx][3] = allignment;
         }
       }
+    }
+
+    for (final k in diffsCurr.keys) {
       if (!currErr.containsKey(k)) {
         break;
       }
@@ -181,6 +184,7 @@ class CameraVM extends ChangeNotifier {
         _strenghtObject.repetitions += 1;
       }
     }
+    print(inferenceResults);
     return inferenceResults;
   }
 }
