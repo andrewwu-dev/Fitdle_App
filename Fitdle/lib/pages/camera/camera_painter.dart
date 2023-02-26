@@ -15,7 +15,7 @@ class CameraScreenPainter extends CustomPainter {
       ..color = Colors.green
       ..strokeWidth = 5
       ..style = PaintingStyle.stroke;
-    _threshold = 0.4;
+    _threshold = 0.3;
   }
 
   @override

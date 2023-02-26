@@ -37,38 +37,55 @@ const exercises = {
         ('both_knee,both_hip,both_ankle'): 180,
       },
       {
-        ('both_knee,both_hip,both_ankle'): 90,
-      }
-    ]
-  },
-  'overheadPress': {
-    'name': 'Overhead Press',
-    'allowed_err': 10,
-    'alert_err': 5,
-    'states': [
-      {
-        'both_elbow,both_wrist,both_shoulder': 120,
-        'both_shoulder,both_elbow,both_hip,': 120,
-      },
-      {
-        'both_elbow,both_wrist,both_shoulder': 90,
-        'both_shoulder,both_elbow,both_hip,': 90,
+        ('both_knee,both_hip,both_ankle'): 60,
+        'both_hip,both_shoulder,both_knee': 60,
       }
     ]
   },
   'pushups': {
-    'name': 'Bicep Curls',
+    'name': 'Overhead Press',
     'allowed_err': 10,
     'alert_err': 5,
+    // 'states': [
+    //   {
+    //     'both_elbow,both_wrist,both_shoulder': 120,
+    //     'both_shoulder,both_elbow,both_hip,': 120,
+    //   },
+    //   {
+    //     'both_elbow,both_wrist,both_shoulder': 30,
+    //     'both_shoulder,both_elbow,both_hip,': 30,
+    //   }
+    // ]
     'states': [
       {
-        'both_elbow,both_wrist,both_shoulder': 150,
+        'both_elbow,both_wrist,both_shoulder': 20,
+        'both_shoulder,both_elbow,both_hip,': 20,
+        'both_hip,both_shoulder,both_knee': 170,
       },
       {
-        'both_elbow,both_wrist,both_shoulder': 60,
+        'both_elbow,both_wrist,both_shoulder': 150,
+        'both_shoulder,both_elbow,both_hip,': 150,
+        'both_hip,both_shoulder,both_knee': 170,
       }
     ]
   },
+  // 'pushups': {
+  //   'name': 'Bicep Curls',
+  //   'allowed_err': 10,
+  //   'alert_err': 5,
+  //   'states': [
+  //     {
+  //       'both_elbow,both_wrist,both_shoulder': 150,
+  //       'both_shoulder,both_elbow,both_hip,': 0,
+  //       'both_hip,both_shoulder,both_knee': 170,
+  //     },
+  //     {
+  //       'both_elbow,both_wrist,both_shoulder': 35,
+  //       'both_shoulder,both_elbow,both_hip,': 0,
+  //       'both_hip,both_shoulder,both_knee': 170,
+  //     }
+  //   ]
+  // },
   // 'pushups': {
   //   'name': 'Pushup',
   //   'allowed_err': 25,
