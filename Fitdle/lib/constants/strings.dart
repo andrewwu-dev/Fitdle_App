@@ -32,6 +32,8 @@ const birthdayPrompt = "What is your birthday?";
 const run = "Run";
 const pushups = "Pushups";
 const squats = "Squats";
+const overheadPress = "Overhead Press";
+const bicepCurl = "Bicep Curl";
 
 // Home
 const home = "Home";
