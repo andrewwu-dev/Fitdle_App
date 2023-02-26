@@ -18,6 +18,15 @@ const keyPointDict = {
   'right_ankle': 16
 };
 
+const bothKeyPointDict = {
+  'both_shoulder': [5, 6],
+  'both_elbow': [7, 8],
+  'both_wrist': [9, 10],
+  'both_hip': [11, 12],
+  'both_knee': [13, 14],
+  'both_ankle': [15, 16]
+};
+
 const exercises = {
   'squats': {
     'name': 'Squat',

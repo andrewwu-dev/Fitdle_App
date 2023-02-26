@@ -12,7 +12,7 @@ class CameraScreenPainter extends CustomPainter {
 
   CameraScreenPainter(this._inferences, this._cameraHeight, this._cameraWidth) {
     _paint = Paint()
-      ..color = Colors.purple
+      ..color = Colors.green
       ..strokeWidth = 5
       ..style = PaintingStyle.stroke;
     _threshold = 0.4;
@@ -31,6 +31,14 @@ class CameraScreenPainter extends CustomPainter {
           _inferences![edgePair[1]][0], _inferences![edgePair[1]][1], size);
       final confidence1 = _inferences![edgePair[0]][2] >= _threshold;
       final confidence2 = _inferences![edgePair[1]][2] >= _threshold;
+
+      if (_inferences![edgePair[0]][3] == 0.0 ||
+          _inferences![edgePair[1]][3] == 0.0) {
+        _paint.color = Colors.red;
+      } else {
+        _paint.color = Colors.green;
+      }
+
       if (confidence1 && confidence2) {
         canvas.drawLine(point1, point2, _paint);
         canvas.drawCircle(point1, 6.0, _paint);

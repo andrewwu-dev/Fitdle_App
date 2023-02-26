@@ -140,7 +140,19 @@ class CameraVM extends ChangeNotifier {
     //     // break;
     //   }
     // });
+    for (List<num> list in inferenceResults) {
+      list.add(1.0);
+    }
+
     for (final k in diffsCurr.keys) {
+      if ((k as String).contains('both')) {
+        List l = bothKeyPointDict[k]!;
+        for (int idx in l) {
+          double diff = diffsCurr[k] as double;
+          double allignment = diff < allowedErr ? 1.0 : 0.0;
+          inferenceResults[idx][3] = allignment;
+        }
+      }
       if (!currErr.containsKey(k)) {
         break;
       }
