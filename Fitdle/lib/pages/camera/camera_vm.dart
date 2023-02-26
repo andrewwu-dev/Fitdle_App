@@ -164,6 +164,7 @@ class CameraVM extends ChangeNotifier {
 
       currErr = {};
       state = (state + 1) % numStates;
+      print("state: $state");
       if (state == 0) {
         _strenghtObject.repetitions += 1;
       }

@@ -86,7 +86,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void _initCamera() async {
     _cameraVM = CameraVM();
-    _camera = CameraController(widget.camera, ResolutionPreset.max);
+    _camera = CameraController(widget.camera, ResolutionPreset.low);
     await _camera.initialize().then((_) {
       if (!mounted) {
         // May need to pop camera screen here

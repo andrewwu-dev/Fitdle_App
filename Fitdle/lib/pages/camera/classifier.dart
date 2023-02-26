@@ -89,7 +89,6 @@ class Classifier {
   TensorImage getProcessedImage() {
     int padSize = max(inputImage.height, inputImage.width);
     imageProcessor = ImageProcessorBuilder()
-        .add(ResizeWithCropOrPadOp(padSize, padSize))
         .add(ResizeOp(256, 256, ResizeMethod.BILINEAR))
         .build();
 

@@ -21,14 +21,14 @@ const keyPointDict = {
 const exercises = {
   'squats': {
     'name': 'Squat',
-    'allowed_err': 15,
-    'alert_err': 10,
+    'allowed_err': 10,
+    'alert_err': 5,
     'states': [
       {
-        ('both_knee,both_hip,both_ankle'): 100,
+        ('both_knee,both_hip,both_ankle'): 180,
       },
       {
-        ('both_knee,both_hip,both_ankle'): 180,
+        ('both_knee,both_hip,both_ankle'): 90,
       }
     ]
   },

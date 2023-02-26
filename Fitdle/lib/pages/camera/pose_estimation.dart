@@ -3,7 +3,7 @@ import 'package:fitdle/constants/exercise_positions.dart';
 
 class PoseEstimation {
   Map verifyOutput(List keypointScores, Map expectedPose,
-      [double threshold = 0.0]) {
+      [double threshold = 0.4]) {
     var diffs = {};
     expectedPose.forEach((posture, expectedAngle) {
       List postures = posture.split(',');
