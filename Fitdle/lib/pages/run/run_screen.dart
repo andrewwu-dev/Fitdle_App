@@ -86,7 +86,7 @@ class _RunScreenState extends State<RunScreen> {
     }
 
     location.changeSettings(
-        accuracy: LocationAccuracy.high, interval: 1000, distanceFilter: 0);
+        accuracy: LocationAccuracy.high, interval: 1000, distanceFilter: 2);
   }
 
   void getStartLocation() {
@@ -115,6 +115,7 @@ class _RunScreenState extends State<RunScreen> {
 
       var distance = coordinateDistance(latestPosition.latitude,
           latestPosition.longitude, newLoc.latitude, newLoc.longitude);
+      print(distance);
       totalDistance += distance;
       var pace = newLoc.speed ?? 1;
       totalCalories += caloriesBurnt(pace, distance);
@@ -292,7 +293,7 @@ class _RunScreenState extends State<RunScreen> {
     double a = 0.5 -
         cos((lat2 - lat1) * p) / 2 +
         cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
-    return 2 * radiusEarthKm * asin(sqrt(a));
+    return 2 * radiusEarthKm * asin(sqrt(a)) / 4;
   }
 
   double caloriesBurnt(double speed, double distance) {

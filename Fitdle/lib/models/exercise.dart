@@ -8,8 +8,8 @@ final Map _caloriesPerRepetition = {
 };
 
 final Map _pointsPerRepetition = {
-  ExerciseType.pushups: 1,
-  ExerciseType.squats: 1,
+  ExerciseType.pushups: 5,
+  ExerciseType.squats: 5,
 };
 
 class ExerciseHistory {
@@ -48,7 +48,7 @@ class RunObject {
       };
 
   int getPoints() {
-    const pointsPerCalorie = 0.1;
+    const pointsPerCalorie = 1;
     return (calories * pointsPerCalorie).ceil();
   }
 }
@@ -122,7 +122,7 @@ class StrengthObject {
   int getPoints() {
     return (repetitions *
             _pointsPerRepetition[ExerciseType.values[exerciseType - 1]] *
-            score)
+            (score / 10))
         .floor();
   }
 }
