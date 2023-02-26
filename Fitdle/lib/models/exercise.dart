@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-enum ExerciseType { run, pushups, squats }
+enum ExerciseType { run, pushups, squats, overheadPress, bicepCurl }
 
 final Map _caloriesPerRepetition = {
   ExerciseType.pushups: 0.5,

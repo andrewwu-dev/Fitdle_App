@@ -92,14 +92,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ActionButton(
               onPressed: () {
                 Navigator.pushNamed(context, "camera",
-                    arguments: ExerciseType.squats);
+                    arguments: ExerciseType.overheadPress);
               },
               icon: const Icon(AppIcons.overheadPress),
               label: overheadPress),
           ActionButton(
               onPressed: () {
                 Navigator.pushNamed(context, "camera",
-                    arguments: ExerciseType.squats);
+                    arguments: ExerciseType.bicepCurl);
               },
               icon: const Icon(AppIcons.bicepCurl),
               label: bicepCurl),
