@@ -101,6 +101,9 @@ flutter:
     - family: AppIcons
       fonts:
          - asset: lib/resources/fonts/AppIcons.ttf
+    - family: Exercises
+      fonts:
+         - asset: lib/resources/fonts/Exercises.ttf
 
   assets:
     - lib/resources/images/

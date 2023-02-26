@@ -89,6 +89,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
               },
               icon: const Icon(AppIcons.squat),
               label: squats),
+          ActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "camera",
+                    arguments: ExerciseType.overheadPress);
+              },
+              icon: const Icon(AppIcons.overheadPress),
+              label: overheadPress),
+          ActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "camera",
+                    arguments: ExerciseType.bicepCurl);
+              },
+              icon: const Icon(AppIcons.bicepCurl),
+              label: bicepCurl),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

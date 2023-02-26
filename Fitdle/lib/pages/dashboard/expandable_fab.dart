@@ -81,8 +81,8 @@ class _ExpandableFabState extends State<ExpandableFab>
   List<Widget> _buildExpandingActionButtons() {
     final children = <Widget>[];
     final count = widget.children.length;
-    final step = 90.0 / (count - 1);
-    for (var i = 0, angleInDegrees = 45.0;
+    final step = 180.0 / (count - 1);
+    for (var i = 0, angleInDegrees = 0.0;
         i < count;
         i++, angleInDegrees += step) {
       children.add(
@@ -201,21 +201,19 @@ class ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Column(
-      children: [
-        Material(
-          shape: const CircleBorder(),
-          clipBehavior: Clip.antiAlias,
-          color: Colors.purple,
-          elevation: 4.0,
-          child: IconButton(
-            onPressed: onPressed,
-            icon: icon,
-            color: theme.colorScheme.onSecondary,
-          ),
+    return Column(children: [
+      Material(
+        shape: const CircleBorder(),
+        clipBehavior: Clip.antiAlias,
+        color: Colors.purple,
+        elevation: 4.0,
+        child: IconButton(
+          onPressed: onPressed,
+          icon: icon,
+          color: theme.colorScheme.onSecondary,
         ),
-        fitdleText(label, hint, color: Colors.white)
-      ]
-    );
+      ),
+      fitdleText(label, hint, color: Colors.white)
+    ]);
   }
 }
