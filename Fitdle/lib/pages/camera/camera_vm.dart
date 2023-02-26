@@ -13,12 +13,14 @@ import 'classifier.dart';
 import 'package:fitdle/pages/camera/isolate.dart';
 import 'dart:isolate';
 import 'package:fitdle/constants/exercise_positions.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class CameraVM extends ChangeNotifier {
   late final ExerciseRepository _exerciseRepo;
   late final RewardsRepository _rewardsRepo;
   late final UserRepository _userRepo;
   final StrengthObject _strenghtObject = StrengthObject(DateTime.now());
+  final FlutterTts _tts = FlutterTts();
   final PoseEstimation poseEstimation = PoseEstimation();
 
   final PublishSubject<String> _error = PublishSubject();
@@ -33,7 +35,6 @@ class CameraVM extends ChangeNotifier {
   late IsolateUtils isolate;
 
   int state = 0;
-  List<String> message = [];
   var currErr = {};
 
   CameraVM([userRepo, exerciseRepo, rewardsRepo]) {
@@ -42,6 +43,18 @@ class CameraVM extends ChangeNotifier {
     _exerciseRepo = exerciseRepo ?? locator.get<ExerciseRepository>();
     // TODO: Only used to test right now, replace with actual pose estimation.
     _strenghtObject.repetitions = 5;
+    _initTts();
+  }
+
+  _initTts() async {
+    await _tts.awaitSpeakCompletion(true);
+    await _tts.setLanguage("en-US");
+    await _tts.setPitch(1);
+    await _tts.setSpeechRate(0.8);
+  }
+
+  Future<void> _speak(String text) async {
+    await _tts.speak(text);
   }
 
   initIsolate() async {
@@ -110,13 +123,11 @@ class CameraVM extends ChangeNotifier {
     var isolateData = IsolateData(imageStream, classifier.interpreter.address);
     List<dynamic> inferenceResults = await inference(isolateData);
     inferences = inferenceResults;
-    print("inference results");
-    print(inferenceResults);
 
     final exercise = exerciseType.name;
     int numStates = (exercises[exercise]!['states'] as List).length;
     int allowedErr = exercises[exercise]!['allowed_err'] as int;
-    // int alertErr = exercises[exercise]!['alert_err'] as int;
+    int alertErr = exercises[exercise]!['alert_err'] as int;
 
     var diffsCurr = poseEstimation.verifyOutput(
         inferences, (exercises[exercise]!['states'] as List)[state] as Map);
@@ -125,23 +136,7 @@ class CameraVM extends ChangeNotifier {
         (exercises[exercise]!['states'] as List)[(state + 1) % numStates]
             as Map);
 
-    // print("diffs curr:");
-    // print(diffsCurr);
-    // print("testing");
-    // print(diffsNext.values.every((err) => err < allowedErr));
-
     bool bestPose = true;
-    // diffs_curr.forEach((k, v) {
-    //   // Can't break foreach lol :)
-
-    //   // if (!curr_err.containsKey(k)) {
-    //   //   break;
-    //   // }
-    //   if (!curr_err.containsKey(k) && curr_err[k] < v) {
-    //     best_pose = false;
-    //     // break;
-    //   }
-    // });
     for (final k in diffsCurr.keys) {
       if (!currErr.containsKey(k)) {
         break;
@@ -157,12 +152,13 @@ class CameraVM extends ChangeNotifier {
     }
 
     if (diffsNext.values.every((err) => err < allowedErr)) {
-      // currErr.forEach((k, v) {
-      //   if (v > alert_err) {
-      //     message.add(
-      //         "Your form at your ${k.replaceAll('both_', '')} is a bit off");
-      //   }
-      // });
+      for (final p in currErr.entries) {
+        if (p.value > alertErr) {
+          _speak(
+              "Your form at your ${p.key.replaceAll('both_', '')} is a bit off");
+          break;
+        }
+      }
 
       currErr = {};
       state = (state + 1) % numStates;
