@@ -42,7 +42,7 @@ class CameraVM extends ChangeNotifier {
     _rewardsRepo = rewardsRepo ?? locator.get<RewardsRepository>();
     _exerciseRepo = exerciseRepo ?? locator.get<ExerciseRepository>();
     // TODO: Only used to test right now, replace with actual pose estimation.
-    _strenghtObject.repetitions = 5;
+    _strenghtObject.repetitions = 0;
     _initTts();
   }
 
@@ -50,7 +50,8 @@ class CameraVM extends ChangeNotifier {
     await _tts.awaitSpeakCompletion(true);
     await _tts.setLanguage("en-US");
     await _tts.setPitch(1);
-    await _tts.setSpeechRate(0.8);
+    await _tts.setSpeechRate(0.6);
+    await _tts.setVolume(1.0);
   }
 
   Future<void> _speak(String text) async {
@@ -179,6 +180,9 @@ class CameraVM extends ChangeNotifier {
       state = (state + 1) % numStates;
       if (state == 0) {
         _strenghtObject.repetitions += 1;
+        if (_strenghtObject.repetitions % 5 == 0) {
+          _speak("Good job! Keep it up! Do 5 more for 50 more points!");
+        }
       }
     }
     return inferenceResults;
