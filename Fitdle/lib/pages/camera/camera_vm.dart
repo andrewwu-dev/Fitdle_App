@@ -110,8 +110,6 @@ class CameraVM extends ChangeNotifier {
     var isolateData = IsolateData(imageStream, classifier.interpreter.address);
     List<dynamic> inferenceResults = await inference(isolateData);
     inferences = inferenceResults;
-    print("inference results");
-    print(inferenceResults);
 
     final exercise = exerciseType.name;
     int numStates = (exercises[exercise]!['states'] as List).length;
@@ -125,8 +123,8 @@ class CameraVM extends ChangeNotifier {
         (exercises[exercise]!['states'] as List)[(state + 1) % numStates]
             as Map);
 
-    // print("diffs curr:");
-    // print(diffsCurr);
+    print("diffs curr:");
+    print(diffsCurr);
     // print("testing");
     // print(diffsNext.values.every((err) => err < allowedErr));
 
@@ -142,6 +140,21 @@ class CameraVM extends ChangeNotifier {
     //     // break;
     //   }
     // });
+    for (List<num> list in inferenceResults) {
+      list.add(1.0);
+    }
+
+    for (final k in diffsCurr.keys) {
+      if ((k as String).contains('both')) {
+        List l = bothKeyPointDict[k]!;
+        for (int idx in l) {
+          double diff = diffsCurr[k] as double;
+          double allignment = diff < allowedErr ? 1.0 : 0.0;
+          inferenceResults[idx][3] = allignment;
+        }
+      }
+    }
+
     for (final k in diffsCurr.keys) {
       if (!currErr.containsKey(k)) {
         break;
@@ -166,11 +179,12 @@ class CameraVM extends ChangeNotifier {
 
       currErr = {};
       state = (state + 1) % numStates;
-      print("INCREASE STATE");
+      print("state: $state");
       if (state == 0) {
         _strenghtObject.repetitions += 1;
       }
     }
+    print(inferenceResults);
     return inferenceResults;
   }
 }
