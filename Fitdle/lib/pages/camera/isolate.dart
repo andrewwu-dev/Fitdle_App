@@ -1,5 +1,4 @@
 import 'dart:isolate';
-
 import 'package:camera/camera.dart';
 import 'classifier.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';

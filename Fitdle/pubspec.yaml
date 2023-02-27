@@ -102,10 +102,14 @@ flutter:
     - family: AppIcons
       fonts:
          - asset: lib/resources/fonts/AppIcons.ttf
+    - family: Exercises
+      fonts:
+         - asset: lib/resources/fonts/Exercises.ttf
 
   assets:
     - lib/resources/images/
     - assets/model.tflite
+    - assets/thunder.tflite
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

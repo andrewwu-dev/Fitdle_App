@@ -127,7 +127,7 @@ class CameraVM extends ChangeNotifier {
     final exercise = exerciseType.name;
     int numStates = (exercises[exercise]!['states'] as List).length;
     int allowedErr = exercises[exercise]!['allowed_err'] as int;
-    int alertErr = exercises[exercise]!['alert_err'] as int;
+    // int alertErr = exercises[exercise]!['alert_err'] as int;
 
     var diffsCurr = poseEstimation.verifyOutput(
         inferences, (exercises[exercise]!['states'] as List)[state] as Map);
@@ -137,6 +137,21 @@ class CameraVM extends ChangeNotifier {
             as Map);
 
     bool bestPose = true;
+    for (List<num> list in inferenceResults) {
+      list.add(1.0);
+    }
+
+    for (final k in diffsCurr.keys) {
+      if ((k as String).contains('both')) {
+        List l = bothKeyPointDict[k]!;
+        for (int idx in l) {
+          double diff = diffsCurr[k] as double;
+          double allignment = diff < allowedErr ? 1.0 : 0.0;
+          inferenceResults[idx][3] = allignment;
+        }
+      }
+    }
+
     for (final k in diffsCurr.keys) {
       if (!currErr.containsKey(k)) {
         break;
@@ -152,17 +167,16 @@ class CameraVM extends ChangeNotifier {
     }
 
     if (diffsNext.values.every((err) => err < allowedErr)) {
-      for (final p in currErr.entries) {
-        if (p.value > alertErr) {
-          _speak(
-              "Your form at your ${p.key.replaceAll('both_', '')} is a bit off");
-          break;
-        }
-      }
+      // for (final p in currErr.entries) {
+      //   if (p.value > alertErr) {
+      //     _speak(
+      //         "Your form at your ${p.key.replaceAll('both_', '')} is a bit off");
+      //     break;
+      //   }
+      // }
 
       currErr = {};
       state = (state + 1) % numStates;
-      print("INCREASE STATE");
       if (state == 0) {
         _strenghtObject.repetitions += 1;
       }

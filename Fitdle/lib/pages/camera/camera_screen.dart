@@ -8,6 +8,7 @@ import 'package:fitdle/components/common.dart';
 import 'package:fitdle/constants/all_constants.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tuple/tuple.dart';
+import 'camera_painter.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen(
@@ -86,7 +87,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void _initCamera() async {
     _cameraVM = CameraVM();
-    _camera = CameraController(widget.camera, ResolutionPreset.max);
+    _camera = CameraController(widget.camera, ResolutionPreset.low);
     await _camera.initialize().then((_) {
       if (!mounted) {
         // May need to pop camera screen here
@@ -167,7 +168,8 @@ class _CameraScreenState extends State<CameraScreen> {
               automaticallyImplyLeading: false,
               centerTitle: true,
               backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-              title: fitdleText(widget.exerciseType.name, h2)),
+              title:
+                  fitdleText(exercises[widget.exerciseType.name]!["name"], h2)),
           body: body(size));
     }
   }
@@ -215,8 +217,11 @@ class _CameraScreenState extends State<CameraScreen> {
             ), // Camera
             CustomPaint(
               size: Size(size.width, size.height),
-              painter:
-                  _CameraScreenPainter(_isLoading ? null : _inferenceResults),
+              // camera resolution has height and width reversed
+              painter: CameraScreenPainter(
+                  _isLoading ? null : _inferenceResults,
+                  _camera.value.previewSize?.width,
+                  _camera.value.previewSize?.height),
             ),
             Column(
               verticalDirection: VerticalDirection.down,
@@ -238,50 +243,5 @@ class _CameraScreenState extends State<CameraScreen> {
       if (_isLoading)
         const Center(child: CircularProgressIndicator(color: Colors.purple))
     ]);
-  }
-}
-
-class _CameraScreenPainter extends CustomPainter {
-  // 2d array of [x, y, score] for each keypoint
-  final List? _inferences;
-  late Paint _paint;
-  late num _threshold;
-
-  _CameraScreenPainter(this._inferences) {
-    _paint = Paint()
-      ..color = Colors.purple
-      ..strokeWidth = 5
-      ..style = PaintingStyle.stroke;
-    _threshold = 0.11;
-  }
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (_inferences == null || _inferences!.isEmpty) {
-      return;
-    }
-
-    final width = size.width;
-    final height = size.height;
-    var x = _inferences?.length;
-
-    for (var edgePair in keyPointsEdgeIndsToColor.keys) {
-      final point1 = Offset(width * _inferences![edgePair[0]][0],
-          height * _inferences![edgePair[0]][1]);
-      final point2 = Offset(width * _inferences![edgePair[1]][0],
-          height * _inferences![edgePair[1]][1]);
-      num score1 = _inferences![edgePair[0]][2];
-      num score2 = _inferences![edgePair[1]][2];
-      if (score1 > _threshold && score2 > _threshold) {
-        canvas.drawLine(point1, point2, _paint);
-        canvas.drawCircle(point1, 6.0, _paint);
-        canvas.drawCircle(point2, 6.0, _paint);
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter old) {
-    return true;
   }
 }
