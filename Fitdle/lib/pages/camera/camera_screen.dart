@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:camera/camera.dart';
+import 'package:fitdle/constants/exercise_positions.dart';
 import 'package:fitdle/models/exercise.dart';
 import 'package:fitdle/pages/camera/camera_vm.dart';
 import 'package:flutter/material.dart';
@@ -167,7 +168,8 @@ class _CameraScreenState extends State<CameraScreen> {
               automaticallyImplyLeading: false,
               centerTitle: true,
               backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-              title: fitdleText(widget.exerciseType.name, h2)),
+              title:
+                  fitdleText(exercises[widget.exerciseType.name]!["name"], h2)),
           body: body(size));
     }
   }
