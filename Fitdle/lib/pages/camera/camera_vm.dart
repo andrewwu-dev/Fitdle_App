@@ -80,8 +80,8 @@ class CameraVM extends ChangeNotifier {
   }
 
   double _calculateScore() {
-    const pointsPerRep = 10.0;
-    return pointsPerRep * _strenghtObject.repetitions;
+    // TODO: calculate score
+    return 10.0;
   }
 
   int _calculateBonus(int r) {
