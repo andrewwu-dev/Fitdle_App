@@ -40,6 +40,9 @@ class CameraVM extends ChangeNotifier {
   int state = 0;
   var currErr = {};
 
+  bool perfect = true;
+  double totalScore = 0.0;
+
   CameraVM([userRepo, exerciseRepo, rewardsRepo]) {
     _userRepo = userRepo ?? locator.get<UserRepository>();
     _rewardsRepo = rewardsRepo ?? locator.get<RewardsRepository>();
@@ -80,8 +83,8 @@ class CameraVM extends ChangeNotifier {
   }
 
   double _calculateScore() {
-    // TODO: calculate score
-    return 10.0;
+    return totalScore / _strenghtObject.repetitions;
+    // return 10.0;
   }
 
   int _calculateBonus(int r) {
@@ -134,7 +137,7 @@ class CameraVM extends ChangeNotifier {
     final exercise = exerciseType.name;
     int numStates = (exercises[exercise]!['states'] as List).length;
     int allowedErr = exercises[exercise]!['allowed_err'] as int;
-    // int alertErr = exercises[exercise]!['alert_err'] as int;
+    int alertErr = exercises[exercise]!['alert_err'] as int;
 
     var diffsCurr = poseEstimation.verifyOutput(
         inferences, (exercises[exercise]!['states'] as List)[state] as Map);
@@ -174,18 +177,26 @@ class CameraVM extends ChangeNotifier {
     }
 
     if (diffsNext.values.every((err) => err < allowedErr)) {
-      // for (final p in currErr.entries) {
-      //   if (p.value > alertErr) {
-      //     _speak(
-      //         "Your form at your ${p.key.replaceAll('both_', '')} is a bit off");
-      //     break;
-      //   }
-      // }
+      for (final p in currErr.entries) {
+        if (p.value > alertErr) {
+          perfect = false;
+          break;
+          // _speak(
+          //     "Your form at your ${p.key.replaceAll('both_', '')} is a bit off");
+          // break;
+        }
+      }
 
       currErr = {};
       state = (state + 1) % numStates;
       if (state == 0) {
         updateRepetitions();
+        if (perfect){
+          totalScore += 1.0;
+        } else {
+          totalScore += 0.5;
+        }
+        perfect = true;
         if (_strenghtObject.repetitions % 5 == 0) {
           round += 1;
           _currentBonus += _calculateBonus(round);
