@@ -83,8 +83,10 @@ class CameraVM extends ChangeNotifier {
   }
 
   double _calculateScore() {
+    if (_strenghtObject.repetitions == 0){
+      return 0.0;
+    }
     return totalScore / _strenghtObject.repetitions;
-    // return 10.0;
   }
 
   int _calculateBonus(int r) {
