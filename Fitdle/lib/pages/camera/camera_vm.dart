@@ -33,6 +33,8 @@ class CameraVM extends ChangeNotifier {
   late Classifier classifier;
   List<dynamic> inferences = [];
   late IsolateUtils isolate;
+  // 1 round = 5 reps. Used to assign bonus points
+  int round = 0;
 
   int state = 0;
   var currErr = {};
@@ -73,14 +75,17 @@ class CameraVM extends ChangeNotifier {
   }
 
   updateRepetitions() {
-    // TODO: Connect with pose estimation
     _strenghtObject.repetitions += 1;
   }
 
-  _calculateScore() {
-    // TODO: Figure out how to calculate score based on exercise?
+  double _calculateScore() {
     const pointsPerRep = 10.0;
-    _strenghtObject.score = pointsPerRep * _strenghtObject.repetitions;
+    return pointsPerRep * _strenghtObject.repetitions + _calculateBonus();
+  }
+
+  int _calculateBonus() {
+    const bonusPerRound = 4;
+    return bonusPerRound * round;
   }
 
   Future<void> logStrength(ExerciseType type) async {
@@ -88,7 +93,7 @@ class CameraVM extends ChangeNotifier {
     _strenghtObject.endTimestamp = DateTime.now();
     // +1 because the enum starts at 0, but the API expects 1.
     _strenghtObject.exerciseType = type.index + 1;
-    _calculateScore();
+    _strenghtObject.score = _calculateScore();
     var res = await _exerciseRepo.logStrength(
       _userRepo.user.id!,
       _strenghtObject,
@@ -179,9 +184,11 @@ class CameraVM extends ChangeNotifier {
       currErr = {};
       state = (state + 1) % numStates;
       if (state == 0) {
-        _strenghtObject.repetitions += 1;
+        updateRepetitions();
         if (_strenghtObject.repetitions % 5 == 0) {
-          _speak("Good job! Keep it up! Do 5 more for 50 more points!");
+          round += 1;
+          _speak(
+              "Good job! Keep it up! Do 5 more for ${_calculateScore()} bonus points!");
         }
       }
     }
