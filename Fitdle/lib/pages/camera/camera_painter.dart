@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:fitdle/constants/exercise_positions.dart';
 import 'package:flutter/material.dart';
 
