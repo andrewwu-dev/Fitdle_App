@@ -35,7 +35,7 @@ class CameraVM extends ChangeNotifier {
   late IsolateUtils isolate;
   // 1 round = 5 reps. Used to assign bonus points
   int round = 0;
-  int currentBonus = 0;
+  int _currentBonus = 0;
 
   int state = 0;
   var currErr = {};
@@ -85,7 +85,7 @@ class CameraVM extends ChangeNotifier {
   }
 
   int _calculateBonus(int r) {
-    const bonusPerRound = 4;
+    const bonusPerRound = 2;
     return bonusPerRound * r;
   }
 
@@ -108,7 +108,7 @@ class CameraVM extends ChangeNotifier {
       Earning(
         _userRepo.user.id!,
         DateTime.now().toIso8601String(),
-        _strenghtObject.getPoints() + _calculateBonus(round),
+        _strenghtObject.getPoints() + _currentBonus,
       ),
     );
     if (res is Failure) {
@@ -188,7 +188,7 @@ class CameraVM extends ChangeNotifier {
         updateRepetitions();
         if (_strenghtObject.repetitions % 5 == 0) {
           round += 1;
-          currentBonus += _calculateBonus(round);
+          _currentBonus += _calculateBonus(round);
           _speak(
               "Good job! Keep it up! Do 5 more for ${_calculateBonus(round + 1)} bonus points!");
         }
