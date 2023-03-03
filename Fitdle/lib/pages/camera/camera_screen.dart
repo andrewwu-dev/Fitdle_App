@@ -88,11 +88,16 @@ class _CameraScreenState extends State<CameraScreen> {
   void _initCamera() async {
     _cameraVM = CameraVM();
     _camera = CameraController(widget.camera, ResolutionPreset.low);
-    await _camera.initialize().then((_) {
+    await _camera.initialize().then((_) async {
       if (!mounted) {
         // May need to pop camera screen here
         return;
       }
+      await _cameraVM.initIsolate();
+      setState(() {});
+      _camera.startImageStream((CameraImage image) {
+        _createIsolate(image);
+      });
     }).catchError((Object e) {
       if (e is CameraException) {
         final error = _getCameraError(e.code);
@@ -107,11 +112,6 @@ class _CameraScreenState extends State<CameraScreen> {
                           child: const Text(ok))
                     ]));
       }
-    });
-    await _cameraVM.initIsolate();
-    setState(() {});
-    _camera.startImageStream((CameraImage image) {
-      _createIsolate(image);
     });
   }
 

@@ -71,7 +71,7 @@ const exercises = {
   },
   'bicepCurl': {
     'name': 'Bicep Curls',
-    'allowed_err': 10,
+    'allowed_err': 15,
     'alert_err': 5,
     'states': [
       {
