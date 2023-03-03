@@ -134,7 +134,7 @@ class CameraVM extends ChangeNotifier {
     final exercise = exerciseType.name;
     int numStates = (exercises[exercise]!['states'] as List).length;
     int allowedErr = exercises[exercise]!['allowed_err'] as int;
-    // int alertErr = exercises[exercise]!['alert_err'] as int;
+    int alertErr = exercises[exercise]!['alert_err'] as int;
 
     var diffsCurr = poseEstimation.verifyOutput(
         inferences, (exercises[exercise]!['states'] as List)[state] as Map);
@@ -153,7 +153,12 @@ class CameraVM extends ChangeNotifier {
         List l = bothKeyPointDict[k]!;
         for (int idx in l) {
           double diff = diffsCurr[k] as double;
-          double allignment = diff < allowedErr ? 1.0 : 0.0;
+          double allignment = 0.0;
+          if (diff < alertErr){
+            allignment = 1.0;
+          } else if (diff < allowedErr){
+            allignment = 2.0;
+          }
           inferenceResults[idx][3] = allignment;
         }
       }
