@@ -62,8 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.purple,
                 child: PageView(
                   scrollDirection: Axis.vertical,
-                  physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()),
+                  physics: const BouncingScrollPhysics(),
                   children: [
                     body(context, progress),
                   ],
@@ -84,32 +83,45 @@ class _HomeScreenState extends State<HomeScreen> {
       height: MediaQuery.of(context).size.height,
       child:
           ListView(padding: const EdgeInsets.all(8), primary: false, children: [
+        Image.asset(dashboardSplash, height: 300),
         const SizedBox(height: regular),
         fitdleText(dailyTasks, h4, align: TextAlign.left),
         const SizedBox(height: 20),
         Task(
-            category: lpa,
-            icon: const Icon(Icons.directions_walk, size: h3),
-            unit: steps,
-            taskProgress: progress.lpa,
-            goal: _homeVM.getTaskGoal("lpa")),
-        const SizedBox(height: 20),
-        fitdleText(weeklyTasks, h4, align: TextAlign.left),
-        const SizedBox(height: 20),
-        Task(
-            category: mvpa,
-            icon: const Icon(Icons.directions_run, size: h3),
-            unit: minutes,
-            taskProgress: progress.mvpa,
-            goal: _homeVM.getTaskGoal("mvpa")),
+          category: run,
+          unit: steps,
+          taskProgress: progress.lpa,
+          goal: _homeVM.getTaskGoal("mvpa"),
+          color: runCardColor,
+        ),
         const SizedBox(height: 20),
         Task(
-            category: strength,
-            icon: const Icon(Icons.fitness_center, size: h3),
+            category: pushups,
             unit: times,
             taskProgress: progress.strength,
-            goal: _homeVM.getTaskGoal("strength")),
-        const SizedBox(height: 20)
+            goal: _homeVM.getTaskGoal("strength"),
+            color: pushupsCardColor),
+        const SizedBox(height: 20),
+        Task(
+            category: overheadPress,
+            unit: times,
+            taskProgress: progress.strength,
+            goal: _homeVM.getTaskGoal("strength"),
+            color: overheadPressCardColor),
+        const SizedBox(height: 20),
+        Task(
+            category: squats,
+            unit: times,
+            taskProgress: progress.strength,
+            goal: _homeVM.getTaskGoal("strength"),
+            color: squatsCardColor),
+        const SizedBox(height: 20),
+        Task(
+            category: bicepCurl,
+            unit: times,
+            taskProgress: progress.strength,
+            goal: _homeVM.getTaskGoal("strength"),
+            color: bicpCurlCardColor),
       ]),
     );
   }

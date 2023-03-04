@@ -68,8 +68,9 @@ class HomeVM extends ChangeNotifier {
 
       // parse strength JSON objects
       var strengthJson = data["strength"] as List;
-      List<Strength> strengthExercises = strengthJson.map((json) => Strength.fromJson(json)).toList();
-
+      // TODO: loop through each strength exercise, count frequency of each exercise
+      List<Strength> strengthExercises =
+          strengthJson.map((json) => Strength.fromJson(json)).toList();
       var exerciseHistory = ExerciseHistory(runs, strengthExercises);
 
       // print(data);
