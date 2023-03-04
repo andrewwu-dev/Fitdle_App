@@ -23,33 +23,34 @@ class RewardBox extends StatefulWidget {
 class _RewardBoxState extends State<RewardBox> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 100,
-        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-        decoration: BoxDecoration(
+    return Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            rewardImage(),
-            Flexible(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                fitdleText(widget.title, h5),
-                // If null description is set to ""
-                fitdleText(widget.description, 10.0,
-                    weight: FontWeight.w300, align: TextAlign.center)
-              ],
-            )),
-            const SizedBox(width: 5),
-            Align(
-                alignment: Alignment.bottomRight,
-                child: fitdleText(widget.cost.toString(), hint,
-                    color: Colors.purple))
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              rewardImage(),
+              Flexible(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  fitdleText(widget.title, h5),
+                  const SizedBox(height: 10),
+                  fitdleText(widget.description, 10.0,
+                      weight: FontWeight.w300, align: TextAlign.center)
+                ],
+              )),
+              const SizedBox(width: 5),
+              Align(
+                  alignment: Alignment.bottomRight,
+                  child: fitdleText(widget.cost.toString(), hint,
+                      color: Colors.purple))
+            ],
+          ),
         ));
   }
 
@@ -58,7 +59,7 @@ class _RewardBoxState extends State<RewardBox> {
       return Image.asset("lib/resources/images/gift.jpg",
           height: 45, width: 49);
     } else {
-      return Image.network(widget.imgURL!, fit: BoxFit.fitHeight);
+      return Image.network(widget.imgURL!, height: 60);
     }
   }
 }

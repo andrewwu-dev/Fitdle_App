@@ -76,15 +76,18 @@ class _RedeemScreenState extends State<RedeemScreen> {
       );
     } else {
       return Container(
-        alignment: Alignment.topLeft,
+        alignment: Alignment.center,
         padding: const EdgeInsets.fromLTRB(regular, 0, regular, 0),
-        child: Column(children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Image.asset(redeemSplash, height: size.width * 0.5),
           const SizedBox(height: small),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(coin, height: 30),
-              fitdleText("${_redeemVM.user.numPoints}", h5),
+              const SizedBox(width: small),
+              fitdleText("${_redeemVM.user.numPoints}", h2,
+                  weight: FontWeight.bold),
             ],
           ),
           const SizedBox(height: regular),

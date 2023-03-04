@@ -51,7 +51,6 @@ dependencies:
   tflite_flutter_helper: ^0.3.1
   intl: ^0.17.0
   flutter_tts: ^3.6.3
-  flutter_svg: ^2.0.2
 
 dev_dependencies:
   flutter_test:
