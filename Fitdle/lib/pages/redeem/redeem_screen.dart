@@ -69,7 +69,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
     );
   }
 
-  body(size) {
+  body(Size size) {
     if (_redeemVM.rewards.isEmpty) {
       return Center(
         child: fitdleText(noRewardsAvailable, h3),
@@ -77,9 +77,16 @@ class _RedeemScreenState extends State<RedeemScreen> {
     } else {
       return Container(
         alignment: Alignment.topLeft,
-        padding: const EdgeInsets.fromLTRB(regular, regular, regular, 0),
+        padding: const EdgeInsets.fromLTRB(regular, 0, regular, 0),
         child: Column(children: [
-          fitdleText("Your balance: ${_redeemVM.user.numPoints}", h2),
+          Image.asset(redeemSplash, height: size.width * 0.5),
+          const SizedBox(height: small),
+          Row(
+            children: [
+              Image.asset(coin, height: 30),
+              fitdleText("${_redeemVM.user.numPoints}", h5),
+            ],
+          ),
           const SizedBox(height: regular),
           Expanded(
             child: ListView.separated(
