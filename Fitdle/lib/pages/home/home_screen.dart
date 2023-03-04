@@ -14,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late final HomeVM _homeVM;
   late Future<Progress> _progress;
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -60,13 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onRefresh: _refresh,
                 backgroundColor: backgroundColor,
                 color: Colors.purple,
-                child: PageView(
-                  scrollDirection: Axis.vertical,
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    body(context, progress),
-                  ],
-                ),
+                child: body(context, progress),
               ),
             );
           } else {
@@ -77,53 +72,53 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget body(BuildContext context, Progress progress) {
-    return Container(
-      padding: const EdgeInsets.only(left: small, right: small),
-      color: backgroundColor,
-      height: MediaQuery.of(context).size.height,
-      child:
-          ListView(padding: const EdgeInsets.all(8), primary: false, children: [
-        Image.asset(dashboardSplash, height: 300),
-        const SizedBox(height: regular),
-        fitdleText(dailyTasks, h4, align: TextAlign.left),
-        const SizedBox(height: 20),
-        Task(
-          category: run,
-          unit: steps,
-          taskProgress: progress.lpa,
-          goal: _homeVM.getTaskGoal("mvpa"),
-          color: runCardColor,
-        ),
-        const SizedBox(height: 20),
-        Task(
-            category: pushups,
-            unit: times,
-            taskProgress: progress.strength,
-            goal: _homeVM.getTaskGoal("strength"),
-            color: pushupsCardColor),
-        const SizedBox(height: 20),
-        Task(
-            category: overheadPress,
-            unit: times,
-            taskProgress: progress.strength,
-            goal: _homeVM.getTaskGoal("strength"),
-            color: overheadPressCardColor),
-        const SizedBox(height: 20),
-        Task(
-            category: squats,
-            unit: times,
-            taskProgress: progress.strength,
-            goal: _homeVM.getTaskGoal("strength"),
-            color: squatsCardColor),
-        const SizedBox(height: 20),
-        Task(
-            category: bicepCurl,
-            unit: times,
-            taskProgress: progress.strength,
-            goal: _homeVM.getTaskGoal("strength"),
-            color: bicpCurlCardColor),
-      ]),
-    );
+    return ListView(
+        physics: const BouncingScrollPhysics(),
+        controller: _scrollController,
+        padding: const EdgeInsets.all(small + 8),
+        primary: false,
+        children: [
+          Image.asset(dashboardSplash, height: 300),
+          const SizedBox(height: regular),
+          fitdleText(dailyTasks, h4, align: TextAlign.left),
+          const SizedBox(height: 20),
+          Task(
+            category: run,
+            unit: minutes,
+            taskProgress: progress.run,
+            goal: _homeVM.getTaskGoal("run"),
+            color: runCardColor,
+          ),
+          const SizedBox(height: 20),
+          Task(
+              category: pushups,
+              unit: times,
+              taskProgress: progress.pushups,
+              goal: _homeVM.getTaskGoal("pushups"),
+              color: pushupsCardColor),
+          const SizedBox(height: 20),
+          Task(
+              category: overheadPress,
+              unit: times,
+              taskProgress: progress.overheadPress,
+              goal: _homeVM.getTaskGoal("overheadPress"),
+              color: overheadPressCardColor),
+          const SizedBox(height: 20),
+          Task(
+              category: squats,
+              unit: times,
+              taskProgress: progress.squats,
+              goal: _homeVM.getTaskGoal("squats"),
+              color: squatsCardColor),
+          const SizedBox(height: 20),
+          Task(
+              category: bicepCurl,
+              unit: times,
+              taskProgress: progress.bicepCurls,
+              goal: _homeVM.getTaskGoal("bicepCurls"),
+              color: bicpCurlCardColor),
+          const SizedBox(height: 20),
+        ]);
   }
 
   String capitalize(String text) {

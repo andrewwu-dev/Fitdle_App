@@ -8,23 +8,30 @@ import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
 class Progress {
-  int lpa;
-  int mvpa;
-  int strength;
+  int run, pushups, overheadPress, squats, bicepCurls;
 
-  Progress({required this.lpa, required this.mvpa, required this.strength});
+  Progress(
+      {required this.run,
+      required this.pushups,
+      required this.overheadPress,
+      required this.squats,
+      required this.bicepCurls});
 }
 
 Map<String, dynamic> movementGuidelines = {
   "18-64": {
-    "lpa": {"goal": 7500, "unit": steps},
-    "mvpa": {"goal": 150, "unit": minutes},
-    "strength": {"goal": 2, "unit": times}
+    "run": {"goal": 20, "unit": minutes},
+    "pushups": {"goal": 2, "unit": times},
+    "overheadPress": {"goal": 2, "unit": times},
+    "squats": {"goal": 2, "unit": times},
+    "bicepCurls": {"goal": 2, "unit": times}
   },
   "65+": {
-    "lpa": {"goal": 5500, "unit": steps},
-    "mvpa": {"goal": 150, "unit": minutes},
-    "strength": {"goal": 2, "unit": times}
+    "run": {"goal": 20, "unit": minutes},
+    "pushups": {"goal": 2, "unit": times},
+    "overheadPress": {"goal": 2, "unit": times},
+    "squats": {"goal": 2, "unit": times},
+    "bicepCurls": {"goal": 2, "unit": times}
   }
 };
 
@@ -58,7 +65,8 @@ class HomeVM extends ChangeNotifier {
 
     var res = await _userRepo.fetchExcercises(startTime.toIso8601String());
 
-    Progress progress = Progress(lpa: 0, mvpa: 0, strength: 0);
+    Progress progress = Progress(
+        run: 0, pushups: 0, overheadPress: 0, squats: 0, bicepCurls: 0);
     if (res is Success) {
       var data = res.data as Map<String, dynamic>;
 
@@ -75,13 +83,27 @@ class HomeVM extends ChangeNotifier {
 
       // print(data);
       for (Run run in exerciseHistory.runs) {
-        if (run.numSteps != null) {
-          progress.lpa += run.numSteps!;
-        }
         Duration diff = run.endTimestamp.difference(run.startTimestamp);
-        progress.mvpa += diff.inMinutes;
+        progress.run += diff.inMinutes;
       }
-      progress.strength += exerciseHistory.strengthExercises.length;
+      for (Strength exercise in exerciseHistory.strengthExercises) {
+        // -1 for api indexing, -1 again to ignore run
+        final index = exercise.exerciseType - 2;
+        switch (index) {
+          case 0:
+            progress.pushups += exercise.repetitions;
+            break;
+          case 1:
+            progress.squats += exercise.repetitions;
+            break;
+          case 2:
+            progress.overheadPress += exercise.repetitions;
+            break;
+          case 3:
+            progress.bicepCurls += exercise.repetitions;
+            break;
+        }
+      }
     }
     return progress;
   }
