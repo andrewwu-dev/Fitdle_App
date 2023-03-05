@@ -85,10 +85,9 @@ class HomeVM extends ChangeNotifier {
       // print(data);
       for (Run run in exerciseHistory.runs) {
         Duration diff = run.endTimestamp.difference(run.startTimestamp);
-        num seconds = double.parse(
-            (diff.inSeconds.remainder(60) / 60).toStringAsFixed(2));
-        progress.run += diff.inMinutes + seconds;
-        print(progress.run);
+        num seconds = diff.inSeconds.remainder(60) / 60;
+        progress.run = double.parse(
+            (progress.run + diff.inMinutes + seconds).toStringAsFixed(2));
       }
       for (Strength exercise in exerciseHistory.strengthExercises) {
         // -1 for api indexing, -1 again to ignore run

@@ -37,7 +37,7 @@ class _TaskState extends State<Task> {
           fitdleText(widget.category, h4,
               color: Colors.white, weight: FontWeight.bold),
           Row(children: [
-            fitdleText("${widget.taskProgress} / ${widget.goal}", h4,
+            fitdleText("${widget.taskProgress.toString()} / ${widget.goal}", h4,
                 color: Colors.white, weight: FontWeight.bold),
             const SizedBox(width: 5),
             Padding(
