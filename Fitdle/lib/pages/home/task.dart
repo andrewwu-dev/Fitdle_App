@@ -14,7 +14,7 @@ class Task extends StatefulWidget {
   final String category;
   final String unit;
   final int goal;
-  final int taskProgress;
+  final num taskProgress;
   final Color color;
 
   @override

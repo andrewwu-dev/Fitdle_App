@@ -8,7 +8,8 @@ import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
 class Progress {
-  int run, pushup, overheadPress, squat, bicepCurl;
+  num run;
+  int pushup, overheadPress, squat, bicepCurl;
 
   Progress(
       {required this.run,
@@ -84,7 +85,10 @@ class HomeVM extends ChangeNotifier {
       // print(data);
       for (Run run in exerciseHistory.runs) {
         Duration diff = run.endTimestamp.difference(run.startTimestamp);
-        progress.run += diff.inMinutes;
+        num seconds = double.parse(
+            (diff.inSeconds.remainder(60) / 60).toStringAsFixed(2));
+        progress.run += diff.inMinutes + seconds;
+        print(progress.run);
       }
       for (Strength exercise in exerciseHistory.strengthExercises) {
         // -1 for api indexing, -1 again to ignore run
