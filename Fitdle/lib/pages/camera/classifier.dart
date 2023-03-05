@@ -44,29 +44,38 @@ class Classifier {
   }
 
   static image_lib.Image convertCameraImage(CameraImage cameraImage) {
-    final int width = cameraImage.width;
-    final int height = cameraImage.height;
+    if (Platform.isIOS) {
+      return image_lib.Image.fromBytes(
+        cameraImage.planes[0].bytesPerRow ~/ 4,
+        cameraImage.height,
+        cameraImage.planes[0].bytes,
+        format: image_lib.Format.bgra,
+      );
+    } else {
+      final int width = cameraImage.width;
+      final int height = cameraImage.height;
 
-    final int uvRowStride = cameraImage.planes[1].bytesPerRow;
-    final int? uvPixelStride = cameraImage.planes[1].bytesPerPixel;
+      final int uvRowStride = cameraImage.planes[0].bytesPerRow;
+      final int? uvPixelStride = cameraImage.planes[0].bytesPerPixel;
 
-    var image = image_lib.Image(width, height);
+      var image = image_lib.Image(width, height);
 
-    for (int w = 0; w < width; w++) {
-      for (int h = 0; h < height; h++) {
-        final int uvIndex =
-            uvPixelStride! * (w / 2).floor() + uvRowStride * (h / 2).floor();
-        final int index = h * width + w;
+      for (int w = 0; w < width; w++) {
+        for (int h = 0; h < height; h++) {
+          final int uvIndex =
+              uvPixelStride! * (w / 2).floor() + uvRowStride * (h / 2).floor();
+          final int index = h * width + w;
 
-        final y = cameraImage.planes[0].bytes[index];
-        final u = cameraImage.planes[1].bytes[uvIndex];
-        final v = cameraImage.planes[2].bytes[uvIndex];
+          final y = cameraImage.planes[0].bytes[index];
+          final u = cameraImage.planes[1].bytes[uvIndex];
+          final v = cameraImage.planes[2].bytes[uvIndex];
 
-        image.data[index] = yuv2rgb(y, u, v);
+          image.data[index] = yuv2rgb(y, u, v);
+        }
       }
+      // image = image_lib.copyResize(image, height: 256, width: 256);
+      return image;
     }
-    // image = image_lib.copyResize(image, height: 256, width: 256);
-    return image;
   }
 
   static int yuv2rgb(int y, int u, int v) {

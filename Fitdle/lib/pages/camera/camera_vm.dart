@@ -154,9 +154,9 @@ class CameraVM extends ChangeNotifier {
         for (int idx in l) {
           double diff = diffsCurr[k] as double;
           double allignment = 0.0;
-          if (diff < alertErr){
+          if (diff < alertErr) {
             allignment = 1.0;
-          } else if (diff < allowedErr){
+          } else if (diff < allowedErr) {
             allignment = 2.0;
           }
           inferenceResults[idx][3] = allignment;
