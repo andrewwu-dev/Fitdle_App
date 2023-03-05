@@ -21,17 +21,17 @@ class Progress {
 Map<String, dynamic> movementGuidelines = {
   "18-64": {
     "run": {"goal": 20, "unit": minutes},
-    "pushups": {"goal": 2, "unit": times},
+    "pushup": {"goal": 2, "unit": times},
     "overheadPress": {"goal": 2, "unit": times},
-    "squats": {"goal": 2, "unit": times},
-    "bicepCurls": {"goal": 2, "unit": times}
+    "squat": {"goal": 2, "unit": times},
+    "bicepCurl": {"goal": 2, "unit": times}
   },
   "65+": {
     "run": {"goal": 20, "unit": minutes},
-    "pushups": {"goal": 2, "unit": times},
+    "pushup": {"goal": 2, "unit": times},
     "overheadPress": {"goal": 2, "unit": times},
-    "squats": {"goal": 2, "unit": times},
-    "bicepCurls": {"goal": 2, "unit": times}
+    "squat": {"goal": 2, "unit": times},
+    "bicepCurl": {"goal": 2, "unit": times}
   }
 };
 
