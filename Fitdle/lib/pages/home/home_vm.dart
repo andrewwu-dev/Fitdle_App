@@ -8,14 +8,14 @@ import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
 class Progress {
-  int run, pushups, overheadPress, squats, bicepCurls;
+  int run, pushup, overheadPress, squat, bicepCurl;
 
   Progress(
       {required this.run,
-      required this.pushups,
+      required this.pushup,
       required this.overheadPress,
-      required this.squats,
-      required this.bicepCurls});
+      required this.squat,
+      required this.bicepCurl});
 }
 
 Map<String, dynamic> movementGuidelines = {
@@ -65,8 +65,8 @@ class HomeVM extends ChangeNotifier {
 
     var res = await _userRepo.fetchExcercises(startTime.toIso8601String());
 
-    Progress progress = Progress(
-        run: 0, pushups: 0, overheadPress: 0, squats: 0, bicepCurls: 0);
+    Progress progress =
+        Progress(run: 0, pushup: 0, overheadPress: 0, squat: 0, bicepCurl: 0);
     if (res is Success) {
       var data = res.data as Map<String, dynamic>;
 
@@ -91,16 +91,16 @@ class HomeVM extends ChangeNotifier {
         final index = exercise.exerciseType - 2;
         switch (index) {
           case 0:
-            progress.pushups += exercise.repetitions;
+            progress.pushup += 1;
             break;
           case 1:
-            progress.squats += exercise.repetitions;
+            progress.squat += 1;
             break;
           case 2:
-            progress.overheadPress += exercise.repetitions;
+            progress.overheadPress += 1;
             break;
           case 3:
-            progress.bicepCurls += exercise.repetitions;
+            progress.bicepCurl += 1;
             break;
         }
       }

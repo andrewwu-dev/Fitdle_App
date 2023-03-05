@@ -30,8 +30,8 @@ const birthdayPrompt = "What is your birthday?";
 
 // Dashboard
 const run = "Run";
-const pushups = "Pushups";
-const squats = "Squats";
+const pushup = "Pushup";
+const squat = "Squat";
 const overheadPress = "Overhead Press";
 const bicepCurl = "Bicep Curl";
 

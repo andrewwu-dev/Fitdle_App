@@ -91,10 +91,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 20),
           Task(
-              category: pushups,
+              category: pushup,
               unit: times,
-              taskProgress: progress.pushups,
-              goal: _homeVM.getTaskGoal("pushups"),
+              taskProgress: progress.pushup,
+              goal: _homeVM.getTaskGoal("pushup"),
               color: pushupsCardColor),
           const SizedBox(height: 20),
           Task(
@@ -105,17 +105,17 @@ class _HomeScreenState extends State<HomeScreen> {
               color: overheadPressCardColor),
           const SizedBox(height: 20),
           Task(
-              category: squats,
+              category: squat,
               unit: times,
-              taskProgress: progress.squats,
-              goal: _homeVM.getTaskGoal("squats"),
+              taskProgress: progress.squat,
+              goal: _homeVM.getTaskGoal("squat"),
               color: squatsCardColor),
           const SizedBox(height: 20),
           Task(
               category: bicepCurl,
               unit: times,
-              taskProgress: progress.bicepCurls,
-              goal: _homeVM.getTaskGoal("bicepCurls"),
+              taskProgress: progress.bicepCurl,
+              goal: _homeVM.getTaskGoal("bicepCurl"),
               color: bicpCurlCardColor),
           const SizedBox(height: 20),
         ]);
