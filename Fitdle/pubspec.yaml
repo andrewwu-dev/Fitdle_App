@@ -109,6 +109,7 @@ flutter:
   assets:
     - lib/resources/images/
     - assets/thunder.tflite
+    - assets/images/
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

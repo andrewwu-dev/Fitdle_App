@@ -8,23 +8,30 @@ import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
 class Progress {
-  int lpa;
-  int mvpa;
-  int strength;
+  int run, pushup, overheadPress, squat, bicepCurl;
 
-  Progress({required this.lpa, required this.mvpa, required this.strength});
+  Progress(
+      {required this.run,
+      required this.pushup,
+      required this.overheadPress,
+      required this.squat,
+      required this.bicepCurl});
 }
 
 Map<String, dynamic> movementGuidelines = {
   "18-64": {
-    "lpa": {"goal": 7500, "unit": steps},
-    "mvpa": {"goal": 150, "unit": minutes},
-    "strength": {"goal": 2, "unit": times}
+    "run": {"goal": 20, "unit": minutes},
+    "pushups": {"goal": 2, "unit": times},
+    "overheadPress": {"goal": 2, "unit": times},
+    "squats": {"goal": 2, "unit": times},
+    "bicepCurls": {"goal": 2, "unit": times}
   },
   "65+": {
-    "lpa": {"goal": 5500, "unit": steps},
-    "mvpa": {"goal": 150, "unit": minutes},
-    "strength": {"goal": 2, "unit": times}
+    "run": {"goal": 20, "unit": minutes},
+    "pushups": {"goal": 2, "unit": times},
+    "overheadPress": {"goal": 2, "unit": times},
+    "squats": {"goal": 2, "unit": times},
+    "bicepCurls": {"goal": 2, "unit": times}
   }
 };
 
@@ -58,7 +65,8 @@ class HomeVM extends ChangeNotifier {
 
     var res = await _userRepo.fetchExcercises(startTime.toIso8601String());
 
-    Progress progress = Progress(lpa: 0, mvpa: 0, strength: 0);
+    Progress progress =
+        Progress(run: 0, pushup: 0, overheadPress: 0, squat: 0, bicepCurl: 0);
     if (res is Success) {
       var data = res.data as Map<String, dynamic>;
 
@@ -68,19 +76,34 @@ class HomeVM extends ChangeNotifier {
 
       // parse strength JSON objects
       var strengthJson = data["strength"] as List;
-      List<Strength> strengthExercises = strengthJson.map((json) => Strength.fromJson(json)).toList();
-
+      // TODO: loop through each strength exercise, count frequency of each exercise
+      List<Strength> strengthExercises =
+          strengthJson.map((json) => Strength.fromJson(json)).toList();
       var exerciseHistory = ExerciseHistory(runs, strengthExercises);
 
       // print(data);
       for (Run run in exerciseHistory.runs) {
-        if (run.numSteps != null) {
-          progress.lpa += run.numSteps!;
-        }
         Duration diff = run.endTimestamp.difference(run.startTimestamp);
-        progress.mvpa += diff.inMinutes;
+        progress.run += diff.inMinutes;
       }
-      progress.strength += exerciseHistory.strengthExercises.length;
+      for (Strength exercise in exerciseHistory.strengthExercises) {
+        // -1 for api indexing, -1 again to ignore run
+        final index = exercise.exerciseType - 2;
+        switch (index) {
+          case 0:
+            progress.pushup += 1;
+            break;
+          case 1:
+            progress.squat += 1;
+            break;
+          case 2:
+            progress.overheadPress += 1;
+            break;
+          case 3:
+            progress.bicepCurl += 1;
+            break;
+        }
+      }
     }
     return progress;
   }

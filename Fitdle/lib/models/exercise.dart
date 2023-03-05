@@ -1,17 +1,17 @@
 import 'dart:convert';
 
-enum ExerciseType { run, pushups, squats, overheadPress, bicepCurl }
+enum ExerciseType { run, pushup, squat, overheadPress, bicepCurl }
 
 final Map _caloriesPerRepetition = {
-  ExerciseType.pushups: 0.5,
-  ExerciseType.squats: 0.32,
+  ExerciseType.pushup: 0.5,
+  ExerciseType.squat: 0.32,
   ExerciseType.overheadPress: 0.32,
   ExerciseType.bicepCurl: 0.32,
 };
 
 final Map _pointsPerRepetition = {
-  ExerciseType.pushups: 5,
-  ExerciseType.squats: 5,
+  ExerciseType.pushup: 5,
+  ExerciseType.squat: 5,
   ExerciseType.overheadPress: 5,
   ExerciseType.bicepCurl: 5,
 };

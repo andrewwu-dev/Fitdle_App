@@ -78,17 +78,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onPressed: () async {
                 await availableCameras().then((value) => Navigator.pushNamed(
                     context, "camera",
-                    arguments: ExerciseType.pushups));
+                    arguments: ExerciseType.pushup));
               },
               icon: const Icon(AppIcons.pushup),
-              label: pushups),
+              label: pushup),
           ActionButton(
               onPressed: () {
                 Navigator.pushNamed(context, "camera",
-                    arguments: ExerciseType.squats);
+                    arguments: ExerciseType.squat);
               },
               icon: const Icon(AppIcons.squat),
-              label: squats),
+              label: squat),
           ActionButton(
               onPressed: () {
                 Navigator.pushNamed(context, "camera",
