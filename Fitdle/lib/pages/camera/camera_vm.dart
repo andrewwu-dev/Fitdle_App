@@ -39,6 +39,8 @@ class CameraVM extends ChangeNotifier {
 
   int state = 0;
   var currErr = {};
+  var prevDiffs = {};
+  int frameCounter = 0;
 
   CameraVM([userRepo, exerciseRepo, rewardsRepo]) {
     _userRepo = userRepo ?? locator.get<UserRepository>();
@@ -186,19 +188,33 @@ class CameraVM extends ChangeNotifier {
       //     break;
       //   }
       // }
+      bool still = true;
+      for (final k in diffsCurr.keys) {
+        if ((diffsCurr[k] - prevDiffs[k]).abs() > 5) {
+          still = false;
+          break;
+        }
+      }
+      if (still) {
+        frameCounter += 1;
+      }
 
-      currErr = {};
-      state = (state + 1) % numStates;
-      if (state == 0) {
-        updateRepetitions();
-        if (_strenghtObject.repetitions % 5 == 0) {
-          round += 1;
-          _currentBonus += _calculateBonus(round);
-          _speak(
-              "Good job! Keep it up! Do 5 more for ${_calculateBonus(round + 1)} bonus points!");
+      if (frameCounter >= 1) {
+        frameCounter = 0;
+        currErr = {};
+        state = (state + 1) % numStates;
+        if (state == 0) {
+          updateRepetitions();
+          if (_strenghtObject.repetitions % 5 == 0) {
+            round += 1;
+            _currentBonus += _calculateBonus(round);
+            _speak(
+                "Good job! Keep it up! Do 5 more for ${_calculateBonus(round + 1)} bonus points!");
+          }
         }
       }
     }
+    prevDiffs = diffsCurr;
     return inferenceResults;
   }
 }
