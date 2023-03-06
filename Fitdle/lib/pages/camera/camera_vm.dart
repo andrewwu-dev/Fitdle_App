@@ -42,6 +42,9 @@ class CameraVM extends ChangeNotifier {
   var prevDiffs = {};
   int frameCounter = 0;
 
+  bool perfect = true;
+  double totalScore = 0.0;
+
   CameraVM([userRepo, exerciseRepo, rewardsRepo]) {
     _userRepo = userRepo ?? locator.get<UserRepository>();
     _rewardsRepo = rewardsRepo ?? locator.get<RewardsRepository>();
@@ -82,8 +85,10 @@ class CameraVM extends ChangeNotifier {
   }
 
   double _calculateScore() {
-    // TODO: calculate score
-    return 10.0;
+    if (_strenghtObject.repetitions == 0) {
+      return 0.0;
+    }
+    return totalScore / _strenghtObject.repetitions;
   }
 
   int _calculateBonus(int r) {
