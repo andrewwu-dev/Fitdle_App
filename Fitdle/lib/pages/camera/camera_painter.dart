@@ -33,11 +33,11 @@ class CameraScreenPainter extends CustomPainter {
       if (_inferences![edgePair[0]][3] == 0.0 ||
           _inferences![edgePair[1]][3] == 0.0) {
         _paint.color = Colors.red;
-      } else if (_inferences![edgePair[0]][3] == 1.0 ||
-          _inferences![edgePair[1]][3] == 1.0) {
-        _paint.color = Colors.green;
-      } else {
+      } else if (_inferences![edgePair[0]][3] == 2.0 ||
+          _inferences![edgePair[1]][3] == 2.0) {
         _paint.color = Colors.yellow;
+      } else {
+        _paint.color = Colors.green;
       }
 
       if (confidence1 && confidence2) {

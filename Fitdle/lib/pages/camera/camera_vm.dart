@@ -39,6 +39,8 @@ class CameraVM extends ChangeNotifier {
 
   int state = 0;
   var currErr = {};
+  var prevDiffs = {};
+  int frameCounter = 0;
 
   bool perfect = true;
   double totalScore = 0.0;
@@ -83,7 +85,7 @@ class CameraVM extends ChangeNotifier {
   }
 
   double _calculateScore() {
-    if (_strenghtObject.repetitions == 0){
+    if (_strenghtObject.repetitions == 0) {
       return 0.0;
     }
     return totalScore / _strenghtObject.repetitions;
@@ -184,34 +186,40 @@ class CameraVM extends ChangeNotifier {
     }
 
     if (diffsNext.values.every((err) => err < allowedErr)) {
-      for (final p in currErr.entries) {
-        if (p.value > alertErr) {
-          perfect = false;
+      // for (final p in currErr.entries) {
+      //   if (p.value > alertErr) {
+      //     _speak(
+      //         "Your form at your ${p.key.replaceAll('both_', '')} is a bit off");
+      //     break;
+      //   }
+      // }
+      bool still = true;
+      for (final k in diffsCurr.keys) {
+        if ((diffsCurr[k] - prevDiffs[k]).abs() > 5) {
+          still = false;
           break;
-          // _speak(
-          //     "Your form at your ${p.key.replaceAll('both_', '')} is a bit off");
-          // break;
         }
       }
+      if (still) {
+        frameCounter += 1;
+      }
 
-      currErr = {};
-      state = (state + 1) % numStates;
-      if (state == 0) {
-        updateRepetitions();
-        if (perfect){
-          totalScore += 1.0;
-        } else {
-          totalScore += 0.5;
-        }
-        perfect = true;
-        if (_strenghtObject.repetitions % 5 == 0) {
-          round += 1;
-          _currentBonus += _calculateBonus(round);
-          _speak(
-              "Good job! Keep it up! Do 5 more for ${_calculateBonus(round + 1)} bonus points!");
+      if (frameCounter >= 1) {
+        frameCounter = 0;
+        currErr = {};
+        state = (state + 1) % numStates;
+        if (state == 0) {
+          updateRepetitions();
+          if (_strenghtObject.repetitions % 5 == 0) {
+            round += 1;
+            _currentBonus += _calculateBonus(round);
+            _speak(
+                "Good job! Keep it up! Do 5 more for ${_calculateBonus(round + 1)} bonus points!");
+          }
         }
       }
     }
+    prevDiffs = diffsCurr;
     return inferenceResults;
   }
 }

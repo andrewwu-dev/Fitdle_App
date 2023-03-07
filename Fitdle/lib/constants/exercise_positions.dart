@@ -28,16 +28,16 @@ const bothKeyPointDict = {
 };
 
 const exercises = {
-  'squats': {
-    'name': 'Squats',
+  'squat': {
+    'name': 'Squat',
     'allowed_err': 10,
-    'alert_err': 5,
+    'alert_err': 8,
     'states': [
       {
         ('both_knee,both_hip,both_ankle'): 180,
       },
       {
-        ('both_knee,both_hip,both_ankle'): 60,
+        ('both_knee,both_hip,both_ankle'): 55,
         'both_hip,both_shoulder,both_knee': 60,
       }
     ]
@@ -64,13 +64,13 @@ const exercises = {
       },
       {
         'both_elbow,both_wrist,both_shoulder': 150,
-        'both_shoulder,both_elbow,both_hip,': 150,
+        'both_shoulder,both_elbow,both_hip,': 165,
         'both_hip,both_shoulder,both_knee': 170,
       }
     ]
   },
   'bicepCurl': {
-    'name': 'Bicep Curls',
+    'name': 'Bicep Curl',
     'allowed_err': 15,
     'alert_err': 5,
     'states': [
@@ -86,8 +86,8 @@ const exercises = {
       }
     ]
   },
-  'pushups': {
-    'name': 'Pushups',
+  'pushup': {
+    'name': 'Pushup',
     'allowed_err': 25,
     'alert_err': 5,
     'states': [
