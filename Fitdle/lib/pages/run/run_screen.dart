@@ -297,9 +297,12 @@ class _RunScreenState extends State<RunScreen> {
   }
 
   double caloriesBurnt(double speed, double distance) {
-    const double kmToM = 0.62137;
-    const weightLbs = 140;
-    return 0.75 * weightLbs * distance * kmToM;
+    //  const double kmToM = 0.62137;
+    const double lbtokg = 0.45;
+    const double cal_factor = 0.75;
+    double segtime = speed / distance;
+    int userweight = 0; //_userRepo.user.bodyWeight;
+    return cal_factor * userweight * lbtokg * speed * segtime;
   }
 
   Stream<int> stopWatchStream() {
