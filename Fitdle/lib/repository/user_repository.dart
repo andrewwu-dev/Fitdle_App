@@ -28,6 +28,8 @@ class UserRepository extends BaseRepository implements UserRepositoryProtocol {
         lastName: json["lastName"],
         birthDate: json["birthDate"],
         numPoints: json["numPoints"]);
+    bodyWeight:
+    json["bodyWeight"];
   }
 
   @override
@@ -49,6 +51,8 @@ class UserRepository extends BaseRepository implements UserRepositoryProtocol {
           lastName: json["lastName"],
           birthDate: json["birthDate"],
           numPoints: json["numPoints"]);
+      bodyWeight:
+      json["bodyWeight"];
     }
     return res;
   }
