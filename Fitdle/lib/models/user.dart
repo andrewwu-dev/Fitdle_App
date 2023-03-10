@@ -34,7 +34,7 @@ class User {
     age = null;
   }
 
-  update({id, email, firstName, lastName, birthDate, numPoints}) {
+  update({id, email, firstName, lastName, birthDate, numPoints, bodyWeight}) {
     this.id = id;
     this.email = email;
     this.firstName = firstName;
