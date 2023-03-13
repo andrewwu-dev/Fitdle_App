@@ -4,7 +4,7 @@ const instructions = {
   'overheadPress':
       'Hold a weighted barbell with your palms facing forward, lift it over your head using your shoulders and arms, and then lower it back down to your starting position.',
   'bicepCurl':
-      'Hold a dumbbell with your palm facing forward, keep your elbow close to your body, curl the weight towards your shoulder, and then slowly lower it back down to your starting position.',
+      'Hold a weighted dumbbell with your palm facing forward, keep your elbow close to your body, curl the weight towards your shoulder, and then slowly lower it back down to your starting position.',
   'pushup':
       'Start in a plank position with your hands shoulder-width apart, lower your body down towards the ground while keeping your elbows close to your body, push through your hands to return to the starting plank position.'
 };
