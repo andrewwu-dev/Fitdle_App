@@ -188,6 +188,12 @@ class CameraVM extends ChangeNotifier {
     }
 
     if (diffsNext.values.every((err) => err < allowedErr)) {
+      for (final p in currErr.entries) {
+        if (p.value > alertErr) {
+          perfect = false;
+          break;
+        }
+      }
       bool still = true;
       for (final k in diffsCurr.keys) {
         if ((diffsCurr[k] - prevDiffs[k]).abs() > 5) {
@@ -205,6 +211,12 @@ class CameraVM extends ChangeNotifier {
         state = (state + 1) % numStates;
         if (state == 0) {
           updateRepetitions();
+          if (perfect) {
+            totalScore += 1.0;
+          } else {
+            totalScore += 0.5;
+          }
+          perfect = true;
           if (_strenghtObject.repetitions % 5 == 0) {
             round += 1;
             _currentBonus += _calculateBonus(round);
