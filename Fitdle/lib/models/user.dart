@@ -20,7 +20,8 @@ class User {
         "email": email,
         "firstName": firstName,
         "lastName": lastName,
-        "birthDate": birthDate
+        "birthDate": birthDate,
+        "bodyWeight": bodyWeight
       };
 
   clear() {
