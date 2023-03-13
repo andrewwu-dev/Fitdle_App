@@ -125,7 +125,8 @@ class StrengthObject {
 
   int getPoints() {
     return (repetitions *
-            _pointsPerRepetition[ExerciseType.values[exerciseType - 1]])
+            _pointsPerRepetition[ExerciseType.values[exerciseType - 1]] *
+            score)
         .floor();
   }
 }
