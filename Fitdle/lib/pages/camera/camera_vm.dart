@@ -58,11 +58,11 @@ class CameraVM extends ChangeNotifier {
     await _tts.awaitSpeakCompletion(true);
     await _tts.setLanguage("en-US");
     await _tts.setPitch(1);
-    await _tts.setSpeechRate(0.6);
+    await _tts.setSpeechRate(0.5);
     await _tts.setVolume(1.0);
   }
 
-  Future<void> _speak(String text) async {
+  Future<void> speak(String text) async {
     await _tts.speak(text);
   }
 
@@ -115,9 +115,11 @@ class CameraVM extends ChangeNotifier {
       Earning(
         _userRepo.user.id!,
         DateTime.now().toIso8601String(),
-        _strenghtObject.getPoints() + _currentBonus,
+        ((_strenghtObject.getPoints() + _currentBonus)).ceil(),
       ),
     );
+    _userRepo.user.numPoints = (_userRepo.user.numPoints ?? 0) +
+        ((_strenghtObject.getPoints() + _currentBonus)).ceil();
     if (res is Failure) {
       _error.sink.add("Unable to save points");
       return;
@@ -186,13 +188,6 @@ class CameraVM extends ChangeNotifier {
     }
 
     if (diffsNext.values.every((err) => err < allowedErr)) {
-      // for (final p in currErr.entries) {
-      //   if (p.value > alertErr) {
-      //     _speak(
-      //         "Your form at your ${p.key.replaceAll('both_', '')} is a bit off");
-      //     break;
-      //   }
-      // }
       bool still = true;
       for (final k in diffsCurr.keys) {
         if ((diffsCurr[k] - prevDiffs[k]).abs() > 5) {
@@ -213,8 +208,8 @@ class CameraVM extends ChangeNotifier {
           if (_strenghtObject.repetitions % 5 == 0) {
             round += 1;
             _currentBonus += _calculateBonus(round);
-            _speak(
-                "Good job! Keep it up! Do 5 more for ${_calculateBonus(round + 1)} bonus points!");
+            speak(
+                "Good job! Keep it up! Do 5 more for up to ${_calculateBonus(round + 1)} bonus points!");
           }
         }
       }

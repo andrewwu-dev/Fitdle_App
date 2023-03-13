@@ -50,6 +50,7 @@ class _CameraScreenState extends State<CameraScreen> {
   void initState() {
     _initCamera();
     _listen();
+    _cameraVM.speak(instructions[widget.exerciseType.name]!);
     super.initState();
   }
 

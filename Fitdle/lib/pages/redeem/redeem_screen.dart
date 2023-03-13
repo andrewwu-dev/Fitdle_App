@@ -65,7 +65,23 @@ class _RedeemScreenState extends State<RedeemScreen> {
         titleSpacing: appBarPadding,
         title: fitdleText(redeem, h2),
       ),
-      body: body(size),
+      body: RefreshIndicator(
+        backgroundColor: backgroundColor,
+        color: Colors.purple,
+        onRefresh: () async {
+          await _redeemVM.getRewards().then((_) {
+            setState(() {});
+          });
+        },
+        child: PageView(
+          scrollDirection: Axis.vertical,
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
+          children: [
+            body(size),
+          ],
+        ),
+      ),
     );
   }
 

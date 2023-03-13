@@ -1,3 +1,14 @@
+const instructions = {
+  'squat':
+      'Stand with your feet shoulder-width apart, lower your hips down and back while keeping your chest up and core engaged, push through your heels to return to standing position.',
+  'overheadPress':
+      'Hold a weighted barbell with your palms facing forward, lift it over your head using your shoulders and arms, and then lower it back down to your starting position.',
+  'bicepCurl':
+      'Hold a dumbbell with your palm facing forward, keep your elbow close to your body, curl the weight towards your shoulder, and then slowly lower it back down to your starting position.',
+  'pushup':
+      'Start in a plank position with your hands shoulder-width apart, lower your body down towards the ground while keeping your elbows close to your body, push through your hands to return to the starting plank position.'
+};
+
 const keyPointDict = {
   'nose': 0,
   'left_eye': 1,
@@ -44,7 +55,7 @@ const exercises = {
   },
   'overheadPress': {
     'name': 'Overhead Press',
-    'allowed_err': 10,
+    'allowed_err': 20,
     'alert_err': 5,
     // 'states': [
     //   {
@@ -58,14 +69,14 @@ const exercises = {
     // ]
     'states': [
       {
-        'both_elbow,both_wrist,both_shoulder': 20,
-        'both_shoulder,both_elbow,both_hip,': 20,
-        'both_hip,both_shoulder,both_knee': 170,
+        'both_elbow,both_wrist,both_shoulder': 15,
+        'both_shoulder,both_elbow,both_hip,': 15,
+        'both_hip,both_shoulder,both_knee': 165,
       },
       {
-        'both_elbow,both_wrist,both_shoulder': 150,
-        'both_shoulder,both_elbow,both_hip,': 165,
-        'both_hip,both_shoulder,both_knee': 170,
+        'both_elbow,both_wrist,both_shoulder': 160,
+        'both_shoulder,both_elbow,both_hip,': 175,
+        'both_hip,both_shoulder,both_knee': 165,
       }
     ]
   },
@@ -92,12 +103,12 @@ const exercises = {
     'alert_err': 5,
     'states': [
       {
-        'both_elbow,both_wrist,both_shoulder': 180,
-        'both_hip,both_shoulder,both_ankle': 180,
+        'both_elbow,both_wrist,both_shoulder': 170,
+        'both_hip,both_shoulder,both_knee': 160,
       },
       {
         'both_elbow,both_wrist,both_shoulder': 90,
-        'both_hip,both_shoulder,both_ankle': 180,
+        'both_hip,both_shoulder,both_knee': 180,
       }
     ]
   },
