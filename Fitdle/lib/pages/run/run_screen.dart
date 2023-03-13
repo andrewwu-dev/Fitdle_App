@@ -299,9 +299,9 @@ class _RunScreenState extends State<RunScreen> {
   double caloriesBurnt(double speed, double distance) {
     //  const double kmToM = 0.62137;
     const double lbtokg = 0.45;
-    const double b_scale = 0.75;
+    const double b_scale = 2;
     double segtime = speed / distance;
-    int userweight = 0; //_userRepo.user.bodyWeight;
+    int userweight = 140; //_userRepo.user.bodyWeight;
     return b_scale * userweight * lbtokg * speed * segtime;
   }
 
