@@ -24,7 +24,7 @@ class PersonalInfoVM extends ChangeNotifier {
   }
 
   updatePersonalInfo(firstName, lastName) {
-    _userRepo.updateUser(firstName: firstName, lastName: lastName);
+    _userRepo.user.update(firstName: firstName, lastName: lastName);
     _done.sink.add(null);
   }
 }
