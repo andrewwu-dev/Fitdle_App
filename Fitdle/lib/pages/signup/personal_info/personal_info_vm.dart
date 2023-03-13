@@ -12,7 +12,6 @@ class PersonalInfoVM extends ChangeNotifier {
   PublishSubject<String> get subject => _subject;
   PublishSubject get done => _done;
 
-
   PersonalInfoVM([userRepo]) {
     _userRepo = userRepo ?? locator.get<UserRepository>();
   }
@@ -25,7 +24,7 @@ class PersonalInfoVM extends ChangeNotifier {
   }
 
   updatePersonalInfo(firstName, lastName) {
-    _userRepo.user.update(firstName: firstName, lastName: lastName);
+    _userRepo.updateUser(firstName: firstName, lastName: lastName);
     _done.sink.add(null);
   }
 }
