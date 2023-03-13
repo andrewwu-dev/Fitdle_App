@@ -27,12 +27,13 @@ class User {
   }
 
   update({id, email, firstName, lastName, birthDate, numPoints}) {
-    this.id = id;
-    this.email = email;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.birthDate = birthDate;
-    this.numPoints = numPoints;
+    // Update values only if they are not null
+    this.id = id ?? this.id;
+    this.email = email ?? this.email;
+    this.firstName = firstName ?? this.firstName;
+    this.lastName = lastName ?? this.lastName;
+    this.birthDate = birthDate ?? this.birthDate;
+    this.numPoints = numPoints ?? this.numPoints;
     age = (birthDate != null)
         ? calculateAge(DateTime.parse(this.birthDate!))
         : null;
