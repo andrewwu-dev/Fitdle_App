@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:fitdle/constants/all_constants.dart';
+import 'package:fitdle/pages/dashboard/dashboard_screen.dart';
 import 'package:fitdle/pages/signup/birthday/brithday_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -35,7 +36,12 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
 
   _listen() {
     _navigationSubscription = _birthdayVM.done.listen((value) {
-      Navigator.pushNamedAndRemoveUntil(context, "dashboard", (_) => false);
+      Navigator.pop(context);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const DashboardScreen(),
+        ),
+      );
     });
 
     _errorSubscription = _birthdayVM.error.listen((msg) {

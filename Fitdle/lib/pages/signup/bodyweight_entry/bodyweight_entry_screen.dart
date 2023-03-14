@@ -56,6 +56,7 @@ class _BodyWeightScreenState extends State<BodyWeightScreen> {
     if (_isloading) return fitdleSpinner();
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Container(
             alignment: Alignment.topLeft,
             padding: EdgeInsets.fromLTRB(regular, size.height / 6, regular, 0),
