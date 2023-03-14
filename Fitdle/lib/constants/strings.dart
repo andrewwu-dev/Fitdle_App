@@ -18,6 +18,8 @@ const signup = "Sign up";
 const alreadyHaveAccount = "Already have an account?";
 const weakPassword = "The password provided is too weak.";
 const emailInUse = "The account already exists for that email.";
+const bodyweightEntry = "What is your weight?";
+const weightUnit = "Weight (lb)";
 
 // Personal Info
 const hiThere = "Hi there,";

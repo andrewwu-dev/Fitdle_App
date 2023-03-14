@@ -6,14 +6,22 @@ class User {
   int? id;
   int? numPoints;
   int? age;
+  int? bodyWeight;
 
-  User([this.id, this.email, this.firstName, this.lastName, this.birthDate]);
+  User(
+      [this.id,
+      this.email,
+      this.firstName,
+      this.lastName,
+      this.birthDate,
+      this.bodyWeight]);
 
   Map<String, dynamic> toJson() => {
         "email": email,
         "firstName": firstName,
         "lastName": lastName,
-        "birthDate": birthDate
+        "birthDate": birthDate,
+        "bodyWeight": bodyWeight
       };
 
   clear() {
@@ -23,17 +31,18 @@ class User {
     lastName = null;
     birthDate = null;
     numPoints = null;
+    bodyWeight = null;
     age = null;
   }
 
-  update({id, email, firstName, lastName, birthDate, numPoints}) {
-    // Update values only if they are not null
+  update({id, email, firstName, lastName, birthDate, numPoints, bodyWeight}) {
     this.id = id ?? this.id;
     this.email = email ?? this.email;
     this.firstName = firstName ?? this.firstName;
     this.lastName = lastName ?? this.lastName;
     this.birthDate = birthDate ?? this.birthDate;
     this.numPoints = numPoints ?? this.numPoints;
+    this.bodyWeight = bodyWeight ?? this.bodyWeight;
     age = (birthDate != null)
         ? calculateAge(DateTime.parse(this.birthDate!))
         : null;

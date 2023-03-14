@@ -5,6 +5,7 @@ import 'package:fitdle/pages/run/run_screen.dart';
 import 'package:fitdle/pages/signup/birthday/birthday_screen.dart';
 import 'package:fitdle/pages/signup/create_account/create_account_screen.dart';
 import 'package:fitdle/pages/signup/personal_info/personal_info_screen.dart';
+import 'package:fitdle/pages/signup/bodyweight_entry/bodyweight_entry_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -46,6 +47,7 @@ class Fitdle extends StatelessWidget {
           'personal_info': (context) => const PersonalInfoScreen(),
           'birthday': (context) => const BirthdayScreen(),
           'run': (context) => const RunScreen(),
+          'bodyWeight': (context) => const BodyWeightScreen(),
           'camera': (context) => CameraScreen(
                 camera: _cameras!.firstWhere((camera) =>
                     camera.lensDirection == CameraLensDirection.front),

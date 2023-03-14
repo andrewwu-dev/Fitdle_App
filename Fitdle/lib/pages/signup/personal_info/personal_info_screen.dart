@@ -31,7 +31,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
   _listen() {
     _navigationSubscription = _personalInfoVM.done.listen((value) {
-      Navigator.pushNamed(context, "birthday");
+      Navigator.pushNamed(context, "bodyWeight");
     });
   }
 
